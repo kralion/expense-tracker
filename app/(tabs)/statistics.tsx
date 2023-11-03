@@ -1,31 +1,29 @@
-import { Button, Select, Stack } from "native-base";
+import { Button, Select, VStack, HStack, HamburgerIcon } from "native-base";
 import { useState } from "react";
 import { Text, View, Pressable } from "react-native";
 import Expenses from "../../components/dashboard/expenses";
 import Chart from "../../components/estadisticas/chart";
-import AppLayout from "../../components/layout";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Expense from "../../components/dashboard/expense";
+import FontAwesome5 from "@expo/vector-icons/build/FontAwesome5";
 export default function Statistics() {
   const [service, setService] = useState("gastos");
   return (
-    <AppLayout>
+    <SafeAreaView>
       <Text className="font-bold text-center text-2xl">Estadísticas</Text>
-      <Stack
-        direction={{
-          base: "row",
-          md: "row",
-        }}
+      <HStack
         space={1.5}
         alignItems={{
           base: "center",
           md: "flex-start",
         }}
-        className="my-5"
+        className="my-5 px-3"
       >
         <Button
           variant="ghost"
           colorScheme="teal"
           className="py-2.5 w-[90px]  rounded-lg"
-          onPress={() => console.log("hello world")}
+          onPress={() => alert("Diario")}
         >
           Diario
         </Button>
@@ -34,7 +32,7 @@ export default function Statistics() {
           isPressed
           colorScheme="teal"
           className="py-2.5 w-[90px]  rounded-lg"
-          onPress={() => console.log("hello world")}
+          onPress={() => alert("Semanal")}
         >
           Semanal
         </Button>
@@ -42,7 +40,7 @@ export default function Statistics() {
           variant="ghost"
           colorScheme="teal"
           className="py-2.5 w-[90px]  rounded-lg"
-          onPress={() => console.log("hello world")}
+          onPress={() => alert("Mensual")}
         >
           Mensual
         </Button>
@@ -50,43 +48,52 @@ export default function Statistics() {
           variant="ghost"
           colorScheme="teal"
           className="py-2.5 w-[90px]  rounded-lg"
-          onPress={() => console.log("hello world")}
+          onPress={() => alert("Anual")}
         >
           Anual
         </Button>
-      </Stack>
+      </HStack>
 
-      <Stack className="flex justify-between flex-row mb-6">
+      <Chart />
+      <HStack alignItems="center" justifyContent="space-between" paddingX={4}>
         <Button
           size="sm"
           colorScheme="teal"
-          className="py-2.5 w-[90px]  rounded-lg"
           variant="outline"
+          onPress={() => alert("Exportar")}
+          borderRadius={7}
         >
           Exportar
         </Button>
         <Select
           selectedValue={service}
-          minWidth="105"
-          // dropdownIcon={<ChevronDown size={20} className="mr-1.5" />}
+          minWidth="150"
+          borderRadius={7}
+          dropdownIcon={
+            <FontAwesome5
+              name="chevron-down"
+              color="#6D6868"
+              marginRight={10}
+              size={10}
+            />
+          }
           _selectedItem={{
             bg: "teal.500",
-            // endIcon: <CheckIcon size={15} />,
           }}
-          mt={1}
           onValueChange={(itemValue) => setService(itemValue)}
         >
           <Select.Item label="Gastos" value="gastos" />
           <Select.Item label="Ingresos" value="ingresos" />
         </Select>
-      </Stack>
-      <Chart />
+      </HStack>
       <View className=" flex-row m-4 items-center  justify-between ">
-        <Text className="text-xl text-muted font-semibold">Gastos Altos</Text>
+        <Text className="text-xl text-muted font-semibold">Top Gastos</Text>
         <Pressable>{/* <ArrowUpDown color="gray" size={20} /> */}</Pressable>
       </View>
-      <Expenses />
-      <Expenses />
-    </AppLayout>
+      <VStack space={4} className="mx-4">
+        <Expense />
+        <Expense />
+      </VStack>
+    </SafeAreaView>
   );
 }

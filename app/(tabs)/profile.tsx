@@ -4,16 +4,16 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { Button, HStack, Heading, Icon, VStack } from "native-base";
+import { Button, HStack, Heading, Icon, VStack, Link } from "native-base";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
 export default function App() {
   return (
     <View>
-      <View className="bg-accent relative h-36">
+      <View className="bg-accent relative h-20">
         <VStack
-          className=" absolute top-10 left-28"
+          className=" absolute -top-4 left-28"
           space={2}
           alignItems="center"
           marginTop={5}
@@ -123,17 +123,41 @@ export default function App() {
       <HStack
         alignItems="center"
         justifyContent="center"
-        className="text-sm text-center absolute bottom-10 left-20 "
+        className="text-sm text-center absolute -bottom-24 left-20 "
       >
         <Text className="text-gray-400">Developed by</Text>
 
-        <Button className="px-0.5" variant="link" colorScheme="teal">
+        <Link
+          href="https://twitter.com/joanpaucar_"
+          isUnderlined={false}
+          isExternal
+          _text={{
+            color: "teal.600",
+          }}
+          mt={-0.5}
+          _web={{
+            mb: -2,
+          }}
+          className="px-1 "
+        >
           Brayan
-        </Button>
+        </Link>
         <Text className="text-gray-400">&</Text>
-        <Button className="px-0.5" variant="link" colorScheme="teal">
+        <Link
+          href="https://www.facebook.com/miguelangel.requenaramos.94"
+          isUnderlined={false}
+          isExternal
+          _text={{
+            color: "teal.600",
+          }}
+          mt={-0.5}
+          _web={{
+            mb: -2,
+          }}
+          className="px-1 "
+        >
           Miguel
-        </Button>
+        </Link>
       </HStack>
     </View>
   );

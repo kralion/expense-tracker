@@ -1,5 +1,5 @@
 import { LineChart } from "react-native-chart-kit";
-import { Dimensions, View, Text } from "react-native";
+import { Dimensions, View } from "react-native";
 
 import React from "react";
 
@@ -20,8 +20,8 @@ export default function Chart() {
         height={300}
         yAxisInterval={1} // optional, defaults to 1
         chartConfig={{
-          backgroundGradientFrom: "#E3E8EF",
-          backgroundGradientTo: "#E3E8EF",
+          backgroundGradientFrom: "#F5F3F3",
+          backgroundGradientTo: "#F5F3F3",
           decimalPlaces: 0, // optional, defaults to 2dp
           color: (opacity = 1) => `rgba(54, 137, 131, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(109, 104, 104, ${opacity})`,

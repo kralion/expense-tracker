@@ -1,17 +1,13 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
-import { Pressable, Text, useColorScheme } from "react-native";
-
+import { Pressable, Text, View, useColorScheme } from "react-native";
 import Colors from "../../constants/Colors";
 
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function TabLayout() {
@@ -22,49 +18,61 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerStyle: {
-          backgroundColor: "#f4511e",
+          backgroundColor: "#F5F3F3",
         },
-        headerTintColor: "#fff",
-        headerTitleStyle: {
-          fontWeight: "bold",
+        tabBarStyle: {
+          height: 100,
         },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          headerTitle: () => <Text className="font-bold">Hello</Text>,
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? "light"].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
+          title: "",
+          headerShown: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
+
       <Tabs.Screen
-        name="two"
-        options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="signIn"
+        name="statistics"
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="sign-in" color={color} />
+            <TabBarIcon name="bar-chart" color={color} />
           ),
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="add-expense"
+        options={{
+          title: "",
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon size={60} name="plus-circle" color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="wallet"
+        options={{
+          headerBackground: () => (
+            <View className="bg-mutedwhite" style={{ flex: 1 }} />
+          ),
+          title: "",
+          tabBarIcon: ({ color }) => <TabBarIcon name="money" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          headerBackground: () => (
+            <View className="bg-accent" style={{ flex: 1 }} />
+          ),
+          title: "",
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
     </Tabs>
