@@ -1,5 +1,9 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import {
+  AppleAuthenticationScope,
+  signInAsync,
+} from "expo-apple-authentication";
+import {
   Button,
   FormControl,
   HStack,
@@ -10,7 +14,7 @@ import {
 } from "native-base";
 import React, { useState } from "react";
 import { Image, Pressable, SafeAreaView, Text, View } from "react-native";
-export default function App() {
+export default function SignIn() {
   const [show, setShow] = useState(false);
   return (
     <SafeAreaView>
@@ -138,15 +142,37 @@ export default function App() {
             }}
             maxW="350px"
           >
-            <HStack alignItems="center" space={2}>
-              <Image
-                className="w-5 h-5"
-                source={{
-                  uri: "https://img.icons8.com/?size=60&id=95294&format=png",
-                }}
-              />
-              <Text className="  font-semibold">Iniciar Sesión con Apple</Text>
-            </HStack>
+            <Pressable
+              onPress={async () => {
+                try {
+                  const credential = await signInAsync({
+                    requestedScopes: [
+                      AppleAuthenticationScope.FULL_NAME,
+                      AppleAuthenticationScope.EMAIL,
+                    ],
+                  });
+                  // signed in
+                } catch (e) {
+                  if (e.code === "ERR_REQUEST_CANCELED") {
+                    // handle that the user canceled the sign-in flow
+                  } else {
+                    // handle other errors
+                  }
+                }
+              }}
+            >
+              <HStack alignItems="center" space={2}>
+                <Image
+                  className="w-5 h-5"
+                  source={{
+                    uri: "https://img.icons8.com/?size=60&id=95294&format=png",
+                  }}
+                />
+                <Text className="  font-semibold">
+                  Iniciar Sesión con Apple
+                </Text>
+              </HStack>
+            </Pressable>
           </Button>
           <Button
             height={12}

@@ -29,7 +29,7 @@ export default function ExpenseRegistered() {
               <Box width={300} flexShrink={1} alignItems="center">
                 <Image
                   className="w-64 h-64 "
-                  source={require("../../assets/images/success-asset.png")}
+                  source={require("../assets/images/success-asset.png")}
                 />
               </Box>
               <Heading size="md">Registro Exitoso</Heading>
