@@ -22,6 +22,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "package": "com.expensetracker.app",
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.422618280931-fc0s3ktar0vcgoc80n128589e5ahhk1e"
+            ]
+          }
+        ]
       }
     },
     "web": {
@@ -32,6 +42,14 @@
     "plugins": ["expo-router", "expo-apple-authentication"],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "787db6e3-1911-43a2-a367-8132f520e3b3"
+      }
     }
   }
 }
