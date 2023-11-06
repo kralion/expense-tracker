@@ -1,4 +1,16 @@
+//ios  422618280931-fc0s3ktar0vcgoc80n128589e5ahhk1e.apps.googleusercontent.com
+// android  422618280931-50inl7uig7t4p5k6o89521jejcic2llj.apps.googleusercontent.com
+
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
+import * as Facebook from "expo-auth-session/providers/facebook";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { MaterialIcons } from "@expo/vector-icons";
+import {
+  AppleAuthenticationScope,
+  signInAsync,
+} from "expo-apple-authentication";
 import {
   Button,
   FormControl,
@@ -8,10 +20,18 @@ import {
   VStack,
   WarningOutlineIcon,
 } from "native-base";
-import React, { useState } from "react";
+import * as React from "react";
 import { Image, Pressable, SafeAreaView, Text, View } from "react-native";
-export default function App() {
-  const [show, setShow] = useState(false);
+export default function SignIn() {
+  const [show, setShow] = React.useState(false);
+  const [userInfo, setUserInfo] = React.useState(null);
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    iosClientId:
+      "422618280931-fc0s3ktar0vcgoc80n128589e5ahhk1e.apps.googleusercontent.com",
+    androidClientId:
+      "422618280931-50inl7uig7t4p5k6o89521jejcic2llj.apps.googleusercontent.com",
+    scopes: ["profile", "email"],
+  });
   return (
     <SafeAreaView>
       <View className="flex flex-col space-y-9 justify-between mx-2">
@@ -117,15 +137,19 @@ export default function App() {
             }}
             maxW="350px"
           >
-            <HStack alignItems="center" space={2}>
-              <Image
-                className="w-5 h-5"
-                source={{
-                  uri: "https://img.icons8.com/?size=96&id=17949&format=png",
-                }}
-              />
-              <Text className="  font-semibold">Iniciar Sesión con Google</Text>
-            </HStack>
+            <Pressable onPress={() => promptAsync()}>
+              <HStack alignItems="center" space={2}>
+                <Image
+                  className="w-5 h-5"
+                  source={{
+                    uri: "https://img.icons8.com/?size=96&id=17949&format=png",
+                  }}
+                />
+                <Text className="  font-semibold">
+                  Iniciar Sesión con Google
+                </Text>
+              </HStack>
+            </Pressable>
           </Button>
           <Button
             height={12}
@@ -138,15 +162,37 @@ export default function App() {
             }}
             maxW="350px"
           >
-            <HStack alignItems="center" space={2}>
-              <Image
-                className="w-5 h-5"
-                source={{
-                  uri: "https://img.icons8.com/?size=60&id=95294&format=png",
-                }}
-              />
-              <Text className="  font-semibold">Iniciar Sesión con Apple</Text>
-            </HStack>
+            <Pressable
+              onPress={async () => {
+                try {
+                  const credential = await signInAsync({
+                    requestedScopes: [
+                      AppleAuthenticationScope.FULL_NAME,
+                      AppleAuthenticationScope.EMAIL,
+                    ],
+                  });
+                  // signed in
+                } catch (e) {
+                  if (e.code === "ERR_REQUEST_CANCELED") {
+                    // handle that the user canceled the sign-in flow
+                  } else {
+                    // handle other errors
+                  }
+                }
+              }}
+            >
+              <HStack alignItems="center" space={2}>
+                <Image
+                  className="w-5 h-5"
+                  source={{
+                    uri: "https://img.icons8.com/?size=60&id=95294&format=png",
+                  }}
+                />
+                <Text className="  font-semibold">
+                  Iniciar Sesión con Apple
+                </Text>
+              </HStack>
+            </Pressable>
           </Button>
           <Button
             height={12}

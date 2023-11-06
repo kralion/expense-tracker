@@ -1,10 +1,24 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link } from "expo-router";
 import { Button, HStack, Heading, Spacer, Text, VStack } from "native-base";
+import * as React from "react";
 import { Pressable, SafeAreaView, View } from "react-native";
 import Card from "../../components/dashboard/card";
 import Expense from "../../components/dashboard/expense";
+import { supabase } from "../../utils/supabase";
+import { IGasto } from "../../interfaces";
+import { ExpenseSkeleton } from "../../components/skeletons/expense";
+
 export default function Index() {
+  const [expenses, setExpenses] = React.useState<IGasto[]>();
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await supabase.from("gastos").select("*");
+      setExpenses(JSON.parse(JSON.stringify(data)));
+    };
+    fetchData();
+  }, [expenses]);
   return (
     <SafeAreaView className="bg-primary space-y-7">
       <View className="bg-primary space-y-7">
@@ -46,10 +60,16 @@ export default function Index() {
           </Button>
         </HStack>
         <VStack space={4} className="mx-4">
-          <Expense />
-          <Expense />
-          <Expense />
-          <Expense />
+          {expenses?.map((expense, index) => (
+            <React.Suspense fallback={<ExpenseSkeleton />}>
+              <Expense
+                key={index}
+                categoría={expense.categoría}
+                cantidad={expense.cantidad}
+                fecha={expense.fecha}
+              />
+            </React.Suspense>
+          ))}
         </VStack>
       </VStack>
     </SafeAreaView>

@@ -1,6 +1,6 @@
 import { Image, SafeAreaView, Text, View } from "react-native";
 import { Button, Center } from "native-base";
-export default function Index() {
+export default function Welcome() {
   return (
     <SafeAreaView>
       <View className="items-center space-y-12">
