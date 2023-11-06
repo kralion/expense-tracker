@@ -1,9 +1,10 @@
-import React from "react";
-import { Pressable, Box, Spacer, Badge, HStack, Text, Flex } from "native-base";
-import { Image, View } from "react-native";
 import { Link } from "expo-router";
+import { Box, HStack, Pressable, Spacer, Text } from "native-base";
+import * as React from "react";
+import { Image, View } from "react-native";
+import { IGasto } from "../../interfaces";
 
-export default function Expense() {
+export default function Expense({ categoria, cantidad, fecha }: IGasto) {
   return (
     <Link href="/expense-details" asChild>
       <Pressable>

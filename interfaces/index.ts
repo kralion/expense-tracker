@@ -1,0 +1,1 @@
+export { IGasto } from "./expense";
