@@ -4,7 +4,7 @@ import * as React from "react";
 import { Image, View } from "react-native";
 import { IGasto } from "../../interfaces";
 
-export default function Expense({ categoria, cantidad, fecha }: IGasto) {
+export default function Expense({ categoría, cantidad, fecha }: IGasto) {
   return (
     <Link href="/expense-details" asChild>
       <Pressable>
@@ -40,15 +40,21 @@ export default function Expense({ categoria, cantidad, fecha }: IGasto) {
                     }}
                   />
                   <View className="space-y-1">
-                    <Text className=" text-[18px]   font-bold">taxi</Text>
+                    <Text className=" text-[18px]  text-black font-bold">
+                      {categoría}
+                    </Text>
                     <Text className="text-muted text-[14px] ">
-                      en la mañana
+                      {fecha?.toLocaleString("es-PE", {
+                        weekday: "long",
+                        month: "long",
+                        day: "numeric",
+                      })}
                     </Text>
                   </View>
                 </View>
                 <Spacer />
                 <Text className=" text-xl text-red-500   font-bold">
-                  S/. 15
+                  S/. {cantidad.toFixed(2)}
                 </Text>
               </HStack>
             </Box>

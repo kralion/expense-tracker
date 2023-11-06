@@ -1,7 +1,6 @@
 import { Button, Select, VStack, HStack, HamburgerIcon } from "native-base";
 import { useState } from "react";
 import { Text, View, Pressable } from "react-native";
-import Expenses from "../../components/dashboard/expenses";
 import Chart from "../../components/estadisticas/chart";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Expense from "../../components/dashboard/expense";
@@ -90,10 +89,7 @@ export default function Statistics() {
         <Text className="text-xl text-muted font-semibold">Top Gastos</Text>
         <Pressable>{/* <ArrowUpDown color="gray" size={20} /> */}</Pressable>
       </View>
-      <VStack space={4} className="mx-4">
-        <Expense />
-        <Expense />
-      </VStack>
+      <VStack space={4} className="mx-4"></VStack>
     </SafeAreaView>
   );
 }
