@@ -218,9 +218,11 @@ export default function SignIn() {
           <Text className="text-textmuted text-center">
             ¿No tienes una cuenta?
           </Text>
-          <Button className="px-1" variant="link" colorScheme="teal">
-            <Link href={"/(auth)/sign-up"}>Regístrate</Link>
-          </Button>
+          <Link asChild href={"/(auth)/sign-up"}>
+            <Button className="px-1" variant="link" colorScheme="teal">
+              Regístrate
+            </Button>
+          </Link>
         </HStack>
       </View>
     </SafeAreaView>

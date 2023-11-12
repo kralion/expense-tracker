@@ -4,18 +4,21 @@ import * as React from "react";
 import { Image, Pressable, SafeAreaView, Text, View } from "react-native";
 
 export default function SignUp() {
-  router.back();
   const [show, setShow] = React.useState(false);
 
   return (
     <SafeAreaView>
       <View className="bg-[#F5F6F] flex items-center">
-        <Text className="text-right ml-32">
-          ¿Ya es miembro?{" "}
-          <Text className="text-[#4285F4] font-semibold">
-            <Link href={"/(auth)/sign-in"}>Inicia Sesion</Link>
+        <View className="items-center gap-1 flex ml-24  flex-row">
+          <Text className="  text-textmuted text-center">
+            Ya tienes una cuenta ?
           </Text>
-        </Text>
+          <Link asChild href="/(auth)/sign-in">
+            <Button className="px-0" variant="link" colorScheme="teal">
+              Inicia Sesión
+            </Button>
+          </Link>
+        </View>
         <Text className="mt-10 text-2xl font-semibold text-gray-700 text-center">
           Registrarse Expense Tracker
         </Text>

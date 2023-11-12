@@ -17,23 +17,22 @@ export default function Welcome() {
           </Text>
         </View>
         <Center>
-          <Button
-            className="w-72 h-12"
-            colorScheme="teal"
-            variant="outline"
-            size="lg"
-          >
-            <Link href={"/(auth)/sign-in"}>Iniciar sesión</Link>
-          </Button>
+          <Link asChild href="/(auth)/sign-up">
+            <Button className="px-10 rounded-full" colorScheme="teal" size="lg">
+              Iniciar sesión
+            </Button>
+          </Link>
         </Center>
       </View>
       <View className="items-center gap-1 text-center justify-center mt-32 flex  flex-row">
         <Text className="  text-textmuted text-center">
           No tienes una cuenta?
         </Text>
-        <Button className="px-0" variant="link" colorScheme="teal">
-          <Link href={"/(auth)/sign-up"}>Regístrate</Link>
-        </Button>
+        <Link asChild href="/(auth)/sign-up">
+          <Button className="px-0" variant="link" colorScheme="teal">
+            Regístrate
+          </Button>
+        </Link>
       </View>
     </SafeAreaView>
   );
