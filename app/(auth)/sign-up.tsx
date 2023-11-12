@@ -1,3 +1,4 @@
+
 import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
 import { Link, router } from "expo-router";
 import {
@@ -14,11 +15,13 @@ import * as React from "react";
 import { Image, Pressable, SafeAreaView, Text, View } from "react-native";
 
 export default function SignUp() {
+
   const [show, setShow] = React.useState(false);
 
   return (
     <SafeAreaView>
       <View className="bg-[#F5F6F] flex items-center">
+
         <View className="items-center gap-1 flex ml-24  flex-row">
           <Text className="  text-textmuted text-center">
             Ya tienes una cuenta ?
@@ -68,9 +71,7 @@ export default function SignUp() {
             </HStack>
           </Button>
         </View>
-
         <View className="mx-auto w-80 border-b border-[#AEACAC] mt-3"></View>
-
         <View className="flex flex-row justify-center gap-3 mt-3">
           <FormControl w="85%" maxW="150px">
             <FormControl.Label marginBottom={2}>Nombres</FormControl.Label>
@@ -102,6 +103,7 @@ export default function SignUp() {
                 Correo electrónico
               </FormControl.Label>
               <Input
+
                 size="lg"
                 borderRadius={7}
                 w={{
@@ -114,6 +116,7 @@ export default function SignUp() {
               <FormControl.Label marginBottom={2}>Contraseña</FormControl.Label>
               <Input
                 size="lg"
+
                 w={{
                   base: "90%",
                   md: "25%",
