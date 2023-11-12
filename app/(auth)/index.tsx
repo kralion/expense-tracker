@@ -1,5 +1,6 @@
-import { Image, SafeAreaView, Text, View } from "react-native";
+import { Link } from "expo-router";
 import { Button, Center } from "native-base";
+import { Image, SafeAreaView, Text, View } from "react-native";
 export default function Welcome() {
   return (
     <SafeAreaView>
@@ -16,18 +17,22 @@ export default function Welcome() {
           </Text>
         </View>
         <Center>
-          <Button colorScheme="teal" className="rounded-full px-5">
-            <Text className="text-white font-semibold">Iniciar Sesión</Text>
-          </Button>
+          <Link asChild href="/(auth)/sign-up">
+            <Button className="px-10 rounded-full" colorScheme="teal" size="lg">
+              Iniciar sesión
+            </Button>
+          </Link>
         </Center>
       </View>
       <View className="items-center gap-1 text-center justify-center mt-32 flex  flex-row">
         <Text className="  text-textmuted text-center">
           No tienes una cuenta?
         </Text>
-        <Button className="px-0" variant="link" colorScheme="teal">
-          Regístrate
-        </Button>
+        <Link asChild href="/(auth)/sign-up">
+          <Button className="px-0" variant="link" colorScheme="teal">
+            Regístrate
+          </Button>
+        </Link>
       </View>
     </SafeAreaView>
   );

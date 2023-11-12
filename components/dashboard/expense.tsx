@@ -4,7 +4,12 @@ import * as React from "react";
 import { Image, View } from "react-native";
 import { IGasto } from "../../interfaces";
 
-export default function Expense({ categoría, cantidad, fecha }: IGasto) {
+export default function Expense({
+  categoría,
+  cantidad,
+  fecha,
+  assetIdentificador,
+}: IGasto) {
   return (
     <Link href="/expense-details" asChild>
       <Pressable>
@@ -32,13 +37,15 @@ export default function Expense({ categoría, cantidad, fecha }: IGasto) {
             >
               <HStack alignItems="center">
                 <View className="flex-row gap-2  items-center">
-                  <Image
-                    width={50}
-                    height={50}
-                    source={{
-                      uri: "https://img.icons8.com/?size=160&id=Q2m4bLp5g5kF&format=png",
-                    }}
-                  />
+                  <Box p={2} backgroundColor="gray.200" borderRadius={35}>
+                    <Image
+                      width={40}
+                      height={40}
+                      source={{
+                        uri: assetIdentificador,
+                      }}
+                    />
+                  </Box>
                   <View className="space-y-1">
                     <Text className=" text-[18px]  text-black font-bold">
                       {categoría}
