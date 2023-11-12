@@ -1,5 +1,15 @@
+import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
 import { Link, router } from "expo-router";
-import { Button, FormControl, HStack, Input, VStack } from "native-base";
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  HStack,
+  Icon,
+  Input,
+  Spacer,
+  VStack,
+} from "native-base";
 import * as React from "react";
 import { Image, Pressable, SafeAreaView, Text, View } from "react-native";
 
@@ -20,48 +30,42 @@ export default function SignUp() {
           </Link>
         </View>
         <Text className="mt-10 text-2xl font-semibold text-gray-700 text-center">
-          Registrarse Expense Tracker
+          Regístrate en Expense Tracker
         </Text>
 
         <View className="flex flex-row justify-center items-center gap-4 mt-5">
-          <Button className="bg-[#368983]">
-            <Pressable>
-              <HStack>
-                <Image
-                  className="w-5 h-5 mr-2"
-                  source={{
-                    uri: "https://img.icons8.com/?size=96&id=17949&format=png",
-                  }}
-                />
-                <Text className="font-semibold text-white">
-                  Registrarse con Google
-                </Text>
-              </HStack>
-            </Pressable>
+          <Button colorScheme="teal">
+            <HStack>
+              <Image
+                className="w-5 h-5 mr-2"
+                source={{
+                  uri: "https://img.icons8.com/?size=96&id=17949&format=png",
+                }}
+              />
+              <Text className="font-semibold text-white">
+                Registrarse con Google
+              </Text>
+            </HStack>
           </Button>
-          <Button className="bg-[#368983]">
-            <Pressable>
-              <HStack>
-                <Image
-                  className="w-5 h-5"
-                  source={{
-                    uri: "https://img.icons8.com/?size=96&id=uLWV5A9vXIPu&format=png",
-                  }}
-                />
-              </HStack>
-            </Pressable>
+          <Button colorScheme="teal">
+            <HStack>
+              <Image
+                className="w-5 h-5"
+                source={{
+                  uri: "https://img.icons8.com/?size=96&id=uLWV5A9vXIPu&format=png",
+                }}
+              />
+            </HStack>
           </Button>
-          <Button className="bg-[#368983]">
-            <Pressable>
-              <HStack>
-                <Image
-                  className="w-5 h-5"
-                  source={{
-                    uri: "https://img.icons8.com/?size=60&id=95294&format=png",
-                  }}
-                />
-              </HStack>
-            </Pressable>
+          <Button colorScheme="teal">
+            <HStack>
+              <Image
+                className="w-5 h-5"
+                source={{
+                  uri: "https://img.icons8.com/?size=60&id=95294&format=png",
+                }}
+              />
+            </HStack>
           </Button>
         </View>
 
@@ -110,7 +114,6 @@ export default function SignUp() {
               <FormControl.Label marginBottom={2}>Contraseña</FormControl.Label>
               <Input
                 size="lg"
-                borderRadius={7}
                 w={{
                   base: "90%",
                   md: "25%",
@@ -119,25 +122,50 @@ export default function SignUp() {
                 passwordRules={
                   "required: upper; required: lower; required: digit; minlength: 8;"
                 }
+                borderRadius={7}
+                InputRightElement={
+                  <Pressable onPress={() => setShow(!show)}>
+                    <Icon
+                      as={
+                        <MaterialIcons
+                          name={show ? "visibility" : "visibility-off"}
+                        />
+                      }
+                      size={5}
+                      mr="2"
+                      color="muted.400"
+                    />
+                  </Pressable>
+                }
+                placeholder="********"
               />
             </FormControl>
           </VStack>
         </View>
-
-        <View className="mx-10">
-          <Text className="mt-5 text-center text-[#AEACAC]">
-            Al crear una cuenta, acepta nuestros{" "}
-            <Text className="text-primary font-semibold">
-              Términos y condiciones.
-            </Text>
-          </Text>
-        </View>
+        <HStack className="mr-14 " justifyContent="start" mt={5}>
+          <Checkbox
+            shadow="none"
+            borderWidth={1}
+            colorScheme="teal"
+            value="acepto"
+            accessibilityLabel="Terminos y Condiciones"
+            defaultIsChecked
+          >
+            <Text className="text-mute">Acepto los</Text>
+            <Link asChild href={"/modal"}>
+              <Button px={0} variant="link" colorScheme="teal">
+                Términos y Condiciones
+              </Button>
+            </Link>
+          </Checkbox>
+        </HStack>
 
         <Button
-          className="rounded-md mt-5 bg-[#368983]"
+          className="rounded-md mt-5 "
+          colorScheme="teal"
           height={12}
           w={{
-            base: "83%",
+            base: "80%",
             md: "25%",
           }}
           maxW="350px"
@@ -146,7 +174,7 @@ export default function SignUp() {
         </Button>
 
         <View>
-          <Text className="text-[#AEACAC] mt-16 mr-28 text-[11px]">
+          <Text className="text-[#AEACAC] mt-16 mr-24 text-[11px]">
             Este sitio esta protegido por reCAPTCHA
           </Text>
         </View>
