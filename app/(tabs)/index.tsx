@@ -102,10 +102,11 @@ export default function Index() {
           </Button>
         </HStack>
         <VStack space={4} className="mx-2">
-          {expenses?.map((expense, index) => (
+          {expenses?.map((expense) => (
             <React.Suspense fallback={<ExpenseSkeleton />}>
               <Expense
-                key={index}
+                key={expense.id}
+                id={expense.id}
                 assetIdentificador={
                   icons.find((icon) => icon.label === expense.categoría)
                     ?.iconHref ||

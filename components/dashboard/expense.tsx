@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import { Box, HStack, Pressable, Spacer, Text } from "native-base";
+import { Box, Button, HStack, Pressable, Spacer, Text } from "native-base";
 import * as React from "react";
 import { Image, View } from "react-native";
 import { IGasto } from "../../interfaces";
@@ -7,11 +7,12 @@ import { IGasto } from "../../interfaces";
 export default function Expense({
   categoría,
   cantidad,
+  id,
   fecha,
   assetIdentificador,
 }: IGasto) {
   return (
-    <Link href="/expense-details" asChild>
+    <Link href="/(modals)/expense-details" asChild>
       <Pressable>
         {({ isHovered, isFocused, isPressed }) => {
           return (
@@ -27,15 +28,15 @@ export default function Expense({
                   ? "coolGray.200"
                   : "coolGray.100"
               }
-              style={{
-                transform: [
-                  {
-                    scale: isPressed ? 0.96 : 1,
-                  },
-                ],
-              }}
+              // style={{
+              //   transform: [
+              //     {
+              //       scale: isPressed ? 0.96 : 1,
+              //     },
+              //   ],
+              // }}
             >
-              <HStack alignItems="center">
+              <HStack id={id} alignItems="center">
                 <View className="flex-row gap-2  items-center">
                   <Box p={2} backgroundColor="gray.200" borderRadius={35}>
                     <Image
