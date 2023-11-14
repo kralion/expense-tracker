@@ -34,7 +34,7 @@ export default function SignUp() {
                 <Image
                   className="w-5 h-5 mr-2"
                   source={{
-                    uri: "https://img.icons8.com/?size=96&id=17949&format=png",
+                    uri: "https://img.icons8.com/?size=50&id=17950&format=png",
                   }}
                 />
                 <Text className="font-semibold text-white">
@@ -49,7 +49,7 @@ export default function SignUp() {
               <Image
                 className="w-5 h-5"
                 source={{
-                  uri: "https://img.icons8.com/?size=96&id=uLWV5A9vXIPu&format=png",
+                  uri: "https://img.icons8.com/?size=50&id=8818&format=png",
                 }}
               />
               </HStack>
