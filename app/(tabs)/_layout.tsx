@@ -23,6 +23,7 @@ export default function TabLayout() {
         tabBarStyle: {
           height: 100,
         },
+        tabBarHideOnKeyboard: true,
       }}
     >
       <Tabs.Screen
