@@ -8,6 +8,7 @@ import Expense from "../../components/dashboard/expense";
 import { supabase } from "../../utils/supabase";
 import { IGasto } from "../../interfaces";
 import { ExpenseSkeleton } from "../../components/skeletons/expense";
+import { Notification } from "../../components/notification";
 type expenseIcon = {
   label: string;
   iconHref: string;
@@ -53,6 +54,7 @@ export default function Index() {
       iconHref: "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png",
     },
   ];
+  const [showNotification, setShowNotification] = React.useState(false);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -93,25 +95,35 @@ export default function Index() {
         </View>
       </View>
       <VStack space={5} className="bg-slate-100">
+        <Notification
+          setShowNotification={setShowNotification}
+          showNotification={showNotification}
+        />
         <HStack className="items-center" mx={3}>
           <Heading size="md">Historial de Gastos</Heading>
 
           <Spacer />
-          <Button variant="subtle" className="rounded-lg" colorScheme="gray">
+          <Button
+            onPress={() => setShowNotification(true)}
+            variant="subtle"
+            className="rounded-lg"
+            colorScheme="gray"
+          >
             Ver Todo
           </Button>
         </HStack>
         <VStack space={4} className="mx-2">
-          {expenses?.map((expense, index) => (
+          {expenses?.map((expense) => (
             <React.Suspense fallback={<ExpenseSkeleton />}>
               <Expense
-                key={index}
+                key={expense.id}
+                id={expense.id}
                 assetIdentificador={
-                  icons.find((icon) => icon.label === expense.categoría)
+                  icons.find((icon) => icon.label === expense.categoria)
                     ?.iconHref ||
                   "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png"
                 }
-                categoría={expense.categoría}
+                categoria={expense.categoria}
                 cantidad={expense.cantidad}
                 fecha={expense.fecha}
               />

@@ -1,1 +1,2 @@
-export { IGasto } from "./expense";
+export * from "./expense";
+export * from "./user";
