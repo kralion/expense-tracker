@@ -39,7 +39,17 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": ["expo-router", "expo-apple-authentication"],
+    "plugins": [
+      "expo-router",
+      "expo-apple-authentication",
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "merchant.com.expensetracker.app",
+          "enableGooglePay": true
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     },

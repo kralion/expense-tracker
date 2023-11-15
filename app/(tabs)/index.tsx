@@ -8,9 +8,51 @@ import Expense from "../../components/dashboard/expense";
 import { supabase } from "../../utils/supabase";
 import { IGasto } from "../../interfaces";
 import { ExpenseSkeleton } from "../../components/skeletons/expense";
+type expenseIcon = {
+  label: string;
+  iconHref: string;
+};
 
 export default function Index() {
   const [expenses, setExpenses] = React.useState<IGasto[]>();
+  const icons: expenseIcon[] = [
+    {
+      label: "Hogar",
+      iconHref: "https://img.icons8.com/?size=160&id=iJzm3AFQCS4W&format=png",
+    },
+    {
+      label: "Transporte",
+      iconHref: "https://img.icons8.com/?size=160&id=Q2m4bLp5g5kF&format=png",
+    },
+    {
+      label: "Salud",
+      iconHref: "https://img.icons8.com/?size=160&id=9shlfoGKqCS7&format=png",
+    },
+    {
+      label: "Entretenimiento",
+      iconHref: "https://img.icons8.com/?size=160&id=nMSSSpYre8pz&format=png",
+    },
+    {
+      label: "Comida",
+      iconHref: "https://img.icons8.com/?size=160&id=dkL9eYC61t89&format=png",
+    },
+    {
+      label: "Finanzas",
+      iconHref: "https://img.icons8.com/?size=160&id=yUTNKgUuTlsA&format=png",
+    },
+    {
+      label: "Educación",
+      iconHref: "https://img.icons8.com/?size=160&id=XAg8ooTyo7Dl&format=png",
+    },
+    {
+      label: "Personal",
+      iconHref: "https://img.icons8.com/?size=160&id=7Ego1HgHexLw&format=png",
+    },
+    {
+      label: "Otros",
+      iconHref: "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png",
+    },
+  ];
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -59,11 +101,16 @@ export default function Index() {
             Ver Todo
           </Button>
         </HStack>
-        <VStack space={4} className="mx-4">
+        <VStack space={4} className="mx-2">
           {expenses?.map((expense, index) => (
             <React.Suspense fallback={<ExpenseSkeleton />}>
               <Expense
                 key={index}
+                assetIdentificador={
+                  icons.find((icon) => icon.label === expense.categoría)
+                    ?.iconHref ||
+                  "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png"
+                }
                 categoría={expense.categoría}
                 cantidad={expense.cantidad}
                 fecha={expense.fecha}
