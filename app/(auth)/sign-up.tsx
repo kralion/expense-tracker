@@ -37,25 +37,28 @@ export default function SignUp() {
         </Text>
 
         <View className="flex flex-row justify-center items-center gap-4 mt-5">
-          <Button colorScheme="teal">
-            <HStack>
-              <Image
-                className="w-5 h-5 mr-2"
-                source={{
-                  uri: "https://img.icons8.com/?size=96&id=17949&format=png",
-                }}
-              />
-              <Text className="font-semibold text-white">
-                Registrarse con Google
-              </Text>
-            </HStack>
+          <Button className="bg-[#368983]">
+            <Pressable>
+              <HStack>
+                <Image
+                  className="w-5 h-5 mr-2"
+                  source={{
+                    uri: "https://img.icons8.com/?size=50&id=17950&format=png",
+                  }}
+                />
+                <Text className="font-semibold text-white">
+                  Registrarse con Google
+                </Text>
+              </HStack>
+            </Pressable>
+
           </Button>
           <Button colorScheme="teal">
             <HStack>
               <Image
                 className="w-5 h-5"
                 source={{
-                  uri: "https://img.icons8.com/?size=96&id=uLWV5A9vXIPu&format=png",
+                  uri: "https://img.icons8.com/?size=50&id=8818&format=png",
                 }}
               />
             </HStack>
