@@ -1,32 +1,20 @@
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet, View, Text } from "react-native";
 
 import { FontAwesome } from "@expo/vector-icons";
-import { Text, View } from "../components/Themed";
+import { useExpenseContext } from "../../context";
 
-type TUsuario = {
-  id: number;
-  nombre: string;
-  correo: string;
-  password: string;
-};
-
-export default function ModalScreen() {
+export default function BuyPremiumModal() {
+  const { hello } = useExpenseContext();
   return (
     <View className="p-2 bg-primary">
       <View className="bg-accent rounded-md p-2 active:opacity-70 flex justify-between flex-row items-center">
         <Text className="font-semibold text-xm mr-2">
-          Adquisicion de la Version premium
+          Adquisicion de la Version premium {hello}
         </Text>
         <FontAwesome name="diamond" size={20} />
       </View>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
     </View>
   );

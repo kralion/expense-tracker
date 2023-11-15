@@ -1,13 +1,13 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, Tabs } from "expo-router";
-import { Pressable, Text, View, useColorScheme } from "react-native";
+import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
+import { View, useColorScheme } from "react-native";
 import Colors from "../../constants/Colors";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome size={30} style={{ marginBottom: -7 }} {...props} />;
 }
 
 export default function TabLayout() {
@@ -40,7 +40,7 @@ export default function TabLayout() {
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="bar-chart" color={color} />
+            <TabBarIcon name="chart-bar" color={color} />
           ),
           headerShown: false,
         }}
@@ -51,7 +51,13 @@ export default function TabLayout() {
           title: "",
           headerShown: false,
           tabBarIcon: ({ color }) => (
-            <TabBarIcon size={60} name="plus-circle" color={color} />
+            <TabBarIcon
+              className="rotate-45"
+              size={60}
+              style={{ marginBottom: -15 }}
+              name="times-circle"
+              color={color}
+            />
           ),
         }}
       />
@@ -59,11 +65,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="wallet"
         options={{
-          headerBackground: () => (
-            <View className="bg-mutedwhite" style={{ flex: 1 }} />
-          ),
           title: "",
-          tabBarIcon: ({ color }) => <TabBarIcon name="money" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="wallet" color={color} />,
+          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -73,7 +77,9 @@ export default function TabLayout() {
             <View className="bg-accent" style={{ flex: 1 }} />
           ),
           title: "",
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="user-alt" color={color} />
+          ),
         }}
       />
     </Tabs>

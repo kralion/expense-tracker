@@ -93,18 +93,13 @@ export default function ExpenseDetailsModal(expense: IGasto) {
       <HStack mt={10} justifyContent="center" mx={3} space={3}>
         <Button
           onPress={() => handleDeleteExpense(expense.id)}
-          width={100}
+          width={350}
           rounded={7}
           variant="solid"
           colorScheme="rose"
         >
           Eliminar
         </Button>
-        <Link asChild href="/(modals)/expense-edit">
-          <Button width={100} rounded={7} variant="outline">
-            Editar
-          </Button>
-        </Link>
       </HStack>
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />

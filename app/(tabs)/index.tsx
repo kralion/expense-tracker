@@ -119,11 +119,11 @@ export default function Index() {
                 key={expense.id}
                 id={expense.id}
                 assetIdentificador={
-                  icons.find((icon) => icon.label === expense.categoría)
+                  icons.find((icon) => icon.label === expense.categoria)
                     ?.iconHref ||
                   "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png"
                 }
-                categoría={expense.categoría}
+                categoria={expense.categoria}
                 cantidad={expense.cantidad}
                 fecha={expense.fecha}
               />

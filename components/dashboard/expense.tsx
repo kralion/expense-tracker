@@ -5,7 +5,7 @@ import { Image, View } from "react-native";
 import { IGasto } from "../../interfaces";
 
 export default function Expense({
-  categoría,
+  categoria,
   cantidad,
   id,
   fecha,
@@ -49,7 +49,7 @@ export default function Expense({
                   </Box>
                   <View className="space-y-1">
                     <Text className=" text-[18px]  text-black font-bold">
-                      {categoría}
+                      {categoria}
                     </Text>
                     <Text className="text-muted text-[14px] ">
                       {fecha?.toLocaleString("es-PE", {

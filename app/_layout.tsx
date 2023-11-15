@@ -5,9 +5,9 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack } from "expo-router";
+import { Link, SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
-import { View, useColorScheme } from "react-native";
+import { Pressable, View, useColorScheme, Text } from "react-native";
 import { NativeBaseProvider } from "native-base";
 export {
   // Catch any errors thrown by the Layout component.
@@ -59,7 +59,7 @@ function RootLayoutNav() {
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen
-            name="modal"
+            name="(modals)/buy-premium"
             options={{
               presentation: "modal",
               title: "",
@@ -70,7 +70,20 @@ function RootLayoutNav() {
           />
           <Stack.Screen
             name="(modals)/expense-details"
-            options={{ presentation: "modal", title: "Detalles del Gasto" }}
+            options={{
+              presentation: "card",
+              headerBackTitle: "Gastos",
+              headerRight: () => (
+                <Link
+                  href="/(modals)/expense-edit"
+                  className="active:opacity-70"
+                >
+                  <Text className="text-blue-500 text-[17px]">Editar</Text>
+                </Link>
+              ),
+
+              title: "Detalles del Gasto",
+            }}
           />
           <Stack.Screen
             name="(modals)/add-expense-success
@@ -80,8 +93,20 @@ function RootLayoutNav() {
           <Stack.Screen
             name="(modals)/expense-edit"
             options={{
-              presentation: "modal",
+              presentation: "formSheet",
               title: "Editar Gasto ",
+              contentStyle: {
+                backgroundColor: "#368983",
+              },
+            }}
+          />
+          <Stack.Screen
+            name="(modals)/export-data"
+            options={{
+              headerBackTitle: "Perfil",
+              presentation: "card",
+
+              title: "Exportar",
               contentStyle: {
                 backgroundColor: "#368983",
               },

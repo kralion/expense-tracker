@@ -4,9 +4,10 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { Button, HStack, Heading, Icon, VStack, Link } from "native-base";
+import { Button, Center, HStack, Heading, Icon, VStack } from "native-base";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
+import { Link } from "expo-router";
 
 export default function App() {
   return (
@@ -38,123 +39,107 @@ export default function App() {
                 uri: "https://img.icons8.com/?size=96&id=eofZXRmqHHir&format=png",
               }}
               className="rounded-md"
-              alt="logo"
+              alt="country"
               width={20}
               height={20}
             />
           </HStack>
         </VStack>
       </View>
+      <HStack>
+        <VStack
+          space={2}
+          paddingLeft={5}
+          alignItems="flex-start"
+          marginTop={200}
+        >
+          <Link asChild href="/(modals)/export-data">
+            <Pressable className="flex flex-row gap-3 p-2 items-center active:opacity-30">
+              <Icon
+                color="gray.500"
+                as={FontAwesome5}
+                size={21}
+                name="user-alt"
+              />
+              <Text className="text-xl font-bold text-gray-500">
+                Datos Personales
+              </Text>
+            </Pressable>
+          </Link>
+          <Link asChild href="/(modals)/export-data">
+            <Pressable className="flex gap-3 flex-row p-2 items-center active:opacity-30">
+              <Icon
+                color="gray.500"
+                as={MaterialCommunityIcons}
+                size={21}
+                name="database-export"
+              />
+              <Text className="text-xl font-bold text-gray-500">
+                Exportar Gastos
+              </Text>
+            </Pressable>
+          </Link>
+          <Link asChild href="/(modals)/export-data">
+            <Pressable className="flex gap-3 flex-row p-2 items-center active:opacity-30">
+              <Icon color="gray.500" as={Entypo} size={21} name="bell" />
 
-      <VStack space={2} paddingX={3} alignItems="flex-start" marginTop={200}>
-        <Button
-          borderWidth={0}
-          colorScheme="emerald"
-          borderRadius={14}
-          variant="link"
-          startIcon={
-            <Icon
-              color="gray.500"
-              as={FontAwesome5}
-              size={21}
-              name="user-alt"
-            />
-          }
-        >
-          <Text className="font-bold text-xl px-1 text-slate-500">
-            Datos Personales
-          </Text>
-        </Button>
-        <Pressable className="flex flex-row items-center gap-2 active:bg-gray-100 rounded-md p-2">
-          <Icon color="gray.400" as={Entypo} size={21} name="wallet" />
-          <Text className="font-bold text-xl px-1 text-slate-400">
-            Métodos de Pago
-          </Text>
-        </Pressable>
-        <Button
-          borderWidth={0}
-          colorScheme="emerald"
-          borderRadius={14}
-          variant="link"
-          startIcon={
-            <Icon color="gray.400" as={Entypo} size={21} name="bell" />
-          }
-        >
-          <Text className="font-bold text-xl px-1 text-slate-400">
-            Notificaciones
-          </Text>
-        </Button>
-        <Button
-          borderWidth={0}
-          colorScheme="emerald"
-          borderRadius={14}
-          variant="link"
-          startIcon={
-            <Icon
-              color="gray.400"
-              as={Ionicons}
-              size={21}
-              name="ios-settings-sharp"
-            />
-          }
-        >
-          <Text className="font-bold text-xl px-1 text-slate-400">
-            Configuracion
-          </Text>
-        </Button>
-        <Button
-          borderWidth={0}
-          colorScheme="emerald"
-          borderRadius={14}
-          variant="link"
-          startIcon={
-            <Icon
-              color="gray.400"
-              as={MaterialCommunityIcons}
-              size={21}
-              name="logout"
-            />
-          }
-        >
-          <Text className="font-bold text-xl px-1 text-slate-400">Salir</Text>
-        </Button>
-      </VStack>
+              <Text className="text-xl font-bold text-gray-500">
+                Notificaciones
+              </Text>
+            </Pressable>
+          </Link>
+          <Link asChild href="/(modals)/export-data">
+            <Pressable className="flex gap-3 flex-row p-2 items-center active:opacity-30">
+              <Icon
+                color="gray.500"
+                as={Ionicons}
+                size={21}
+                name="ios-settings-sharp"
+              />
 
+              <Text className="text-xl font-bold text-gray-500">
+                Configuración
+              </Text>
+            </Pressable>
+          </Link>
+          <Link asChild href="/(modals)/export-data">
+            <Pressable className="flex gap-3 flex-row p-2 items-center active:opacity-30">
+              <Icon
+                color="gray.500"
+                as={MaterialCommunityIcons}
+                size={21}
+                name="logout"
+              />
+
+              <Text className="text-xl font-bold text-gray-500">Salir</Text>
+            </Pressable>
+          </Link>
+        </VStack>
+        <Center>
+          <VStack className="relative">
+            <View className="w-48 absolute top-44 rounded-lg shadow-xl  bg-slate-900 shadow-black/50 ml-24 -rotate-[23deg] h-96" />
+            <View className="w-48 absolute top-32 rounded-lg shadow-md shadow-black/50 bg-accent ml-28 -rotate-[18deg] h-96" />
+            <View className="w-48 absolute top-20 rounded-lg shadow-md shadow-black/50  bg-primary ml-32 -rotate-[10deg] h-96" />
+          </VStack>
+        </Center>
+      </HStack>
       <HStack
         alignItems="center"
         justifyContent="center"
         className="text-sm text-center absolute -bottom-24 left-20 "
       >
-        <Text className="text-gray-400">Developed by</Text>
+        <Text className="text-gray-400">Desarrollado por</Text>
 
         <Link
           href="https://twitter.com/joanpaucar_"
-          isUnderlined={false}
-          isExternal
-          _text={{
-            color: "teal.600",
-          }}
-          mt={-0.5}
-          _web={{
-            mb: -2,
-          }}
-          className="px-1 "
+          className="px-1  text-primary active:underline"
         >
           Brayan
         </Link>
         <Text className="text-gray-400">&</Text>
         <Link
           href="https://www.facebook.com/miguelangel.requenaramos.94"
-          isUnderlined={false}
-          isExternal
-          _text={{
-            color: "teal.600",
-          }}
-          mt={-0.5}
-          _web={{
-            mb: -2,
-          }}
-          className="px-1 "
+          className="px-1 text-primary active:underline "
         >
           Miguel
         </Link>
