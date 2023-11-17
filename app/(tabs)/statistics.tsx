@@ -1,10 +1,9 @@
-import { Button, Select, VStack, HStack, HamburgerIcon } from "native-base";
-import { useState } from "react";
-import { Text, View, Pressable } from "react-native";
-import Chart from "../../components/estadisticas/chart";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Expense from "../../components/dashboard/expense";
 import FontAwesome5 from "@expo/vector-icons/build/FontAwesome5";
+import { Button, HStack, Select, VStack } from "native-base";
+import { useState } from "react";
+import { Pressable, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Chart from "../../components/estadisticas/chart";
 export default function Statistics() {
   const [service, setService] = useState("gastos");
   return (

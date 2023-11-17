@@ -5,15 +5,15 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Link, SplashScreen, Stack } from "expo-router";
-import { useEffect } from "react";
-import { Pressable, View, useColorScheme, Text } from "react-native";
+import { SplashScreen, Stack } from "expo-router";
 import { NativeBaseProvider } from "native-base";
+import * as React from "react";
+import { useEffect } from "react";
+import { View, useColorScheme } from "react-native";
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from "expo-router";
-import * as React from "react";
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -68,37 +68,11 @@ function RootLayoutNav() {
               ),
             }}
           />
-          <Stack.Screen
-            name="(modals)/expense-details"
-            options={{
-              presentation: "card",
-              headerBackTitle: "Gastos",
-              headerRight: () => (
-                <Link
-                  href="/(modals)/expense-edit"
-                  className="active:opacity-70"
-                >
-                  <Text className="text-blue-500 text-[17px]">Editar</Text>
-                </Link>
-              ),
 
-              title: "Detalles del Gasto",
-            }}
-          />
           <Stack.Screen
             name="(modals)/add-expense-success
             "
             options={{ presentation: "modal", title: "Agregar Gasto" }}
-          />
-          <Stack.Screen
-            name="(modals)/expense-edit"
-            options={{
-              presentation: "formSheet",
-              title: "Editar Gasto ",
-              contentStyle: {
-                backgroundColor: "#368983",
-              },
-            }}
           />
           <Stack.Screen
             name="(modals)/export-data"

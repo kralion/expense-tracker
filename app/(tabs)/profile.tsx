@@ -4,10 +4,10 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { Button, Center, HStack, Heading, Icon, VStack } from "native-base";
+import { Link } from "expo-router";
+import { Center, HStack, Heading, Icon, VStack } from "native-base";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
-import { Link } from "expo-router";
 
 export default function App() {
   return (

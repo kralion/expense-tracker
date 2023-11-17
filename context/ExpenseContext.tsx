@@ -2,22 +2,21 @@ import { createContext, useContext } from "react";
 import { IExpensContextProvider } from "../interfaces";
 
 export const ExpenseContext = createContext<IExpensContextProvider>({
-  hello: "HelloWorld",
   addExpense: () => {},
   deleteExpense: () => {},
   children: null,
 });
 
 export const ExpenseProvider = ({ children }: IExpensContextProvider) => {
-  const hello = "HelloWorld";
   const addExpense = () => {};
-  const deleteExpense = () => {};
+  const deleteExpense = () => {
+    console.log("deleteExpense");
+  };
   return (
     <ExpenseContext.Provider
       value={{
         addExpense,
         deleteExpense,
-        hello,
         children,
       }}
     >

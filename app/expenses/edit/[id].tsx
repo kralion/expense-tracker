@@ -1,15 +1,16 @@
-import { Button, Center, Input, Select, TextArea, VStack } from "native-base";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { Button, Input, Select, TextArea, VStack } from "native-base";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ExpenseEditModal() {
   const [category, setCategory] = useState("");
   const [type, setType] = useState("");
   return (
     <View className="bg-mutedwhite shadow-xl space-y-5 rounded-xl p-5 m-5">
-      <Text className="font-semibold text-left text-xl ">Detalles</Text>
+      <Text className="font-semibold text-left text-xl ">
+        Detalles del Gasto
+      </Text>
       {/* //TODO: Change the value and selected value of each select component */}
       <VStack space={4}>
         <Select

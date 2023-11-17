@@ -1,11 +1,10 @@
 import { StatusBar } from "expo-status-bar";
-import { Platform } from "react-native";
-
-import { Badge, Box, HStack, Tag, VStack, Button } from "native-base";
-import { Text, View } from "react-native";
-import { IGasto } from "../../interfaces";
-import { Link } from "expo-router";
-import { supabase } from "../../utils/supabase";
+import { Platform, Pressable } from "react-native";
+import { Badge, Button, HStack, Tag, VStack } from "native-base";
+import { Text } from "react-native";
+import { IGasto } from "../../../interfaces";
+import { supabase } from "../../../utils/supabase";
+import { useLocalSearchParams, Stack, Link } from "expo-router";
 
 export default function ExpenseDetailsModal(expense: IGasto) {
   const handleDeleteExpense = async (id: string) => {
@@ -13,7 +12,7 @@ export default function ExpenseDetailsModal(expense: IGasto) {
       const { data, error } = await supabase
         .from("gastos")
         .delete()
-        .eq("id", id);
+        .eq("id", expense.id);
 
       if (error) {
         throw error;
@@ -24,6 +23,22 @@ export default function ExpenseDetailsModal(expense: IGasto) {
   };
   return (
     <VStack>
+      <Stack.Screen
+        options={{
+          presentation: "card",
+          headerBackTitle: "Gastos",
+          headerRight: () => (
+            <Link href="/expenses/edit/1" asChild>
+              <Pressable className="active:opacity-50">
+                <Text className="text-blue-500 text-[17px]">Editar</Text>
+              </Pressable>
+            </Link>
+          ),
+
+          title: ` Detalles del Gasto
+          ${expense.id}  `,
+        }}
+      />
       <VStack
         borderColor="coolGray.300"
         rounded={14}
@@ -37,7 +52,7 @@ export default function ExpenseDetailsModal(expense: IGasto) {
         </Text>
 
         <Tag size="lg" variant="solid" colorScheme="teal">
-          {expense.categoría || "Educación"}
+          {expense.categoria || "Educación"}
         </Tag>
         <Text>
           Esta categoría representa gastos que se realizan referentes a la

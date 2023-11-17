@@ -3,8 +3,6 @@ import * as React from "react";
 import { Image, SafeAreaView, Text, View } from "react-native";
 
 export default function Wallet() {
-  const [show, setShow] = React.useState(false);
-
   return (
     <SafeAreaView className=" space-y-6  ">
       <Text className="font-bold text-center text-2xl">Billetera</Text>

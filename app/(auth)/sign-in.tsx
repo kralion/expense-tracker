@@ -1,6 +1,3 @@
-//ios  422618280931-fc0s3ktar0vcgoc80n128589e5ahhk1e.apps.googleusercontent.com
-// android  422618280931-50inl7uig7t4p5k6o89521jejcic2llj.apps.googleusercontent.com
-
 import * as Google from "expo-auth-session/providers/google";
 
 import { MaterialIcons } from "@expo/vector-icons";
