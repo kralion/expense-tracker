@@ -2,6 +2,7 @@ import { createContext, useContext } from "react";
 import { IExpensContextProvider, IGasto } from "../interfaces";
 import { supabase } from "@/utils/supabase";
 import * as React from "react";
+import { NotificationsContext } from "./NotificationsContext";
 
 export const ExpenseContext = createContext<IExpensContextProvider>({
   addExpense: () => {},
@@ -16,15 +17,17 @@ export const ExpenseContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [expenses, setExpenses] = React.useState([]);
+  const { showNotification } = useContext(NotificationsContext);
 
   const fetchData = async () => {
     try {
-      const { data, error } = await supabase.from("gastos").select("*");
-      if (error) {
-        throw error;
-      }
+      const { data } = await supabase.from("gastos").select("*");
       setExpenses(JSON.parse(JSON.stringify(data)));
     } catch (error) {
+      showNotification({
+        title: "Error al obtener gastos",
+        alertStatus: "error",
+      });
       console.error(error);
     }
   };
@@ -36,7 +39,16 @@ export const ExpenseContextProvider = ({
       const { id, fecha, ...expenseParsed } = expense;
       await supabase.from("expenses").insert([expenseParsed]);
       fetchData();
+      showNotification({
+        title: "Gasto agregado",
+        alertStatus: "success",
+      });
     } catch (error) {
+      showNotification({
+        title: "Error al agregar gasto",
+        alertStatus: "error",
+      });
+
       console.error("Error adding expense:", error);
     }
   };
@@ -48,7 +60,15 @@ export const ExpenseContextProvider = ({
         .update(expenseParsedForUpdate)
         .eq("id", id);
       fetchData();
+      showNotification({
+        title: "Gasto actualizado",
+        alertStatus: "success",
+      });
     } catch (error) {
+      showNotification({
+        title: "Error al actualizar gasto",
+        alertStatus: "error",
+      });
       console.error("Error updating expense:", error);
     }
   };
@@ -56,7 +76,15 @@ export const ExpenseContextProvider = ({
     try {
       await supabase.from("expenses").delete().eq("id", id);
       fetchData();
+      showNotification({
+        title: "Gasto eliminado",
+        alertStatus: "success",
+      });
     } catch (error) {
+      showNotification({
+        title: "Error al eliminar gasto",
+        alertStatus: "error",
+      });
       console.error("Error deleting expense:", error);
     }
   };

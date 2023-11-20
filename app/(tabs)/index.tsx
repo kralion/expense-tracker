@@ -9,11 +9,18 @@ import { ExpenseSkeleton } from "../../components/skeletons/expense";
 import { Notification } from "../../components/notification";
 import { expensesIdentifiers } from "@/constants/ExpensesIdentifiers";
 import { useExpenseContext } from "@/context";
+import { useNotificationsContext } from "@/context/NotificationsContext";
 
 export default function Index() {
   const { expenses } = useExpenseContext();
+  const { showNotification: show } = useNotificationsContext();
   const [showNotification, setShowNotification] = React.useState(false);
-
+  React.useEffect(() => {
+    show({
+      title: "Gasto Realizado",
+      alertStatus: "success",
+    });
+  }, []);
   return (
     <SafeAreaView className="bg-primary space-y-7">
       <View className="bg-primary space-y-7">
