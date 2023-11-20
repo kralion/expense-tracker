@@ -4,7 +4,7 @@ import * as React from "react";
 import { Image, View } from "react-native";
 import { IGasto } from "../../interfaces";
 
-export default function Expense(expense: IGasto) {
+export function Expense(expense: IGasto) {
   return (
     <Link href={`/expenses/details/${expense.id}`} asChild>
       <Pressable>

@@ -7,7 +7,7 @@ import Chart from "../../components/estadisticas/chart";
 import { useExpenseContext } from "@/context";
 import { ExpenseSkeleton } from "@/components/skeletons/expense";
 import * as React from "react";
-import Expense from "@/components/dashboard/expense";
+import { Expense } from "@/components/shared";
 import { expensesIdentifiers } from "@/constants/ExpensesIdentifiers";
 export default function Statistics() {
   const [service, setService] = useState("gastos");

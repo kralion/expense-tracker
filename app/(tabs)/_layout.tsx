@@ -3,7 +3,7 @@ import { Tabs } from "expo-router";
 import { View, useColorScheme } from "react-native";
 import Colors from "../../constants/Colors";
 import { ExpenseContextProvider } from "@/context";
-import { NotificationsContextProvider } from "@/context/NotificationsContext";
+import { NotificationContextProvider } from "@/context";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -17,7 +17,7 @@ export default function TabLayout() {
 
   return (
     <ExpenseContextProvider>
-      <NotificationsContextProvider>
+      <NotificationContextProvider>
         <Tabs
           screenOptions={{
             tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
@@ -91,7 +91,7 @@ export default function TabLayout() {
             }}
           />
         </Tabs>
-      </NotificationsContextProvider>
+      </NotificationContextProvider>
     </ExpenseContextProvider>
   );
 }
