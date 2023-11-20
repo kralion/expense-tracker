@@ -10,5 +10,5 @@ export interface IGasto {
 export interface IExpensContextProvider {
   addExpense: (expense: IGasto) => void;
   deleteExpense: ({ id }: IGasto) => void;
-  children: React.ReactNode;
+  expenses: IGasto[];
 }

@@ -4,8 +4,14 @@ import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Chart from "../../components/estadisticas/chart";
+import { useExpenseContext } from "@/context";
+import { ExpenseSkeleton } from "@/components/skeletons/expense";
+import * as React from "react";
+import Expense from "@/components/dashboard/expense";
+import { expensesIdentifiers } from "@/constants/ExpensesIdentifiers";
 export default function Statistics() {
   const [service, setService] = useState("gastos");
+  const { expenses } = useExpenseContext();
   return (
     <SafeAreaView>
       <Text className="font-bold text-center text-2xl">Estadísticas</Text>
@@ -88,7 +94,25 @@ export default function Statistics() {
         <Text className="text-xl text-muted font-semibold">Top Gastos</Text>
         <Pressable>{/* <ArrowUpDown color="gray" size={20} /> */}</Pressable>
       </View>
-      <VStack space={4} className="mx-4"></VStack>
+      <VStack space={4} className="mx-2">
+        {expenses?.map((expense) => (
+          <React.Suspense fallback={<ExpenseSkeleton />}>
+            <Expense
+              key={expense.id}
+              id={expense.id}
+              assetIdentificador={
+                expensesIdentifiers.find(
+                  (icon) => icon.label === expense.categoria
+                )?.iconHref ||
+                "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png"
+              }
+              categoria={expense.categoria}
+              cantidad={expense.cantidad}
+              fecha={expense.fecha}
+            />
+          </React.Suspense>
+        ))}
+      </VStack>
     </SafeAreaView>
   );
 }
