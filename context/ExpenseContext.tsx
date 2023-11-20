@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 import { IExpensContextProvider, IGasto } from "../interfaces";
 import { supabase } from "@/utils/supabase";
 import * as React from "react";
-import { NotificationsContext } from "./NotificationsContext";
+import { NotificationContext } from "./NotificationContext";
 
 export const ExpenseContext = createContext<IExpensContextProvider>({
   addExpense: () => {},
@@ -17,7 +17,7 @@ export const ExpenseContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [expenses, setExpenses] = React.useState([]);
-  const { showNotification } = useContext(NotificationsContext);
+  const { showNotification } = useContext(NotificationContext);
 
   const fetchData = async () => {
     try {

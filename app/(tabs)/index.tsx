@@ -3,17 +3,17 @@ import { Link } from "expo-router";
 import { Button, HStack, Heading, Spacer, Text, VStack } from "native-base";
 import * as React from "react";
 import { Pressable, SafeAreaView, View } from "react-native";
-import Card from "../../components/dashboard/card";
-import Expense from "../../components/dashboard/expense";
-import { ExpenseSkeleton } from "../../components/skeletons/expense";
-import { Notification } from "../../components/notification";
+import Card from "@/components/dashboard/card";
+import { Expense } from "@/components/shared";
+import { ExpenseSkeleton } from "@/components/skeletons/expense";
+import { BudgetLimitExceededModal } from "@/components/shared";
 import { expensesIdentifiers } from "@/constants/ExpensesIdentifiers";
 import { useExpenseContext } from "@/context";
-import { useNotificationsContext } from "@/context/NotificationsContext";
+import { useNotificationContext } from "@/context";
 
 export default function Index() {
   const { expenses } = useExpenseContext();
-  const { showNotification: show } = useNotificationsContext();
+  const { showNotification: show } = useNotificationContext();
   const [showNotification, setShowNotification] = React.useState(false);
   React.useEffect(() => {
     show({
@@ -53,7 +53,7 @@ export default function Index() {
         </View>
       </View>
       <VStack space={5} className="bg-slate-100">
-        <Notification
+        <BudgetLimitExceededModal
           setShowNotification={setShowNotification}
           showNotification={showNotification}
         />

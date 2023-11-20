@@ -11,7 +11,7 @@ interface INotificationContext {
   notification: TNotification;
 }
 
-export const NotificationsContext = createContext<INotificationContext>({
+export const NotificationContext = createContext<INotificationContext>({
   showNotification: () => {},
   notification: {
     title: "",
@@ -19,7 +19,7 @@ export const NotificationsContext = createContext<INotificationContext>({
   },
 });
 
-export const NotificationsContextProvider = ({
+export const NotificationContextProvider = ({
   children,
 }: {
   children: React.ReactNode;
@@ -40,7 +40,7 @@ export const NotificationsContextProvider = ({
   };
 
   return (
-    <NotificationsContext.Provider value={{ showNotification, notification }}>
+    <NotificationContext.Provider value={{ showNotification, notification }}>
       {notification.title && (
         <Alert
           variant="top-accent"
@@ -65,15 +65,15 @@ export const NotificationsContextProvider = ({
         </Alert>
       )}
       {children}
-    </NotificationsContext.Provider>
+    </NotificationContext.Provider>
   );
 };
 
-export const useNotificationsContext = () => {
-  const context = React.useContext(NotificationsContext);
+export const useNotificationContext = () => {
+  const context = React.useContext(NotificationContext);
   if (!context) {
     throw new Error(
-      "useNotificationsContext must be used within a NotificationsContextProvider"
+      "useNotificationContext must be used within a NotificationsContextProvider"
     );
   }
   return context;

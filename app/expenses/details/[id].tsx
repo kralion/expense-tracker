@@ -2,8 +2,8 @@ import { StatusBar } from "expo-status-bar";
 import { Platform, Pressable } from "react-native";
 import { Badge, Button, HStack, Tag, VStack } from "native-base";
 import { Text } from "react-native";
-import { IGasto } from "../../../interfaces";
-import { supabase } from "../../../utils/supabase";
+import { IGasto } from "@/interfaces";
+import { supabase } from "@/utils/supabase";
 import { useLocalSearchParams, Stack, Link } from "expo-router";
 
 export default function ExpenseDetailsModal(expense: IGasto) {
