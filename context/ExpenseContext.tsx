@@ -7,6 +7,7 @@ export const ExpenseContext = createContext<IExpensContextProvider>({
   addExpense: () => {},
   deleteExpense: () => {},
   expenses: [],
+  updateExpense: () => {},
 });
 
 export const ExpenseContextProvider = ({
@@ -31,16 +32,33 @@ export const ExpenseContextProvider = ({
     fetchData();
   }, []);
   const addExpense = async (expense: IGasto) => {
-    const { id, fecha, ...expenseParsed } = expense;
-    const { error } = await supabase.from("expenses").insert([expenseParsed]);
-
-    if (error) {
-      throw error;
+    try {
+      const { id, fecha, ...expenseParsed } = expense;
+      await supabase.from("expenses").insert([expenseParsed]);
+      fetchData();
+    } catch (error) {
+      console.error("Error adding expense:", error);
     }
-    fetchData();
   };
-  const deleteExpense = () => {
-    console.log("deleteExpense");
+  const updateExpense = async (expense: IGasto) => {
+    try {
+      const { id, fecha, ...expenseParsedForUpdate } = expense;
+      await supabase
+        .from("expenses")
+        .update(expenseParsedForUpdate)
+        .eq("id", id);
+      fetchData();
+    } catch (error) {
+      console.error("Error updating expense:", error);
+    }
+  };
+  const deleteExpense = async ({ id }: IGasto) => {
+    try {
+      await supabase.from("expenses").delete().eq("id", id);
+      fetchData();
+    } catch (error) {
+      console.error("Error deleting expense:", error);
+    }
   };
   return (
     <ExpenseContext.Provider
@@ -48,6 +66,7 @@ export const ExpenseContextProvider = ({
         addExpense,
         deleteExpense,
         expenses,
+        updateExpense,
       }}
     >
       {children}
