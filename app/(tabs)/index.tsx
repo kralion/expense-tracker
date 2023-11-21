@@ -10,6 +10,8 @@ import { BudgetLimitExceededModal } from "@/components/shared";
 import { expensesIdentifiers } from "@/constants/ExpensesIdentifiers";
 import { useExpenseContext } from "@/context";
 import { useNotificationContext } from "@/context";
+import { supabase } from "@/utils/supabase";
+import { Session } from "@supabase/supabase-js";
 
 export default function Index() {
   const { expenses } = useExpenseContext();
@@ -21,6 +23,17 @@ export default function Index() {
       alertStatus: "success",
     });
   }, []);
+  const [session, setSession] = React.useState<Session | null>(null);
+
+  React.useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
   return (
     <SafeAreaView className="bg-primary space-y-7">
       <View className="bg-primary space-y-7">
@@ -28,7 +41,10 @@ export default function Index() {
           <View>
             <Text className="text-mutedwhite text-[12px] ">20 Oct, Martes</Text>
             <Text className="font-bold text-[16px] text-white  tracking-tight">
-              Hola, Brayan !
+              {session &&
+                session.user &&
+                `Hola, ${session.user.role} 👋
+                `}
             </Text>
           </View>
           <Link href="/modal" asChild>
