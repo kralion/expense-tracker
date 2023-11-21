@@ -54,16 +54,16 @@ export function BudgetLimitExceededModal({
                 </Badge>
               </VStack>
               <Text>Te recomendamos lo siguiente :</Text>
-              <FlatList
-                data={advices}
-                className="mt-3 text-left"
-                renderItem={({ item }) => (
-                  <Text variant="link" className="font-bold text-muted mt-2">
-                    - {item.description}
-                  </Text>
-                )}
-                keyExtractor={(item) => item.id}
-              />
+
+              {advices.map((advice) => (
+                <View
+                  key={advice.id}
+                  className="flex mt-2 flex-row items-center"
+                >
+                  <View className="w-2 h-2 bg-teal-500 rounded-full mr-2"></View>
+                  <Text>{advice.description}</Text>
+                </View>
+              ))}
             </View>
           </View>
         </Modal.Body>

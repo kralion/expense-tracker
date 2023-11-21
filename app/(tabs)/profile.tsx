@@ -1,15 +1,31 @@
+import { supabase } from "@/utils/supabase";
 import {
   Entypo,
   FontAwesome5,
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { Session } from "@supabase/supabase-js";
+import { Link, router } from "expo-router";
 import { Center, HStack, Heading, Icon, VStack } from "native-base";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
 export default function App() {
+  const [session, setSession] = React.useState<Session | null>(null);
+  async function signOut() {
+    await supabase.auth.signOut();
+    router.push("/(auth)/sign-in");
+  }
+  React.useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
   return (
     <View>
       <View className="bg-accent relative h-20">
@@ -21,15 +37,17 @@ export default function App() {
         >
           <Image
             source={{
-              uri: "https://userstock.io/data/wp-content/uploads/2017/09/bewakoof-com-official-219589-300x300.jpg",
+              uri:
+                "https://userstock.io/data/wp-content/uploads/2017/09/bewakoof-com-official-219589-300x300.jpg" ||
+                session?.user?.user_metadata?.avatar_url,
             }}
             alt="profile-pic"
             width={150}
             height={150}
             className="rounded-full "
           />
-
-          <Heading size="md">Brayan Joan</Heading>
+          {/* //TODO: Cambiar el nombre por el nombre del usuario */}
+          <Heading size="md"> {session?.user?.email} </Heading>
           <HStack space={2} alignItems="center">
             <Heading size="xm" color="gray.400">
               28 años,
@@ -102,18 +120,19 @@ export default function App() {
               </Text>
             </Pressable>
           </Link>
-          <Link asChild href="/(modals)/export-data">
-            <Pressable className="flex gap-3 flex-row p-2 items-center active:opacity-30">
-              <Icon
-                color="gray.500"
-                as={MaterialCommunityIcons}
-                size={21}
-                name="logout"
-              />
+          <Pressable
+            onPress={() => signOut()}
+            className="flex gap-3 flex-row p-2 items-center active:opacity-30"
+          >
+            <Icon
+              color="gray.500"
+              as={MaterialCommunityIcons}
+              size={21}
+              name="logout"
+            />
 
-              <Text className="text-xl font-bold text-gray-500">Salir</Text>
-            </Pressable>
-          </Link>
+            <Text className="text-xl font-bold text-gray-500">Salir</Text>
+          </Pressable>
         </VStack>
         <Center>
           <VStack className="relative">
