@@ -49,9 +49,7 @@ export function BudgetLimitExceededModal({
                 <Badge colorScheme="red" variant="solid">
                   S/. 1,010.00 registrados
                 </Badge>
-                <Badge colorScheme="teal" variant="solid">
-                  S/. 1,000.00 presupuestados
-                </Badge>
+                <Badge variant="solid">S/. 1,000.00 presupuestados</Badge>
               </VStack>
               <Text>Te recomendamos lo siguiente :</Text>
 

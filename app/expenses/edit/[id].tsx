@@ -73,7 +73,7 @@ export default function ExpenseEditModal() {
         </Select>
         <Input size="md" placeholder="Monto" type="text" borderRadius={7} />
       </VStack>
-      <Button colorScheme="teal" rounded={7}>
+      <Button  rounded={7}>
         Guardar
       </Button>
     </View>

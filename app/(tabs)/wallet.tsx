@@ -55,7 +55,6 @@ export default function Wallet() {
             />
           </View>
           <Button
-            colorScheme="teal"
             className="rounded-full mb-4 ml-48"
             height={10}
             w={40}

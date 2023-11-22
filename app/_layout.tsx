@@ -6,7 +6,7 @@ import {
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
-import { NativeBaseProvider } from "native-base";
+import { NativeBaseProvider, extendTheme } from "native-base";
 import * as React from "react";
 import { useEffect } from "react";
 import { View, useColorScheme } from "react-native";
@@ -50,8 +50,26 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
+  const theme = extendTheme({
+    colors: {
+      // Add new color
+      primary: {
+        600: "#10828D", // Primary (default) color
+        800: "#387682", // Active color
+      },
+
+      // Redefine only one shade, other color remains same
+      amber: {
+        400: "#d97706",
+      },
+    },
+    config: {
+      // Changing initialColorMode to 'dark'
+      initialColorMode: "light",
+    },
+  });
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider theme={theme}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         {/* <Stack>
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
