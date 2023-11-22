@@ -39,7 +39,7 @@ export default function AddExpenseSuccesModal() {
                 </Text>
                 nuevos soles registrados en tu historial de gastos
               </Text>
-              <Button colorScheme="teal" className="rounded-full" width={40}>
+              <Button className="rounded-full" width={40}>
                 <Text className=" font-semibold text-white">Aceptar</Text>
               </Button>
             </VStack>

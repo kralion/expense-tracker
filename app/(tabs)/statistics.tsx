@@ -1,4 +1,4 @@
-import FontAwesome5 from "@expo/vector-icons/build/FontAwesome5";
+import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { Button, HStack, Select, VStack } from "native-base";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -9,6 +9,7 @@ import { ExpenseSkeleton } from "@/components/skeletons/expense";
 import * as React from "react";
 import { Expense } from "@/components/shared";
 import { expensesIdentifiers } from "@/constants/ExpensesIdentifiers";
+import { Link } from "expo-router";
 export default function Statistics() {
   const [service, setService] = useState("gastos");
   const { expenses } = useExpenseContext();
@@ -25,7 +26,6 @@ export default function Statistics() {
       >
         <Button
           variant="ghost"
-          colorScheme="teal"
           className="py-2.5 w-[90px]  rounded-lg"
           onPress={() => alert("Diario")}
         >
@@ -34,7 +34,6 @@ export default function Statistics() {
         <Button
           variant="ghost"
           isPressed
-          colorScheme="teal"
           className="py-2.5 w-[90px]  rounded-lg"
           onPress={() => alert("Semanal")}
         >
@@ -42,7 +41,6 @@ export default function Statistics() {
         </Button>
         <Button
           variant="ghost"
-          colorScheme="teal"
           className="py-2.5 w-[90px]  rounded-lg"
           onPress={() => alert("Mensual")}
         >
@@ -50,7 +48,6 @@ export default function Statistics() {
         </Button>
         <Button
           variant="ghost"
-          colorScheme="teal"
           className="py-2.5 w-[90px]  rounded-lg"
           onPress={() => alert("Anual")}
         >
@@ -60,15 +57,17 @@ export default function Statistics() {
 
       <Chart />
       <HStack alignItems="center" justifyContent="space-between" paddingX={4}>
-        <Button
-          size="sm"
-          colorScheme="teal"
-          variant="outline"
-          onPress={() => alert("Exportar")}
-          borderRadius={7}
-        >
-          Exportar
-        </Button>
+        <Link asChild href="/(modals)/export-data">
+          <Button
+            size="sm"
+            startIcon={
+              <FontAwesome name="file-pdf-o" color="white" marginRight={3} />
+            }
+            borderRadius={7}
+          >
+            Exportar Historial
+          </Button>
+        </Link>
         <Select
           selectedValue={service}
           minWidth="150"

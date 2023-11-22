@@ -148,7 +148,6 @@ export default function SignIn() {
           </VStack>
 
           <Button
-            colorScheme="teal"
             className="rounded-full"
             height={12}
             w={{
@@ -262,7 +261,7 @@ export default function SignIn() {
             ¿No tienes una cuenta?
           </Text>
           <Link asChild href={"/(auth)/sign-up"}>
-            <Button className="px-1" variant="link" colorScheme="teal">
+            <Button className="px-1" variant="link">
               Regístrate
             </Button>
           </Link>

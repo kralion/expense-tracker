@@ -51,7 +51,7 @@ export default function ExpenseDetailsModal(expense: IGasto) {
           Categoría
         </Text>
 
-        <Tag size="lg" variant="solid" colorScheme="teal">
+        <Tag size="lg" variant="solid">
           {expense.categoria || "Educación"}
         </Tag>
         <Text>
@@ -71,20 +71,10 @@ export default function ExpenseDetailsModal(expense: IGasto) {
         <Text className="text-black font-bold text-[18px]">Fecha Registro</Text>
 
         <HStack space={2}>
-          <Badge
-            size="lg"
-            variant="outline"
-            colorScheme="teal"
-            className="rounded-full"
-          >
+          <Badge size="lg" variant="outline" className="rounded-full">
             {expense.fecha || "05 de Noviembre del 2023"}
           </Badge>
-          <Badge
-            size="lg"
-            variant="solid"
-            colorScheme="teal"
-            className="rounded-full"
-          >
+          <Badge size="lg" variant="solid" className="rounded-full">
             {expense.fecha || "16:53 PM"}
           </Badge>
         </HStack>
@@ -101,7 +91,7 @@ export default function ExpenseDetailsModal(expense: IGasto) {
           Monto Registrado
         </Text>
 
-        <Tag variant="solid" rounded={7} colorScheme="teal">
+        <Tag variant="solid" rounded={7}>
           S/. {expense.cantidad || 100}.00
         </Tag>
       </VStack>

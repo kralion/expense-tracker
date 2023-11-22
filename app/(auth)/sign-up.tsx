@@ -52,7 +52,7 @@ export default function SignUp() {
             Ya tienes una cuenta ?
           </Text>
           <Link asChild href="/(auth)/sign-in">
-            <Button className="px-0" variant="link" colorScheme="teal">
+            <Button className="px-0" variant="link">
               Inicia Sesión
             </Button>
           </Link>
@@ -62,22 +62,20 @@ export default function SignUp() {
         </Text>
         <VStack alignItems="center" space={4}>
           <View className="flex flex-row justify-center items-center gap-4 mt-5">
-            <Button className="bg-[#368983]">
-              <Pressable>
-                <HStack>
-                  <Image
-                    className="w-5 h-5 mr-2"
-                    source={{
-                      uri: "https://img.icons8.com/?size=50&id=17950&format=png",
-                    }}
-                  />
-                  <Text className="font-semibold text-white">
-                    Registrarse con Google
-                  </Text>
-                </HStack>
-              </Pressable>
+            <Button>
+              <HStack>
+                <Image
+                  className="w-5 h-5 mr-2"
+                  source={{
+                    uri: "https://img.icons8.com/?size=50&id=17950&format=png",
+                  }}
+                />
+                <Text className="font-semibold text-white">
+                  Registrarse con Google
+                </Text>
+              </HStack>
             </Button>
-            <Button colorScheme="teal">
+            <Button>
               <HStack>
                 <Image
                   className="w-5 h-5"
@@ -87,7 +85,7 @@ export default function SignUp() {
                 />
               </HStack>
             </Button>
-            <Button colorScheme="teal">
+            <Button>
               <HStack>
                 <Image
                   className="w-5 h-5"
@@ -177,14 +175,13 @@ export default function SignUp() {
           <Checkbox
             shadow="none"
             borderWidth={1}
-            colorScheme="teal"
             value="acepto"
             accessibilityLabel="Terminos y Condiciones"
             defaultIsChecked
           >
             <Text className="text-mute">Acepto los</Text>
             <Link asChild href={"/modal"}>
-              <Button px={0} variant="link" colorScheme="teal">
+              <Button px={0} variant="link">
                 Términos y Condiciones
               </Button>
             </Link>
@@ -193,7 +190,6 @@ export default function SignUp() {
 
         <Button
           className="rounded-md mt-5 "
-          colorScheme="teal"
           height={12}
           onPress={() => signUpWithEmail()}
           w={{
