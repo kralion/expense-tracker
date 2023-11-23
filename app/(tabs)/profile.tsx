@@ -13,9 +13,23 @@ import { Image, Pressable, Text, View } from "react-native";
 
 export default function App() {
   const [session, setSession] = React.useState<Session | null>(null);
+  const [name, setName] = React.useState("");
   async function signOut() {
     await supabase.auth.signOut();
     router.push("/(auth)/sign-in");
+  }
+  async function fetchUserName(userId: string) {
+    const { data, error } = await supabase
+      .from('app_users')
+      .select('nombres')
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      console.error(error);
+    } else if (data) {
+      setName(data.nombres);
+    }
   }
   React.useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -25,7 +39,13 @@ export default function App() {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
-  }, []);
+
+    if (session?.user?.id) {
+      fetchUserName(session.user.id);
+    }
+  }, [
+    session?.user?.id
+  ]);
   return (
     <View>
       <View className="bg-accent relative h-20">
@@ -47,7 +67,7 @@ export default function App() {
             className="rounded-full "
           />
           {/* //TODO: Cambiar el nombre por el nombre del usuario */}
-          <Heading size="md"> {session?.user?.email} </Heading>
+          <Heading size="md"> {name} </Heading>
           <HStack space={2} alignItems="center">
             <Heading size="xm" color="gray.400">
               28 años,

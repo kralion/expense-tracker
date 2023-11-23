@@ -27,21 +27,31 @@ export default function SignUp() {
   const [show, setShow] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [nombres, setNombres] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
   async function signUpWithEmail() {
     setLoading(true);
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
     });
-
-    if (error) Alert.alert(error.message);
-    if (!session)
-      Alert.alert("Por favor, revisa tu correo electrónico para verificarlo");
+  
+    if (error) {
+      Alert.alert(error.message);
+    } else if (data && data.user) {
+      // Agregar nombres y apellidos a la tabla de usuarios
+      const { data: userData, error: userError } = await supabase
+        .from('app_users')
+        .insert([
+          { id: data.user.id, nombres: nombres },
+        ])
+  
+      if (userError) {
+        Alert.alert(userError.message);
+      }
+    }
+  
     setLoading(false);
   }
   return (
@@ -99,17 +109,19 @@ export default function SignUp() {
 
           <HStack space={3}>
             <FormControl w="85%" maxW="150px">
-              <FormControl.Label marginBottom={2}>Nombres</FormControl.Label>
+              <FormControl.Label marginBottom={2}>Nombre</FormControl.Label>
               <Input
+                value={nombres}
                 size="lg"
                 borderRadius={7}
+                onChange={(value) => setNombres(value.nativeEvent.text)}
                 w={{
                   base: "100%",
                   md: "25%",
                 }}
               />
             </FormControl>
-            <FormControl w="85%" maxW="150px">
+            {/* <FormControl w="85%" maxW="150px">
               <FormControl.Label marginBottom={2}>Apellidos</FormControl.Label>
               <Input
                 size="lg"
@@ -119,7 +131,7 @@ export default function SignUp() {
                   md: "25%",
                 }}
               />
-            </FormControl>
+            </FormControl> */}
           </HStack>
 
           <FormControl w="85%" maxW="350px">
