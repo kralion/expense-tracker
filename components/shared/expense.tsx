@@ -4,16 +4,11 @@ import * as React from "react";
 import { Image, View } from "react-native";
 import { IGasto } from "../../interfaces";
 
-export default function Expense({
-  categoría,
-  cantidad,
-  fecha,
-  assetIdentificador,
-}: IGasto) {
+export function Expense(expense: IGasto) {
   return (
-    <Link href="/expense-details" asChild>
+    <Link href={`/expenses/details/${expense.id}`} asChild>
       <Pressable>
-        {({ isHovered, isFocused, isPressed }) => {
+        {({ isHovered, isPressed }) => {
           return (
             <Box
               maxW="96"
@@ -27,13 +22,6 @@ export default function Expense({
                   ? "coolGray.200"
                   : "coolGray.100"
               }
-              style={{
-                transform: [
-                  {
-                    scale: isPressed ? 0.96 : 1,
-                  },
-                ],
-              }}
             >
               <HStack alignItems="center">
                 <View className="flex-row gap-2  items-center">
@@ -42,16 +30,16 @@ export default function Expense({
                       width={40}
                       height={40}
                       source={{
-                        uri: assetIdentificador,
+                        uri: expense.assetIdentificador,
                       }}
                     />
                   </Box>
                   <View className="space-y-1">
                     <Text className=" text-[18px]  text-black font-bold">
-                      {categoría}
+                      {expense.categoria}
                     </Text>
                     <Text className="text-muted text-[14px] ">
-                      {fecha?.toLocaleString("es-PE", {
+                      {expense.fecha?.toLocaleString("es-PE", {
                         weekday: "long",
                         month: "long",
                         day: "numeric",
@@ -61,7 +49,7 @@ export default function Expense({
                 </View>
                 <Spacer />
                 <Text className=" text-xl text-red-500   font-bold">
-                  S/. {cantidad.toFixed(2)}
+                  S/. {expense.cantidad.toFixed(2)}
                 </Text>
               </HStack>
             </Box>

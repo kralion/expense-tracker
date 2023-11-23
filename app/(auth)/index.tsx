@@ -18,7 +18,7 @@ export default function Welcome() {
         </View>
         <Center>
           <Link asChild href="/(auth)/sign-up">
-            <Button className="px-10 rounded-full" colorScheme="teal" size="lg">
+            <Button className="px-10 rounded-full" size="lg">
               Iniciar sesión
             </Button>
           </Link>
@@ -29,7 +29,7 @@ export default function Welcome() {
           No tienes una cuenta?
         </Text>
         <Link asChild href="/(auth)/sign-up">
-          <Button className="px-0" variant="link" colorScheme="teal">
+          <Button className="px-0" variant="link">
             Regístrate
           </Button>
         </Link>

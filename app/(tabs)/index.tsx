@@ -3,115 +3,129 @@ import { Link } from "expo-router";
 import { Button, HStack, Heading, Spacer, Text, VStack } from "native-base";
 import * as React from "react";
 import { Pressable, SafeAreaView, View } from "react-native";
-import Card from "../../components/dashboard/card";
-import Expense from "../../components/dashboard/expense";
-import { supabase } from "../../utils/supabase";
-import { IGasto } from "../../interfaces";
-import { ExpenseSkeleton } from "../../components/skeletons/expense";
-type expenseIcon = {
-  label: string;
-  iconHref: string;
-};
+import Card from "@/components/dashboard/card";
+import { Expense } from "@/components/shared";
+import { ExpenseSkeleton } from "@/components/skeletons/expense";
+import { BudgetLimitExceededModal } from "@/components/shared";
+import { expensesIdentifiers } from "@/constants/ExpensesIdentifiers";
+import { useExpenseContext } from "@/context";
+import { useNotificationContext } from "@/context";
+import { supabase } from "@/utils/supabase";
+import { Session } from "@supabase/supabase-js";
 
 export default function Index() {
-  const [expenses, setExpenses] = React.useState<IGasto[]>();
-  const icons: expenseIcon[] = [
-    {
-      label: "Hogar",
-      iconHref: "https://img.icons8.com/?size=160&id=iJzm3AFQCS4W&format=png",
-    },
-    {
-      label: "Transporte",
-      iconHref: "https://img.icons8.com/?size=160&id=Q2m4bLp5g5kF&format=png",
-    },
-    {
-      label: "Salud",
-      iconHref: "https://img.icons8.com/?size=160&id=9shlfoGKqCS7&format=png",
-    },
-    {
-      label: "Entretenimiento",
-      iconHref: "https://img.icons8.com/?size=160&id=nMSSSpYre8pz&format=png",
-    },
-    {
-      label: "Comida",
-      iconHref: "https://img.icons8.com/?size=160&id=dkL9eYC61t89&format=png",
-    },
-    {
-      label: "Finanzas",
-      iconHref: "https://img.icons8.com/?size=160&id=yUTNKgUuTlsA&format=png",
-    },
-    {
-      label: "Educación",
-      iconHref: "https://img.icons8.com/?size=160&id=XAg8ooTyo7Dl&format=png",
-    },
-    {
-      label: "Personal",
-      iconHref: "https://img.icons8.com/?size=160&id=7Ego1HgHexLw&format=png",
-    },
-    {
-      label: "Otros",
-      iconHref: "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png",
-    },
-  ];
+  const { expenses } = useExpenseContext();
+  const { showNotification: show } = useNotificationContext();
+  const [showNotification, setShowNotification] = React.useState(false);
+  React.useEffect(() => {
+    show({
+      title: "Gasto Realizado",
+      alertStatus: "success",
+    });
+  }, []);
+  const [session, setSession] = React.useState<Session | null>(null);
 
   React.useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await supabase.from("gastos").select("*");
-      setExpenses(JSON.parse(JSON.stringify(data)));
-    };
-    fetchData();
-  }, [expenses]);
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
   return (
     <SafeAreaView className="bg-primary space-y-7">
       <View className="bg-primary space-y-7">
         <View className="flex flex-row justify-between items-center mx-4">
-          <View>
-            <Text className="text-mutedwhite text-[12px] ">20 Oct, Martes</Text>
+          <View className="flex flex-col text-left justify-start">
+            <Text className="text-mutedwhite text-[12px] ">
+              {
+                new Date()
+                  .toLocaleDateString("es-ES", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })
+                  .split(",")[1]
+              }
+            </Text>
             <Text className="font-bold text-[16px] text-white  tracking-tight">
-              Hola, Brayan !
+              {session &&
+                session.user &&
+                `Hola, ${session.user.role} 👋
+                `}
             </Text>
           </View>
-          <Link href="/modal" asChild>
-            <Pressable className="bg-accent rounded-md p-2 mr-3 active:opacity-70">
-              {({ pressed }) => (
-                <View className="flex flex-row items-center">
-                  <Text className="font-semibold text-xm mr-2">
-                    Prueba Premium
-                  </Text>
-                  <FontAwesome
-                    name="diamond"
-                    size={20}
-                    style={{ opacity: pressed ? 0.5 : 1 }}
-                  />
-                </View>
-              )}
+          {session?.user.role === "authenticated" && (
+            <Pressable
+              onPress={() => setShowNotification(true)}
+              className="rounded-lg"
+            >
+              <FontAwesome
+                color="#BCE15B"
+                name="flash"
+                size={24}
+                className="rounded-lg"
+              />
             </Pressable>
-          </Link>
+          )}
+          {/* //TODO: Cambiar la condicional para mostrar a los usuario con role==="guest"  */}
+          {/* {session?.user.role === "authenticated" && (
+            <Link href="/modal" asChild>
+              <Pressable className="bg-accent rounded-md p-2 mr-3 active:opacity-70">
+                {({ pressed }) => (
+                  <View className="flex flex-row items-center">
+                    <Text className="font-semibold text-xm mr-2">
+                      Prueba Premium
+                    </Text>
+                    <FontAwesome
+                      name="diamond"
+                      size={20}
+                      style={{ opacity: pressed ? 0.5 : 1 }}
+                    />
+                  </View>
+                )}
+              </Pressable>
+            </Link>
+          )} */}
         </View>
         <View className="flex flex-row justify-center items-center ">
           <Card />
         </View>
       </View>
       <VStack space={5} className="bg-slate-100">
+        <BudgetLimitExceededModal
+          setShowNotification={setShowNotification}
+          showNotification={showNotification}
+        />
         <HStack className="items-center" mx={3}>
           <Heading size="md">Historial de Gastos</Heading>
 
           <Spacer />
-          <Button variant="subtle" className="rounded-lg" colorScheme="gray">
+          <Button
+            onPress={() => setShowNotification(true)}
+            variant="subtle"
+            className="rounded-lg"
+            colorScheme="gray"
+          >
             Ver Todo
           </Button>
         </HStack>
         <VStack space={4} className="mx-2">
-          {expenses?.map((expense, index) => (
+          {expenses?.map((expense) => (
             <React.Suspense fallback={<ExpenseSkeleton />}>
               <Expense
-                key={index}
+                key={expense.id}
+                id={expense.id}
                 assetIdentificador={
-                  icons.find((icon) => icon.label === expense.categoría)
-                    ?.iconHref ||
+                  expensesIdentifiers.find(
+                    (icon) => icon.label === expense.categoria
+                  )?.iconHref ||
                   "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png"
                 }
-                categoría={expense.categoría}
+                categoria={expense.categoria}
                 cantidad={expense.cantidad}
                 fecha={expense.fecha}
               />

@@ -1,14 +1,31 @@
+import { supabase } from "@/utils/supabase";
 import {
   Entypo,
   FontAwesome5,
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { Button, HStack, Heading, Icon, VStack, Link } from "native-base";
+import { Session } from "@supabase/supabase-js";
+import { Link, router } from "expo-router";
+import { Center, HStack, Heading, Icon, VStack } from "native-base";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
 export default function App() {
+  const [session, setSession] = React.useState<Session | null>(null);
+  async function signOut() {
+    await supabase.auth.signOut();
+    router.push("/(auth)/sign-in");
+  }
+  React.useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
   return (
     <View>
       <View className="bg-accent relative h-20">
@@ -20,15 +37,17 @@ export default function App() {
         >
           <Image
             source={{
-              uri: "https://userstock.io/data/wp-content/uploads/2017/09/bewakoof-com-official-219589-300x300.jpg",
+              uri:
+                "https://userstock.io/data/wp-content/uploads/2017/09/bewakoof-com-official-219589-300x300.jpg" ||
+                session?.user?.user_metadata?.avatar_url,
             }}
             alt="profile-pic"
             width={150}
             height={150}
             className="rounded-full "
           />
-
-          <Heading size="md">Brayan Joan</Heading>
+          {/* //TODO: Cambiar el nombre por el nombre del usuario */}
+          <Heading size="md"> {session?.user?.email} </Heading>
           <HStack space={2} alignItems="center">
             <Heading size="xm" color="gray.400">
               28 años,
@@ -38,123 +57,108 @@ export default function App() {
                 uri: "https://img.icons8.com/?size=96&id=eofZXRmqHHir&format=png",
               }}
               className="rounded-md"
-              alt="logo"
+              alt="country"
               width={20}
               height={20}
             />
           </HStack>
         </VStack>
       </View>
+      <HStack>
+        <VStack
+          space={2}
+          paddingLeft={5}
+          alignItems="flex-start"
+          marginTop={200}
+        >
+          <Link asChild href="/(modals)/export-data">
+            <Pressable className="flex flex-row gap-3 p-2 items-center active:opacity-30">
+              <Icon
+                color="gray.500"
+                as={FontAwesome5}
+                size={21}
+                name="user-alt"
+              />
+              <Text className="text-xl font-bold text-gray-500">
+                Datos Personales
+              </Text>
+            </Pressable>
+          </Link>
+          <Link asChild href="/(modals)/export-data">
+            <Pressable className="flex gap-3 flex-row p-2 items-center active:opacity-30">
+              <Icon
+                color="gray.500"
+                as={MaterialCommunityIcons}
+                size={21}
+                name="database-export"
+              />
+              <Text className="text-xl font-bold text-gray-500">
+                Exportar Gastos
+              </Text>
+            </Pressable>
+          </Link>
+          <Link asChild href="/(modals)/export-data">
+            <Pressable className="flex gap-3 flex-row p-2 items-center active:opacity-30">
+              <Icon color="gray.500" as={Entypo} size={21} name="bell" />
 
-      <VStack space={2} paddingX={3} alignItems="flex-start" marginTop={200}>
-        <Button
-          borderWidth={0}
-          colorScheme="emerald"
-          borderRadius={14}
-          variant="link"
-          startIcon={
+              <Text className="text-xl font-bold text-gray-500">
+                Notificaciones
+              </Text>
+            </Pressable>
+          </Link>
+          <Link asChild href="/(modals)/export-data">
+            <Pressable className="flex gap-3 flex-row p-2 items-center active:opacity-30">
+              <Icon
+                color="gray.500"
+                as={Ionicons}
+                size={21}
+                name="ios-settings-sharp"
+              />
+
+              <Text className="text-xl font-bold text-gray-500">
+                Configuración
+              </Text>
+            </Pressable>
+          </Link>
+          <Pressable
+            onPress={() => signOut()}
+            className="flex gap-3 flex-row p-2 items-center active:opacity-30"
+          >
             <Icon
               color="gray.500"
-              as={FontAwesome5}
-              size={21}
-              name="user-alt"
-            />
-          }
-        >
-          <Text className="font-bold text-xl px-1 text-slate-500">
-            Datos Personales
-          </Text>
-        </Button>
-        <Pressable className="flex flex-row items-center gap-2 active:bg-gray-100 rounded-md p-2">
-          <Icon color="gray.400" as={Entypo} size={21} name="wallet" />
-          <Text className="font-bold text-xl px-1 text-slate-400">
-            Métodos de Pago
-          </Text>
-        </Pressable>
-        <Button
-          borderWidth={0}
-          colorScheme="emerald"
-          borderRadius={14}
-          variant="link"
-          startIcon={
-            <Icon color="gray.400" as={Entypo} size={21} name="bell" />
-          }
-        >
-          <Text className="font-bold text-xl px-1 text-slate-400">
-            Notificaciones
-          </Text>
-        </Button>
-        <Button
-          borderWidth={0}
-          colorScheme="emerald"
-          borderRadius={14}
-          variant="link"
-          startIcon={
-            <Icon
-              color="gray.400"
-              as={Ionicons}
-              size={21}
-              name="ios-settings-sharp"
-            />
-          }
-        >
-          <Text className="font-bold text-xl px-1 text-slate-400">
-            Configuracion
-          </Text>
-        </Button>
-        <Button
-          borderWidth={0}
-          colorScheme="emerald"
-          borderRadius={14}
-          variant="link"
-          startIcon={
-            <Icon
-              color="gray.400"
               as={MaterialCommunityIcons}
               size={21}
               name="logout"
             />
-          }
-        >
-          <Text className="font-bold text-xl px-1 text-slate-400">Salir</Text>
-        </Button>
-      </VStack>
 
+            <Text className="text-xl font-bold text-gray-500">Salir</Text>
+          </Pressable>
+        </VStack>
+        <Center>
+          <VStack className="relative">
+            <View className="w-48 absolute top-44 rounded-lg shadow-xl  bg-slate-900 shadow-black/50 ml-24 -rotate-[23deg] h-96" />
+            <View className="w-48 absolute top-32 rounded-lg shadow-md shadow-black/50 bg-accent ml-28 -rotate-[18deg] h-96" />
+            <View className="w-48 absolute top-20 rounded-lg shadow-md shadow-black/50  bg-primary ml-32 -rotate-[10deg] h-96" />
+          </VStack>
+        </Center>
+      </HStack>
       <HStack
         alignItems="center"
         justifyContent="center"
         className="text-sm text-center absolute -bottom-24 left-20 "
       >
-        <Text className="text-gray-400">Developed by</Text>
+        <Text className="text-gray-400">Desarrollado por</Text>
 
         <Link
           href="https://twitter.com/joanpaucar_"
-          isUnderlined={false}
-          isExternal
-          _text={{
-            color: "teal.600",
-          }}
-          mt={-0.5}
-          _web={{
-            mb: -2,
-          }}
-          className="px-1 "
+          className="px-1  text-primary active:underline"
         >
           Brayan
         </Link>
         <Text className="text-gray-400">&</Text>
         <Link
           href="https://www.facebook.com/miguelangel.requenaramos.94"
-          isUnderlined={false}
-          isExternal
-          _text={{
-            color: "teal.600",
-          }}
-          mt={-0.5}
-          _web={{
-            mb: -2,
-          }}
-          className="px-1 "
+          className="px-1 text-primary active:underline "
         >
           Miguel
         </Link>

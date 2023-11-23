@@ -11,7 +11,7 @@ import {
 import React from "react";
 import { Image, SafeAreaView } from "react-native";
 
-export default function ExpenseRegistered() {
+export default function AddExpenseSuccesModal() {
   return (
     <NativeBaseProvider>
       <SafeAreaView className="bg-primary h-screen">
@@ -29,7 +29,7 @@ export default function ExpenseRegistered() {
               <Box width={300} flexShrink={1} alignItems="center">
                 <Image
                   className="w-64 h-64 "
-                  source={require("../assets/images/success-asset.png")}
+                  source={require("../../assets/images/success-asset.png")}
                 />
               </Box>
               <Heading size="md">Registro Exitoso</Heading>
@@ -39,7 +39,7 @@ export default function ExpenseRegistered() {
                 </Text>
                 nuevos soles registrados en tu historial de gastos
               </Text>
-              <Button colorScheme="teal" className="rounded-full" width={40}>
+              <Button className="rounded-full" width={40}>
                 <Text className=" font-semibold text-white">Aceptar</Text>
               </Button>
             </VStack>

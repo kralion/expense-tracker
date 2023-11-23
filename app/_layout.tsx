@@ -6,18 +6,18 @@ import {
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
+import { NativeBaseProvider, extendTheme } from "native-base";
+import * as React from "react";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
-import { NativeBaseProvider } from "native-base";
+import { View, useColorScheme } from "react-native";
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from "expo-router";
-import * as React from "react";
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "(auth)",
+  initialRouteName: "(tabs)",
 };
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -50,16 +50,61 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
+  const theme = extendTheme({
+    colors: {
+      // Add new color
+      primary: {
+        600: "#10828D", // Primary (default) color
+        800: "#387682", // Active color
+      },
+
+      // Redefine only one shade, other color remains same
+      amber: {
+        400: "#d97706",
+      },
+    },
+    config: {
+      // Changing initialColorMode to 'dark'
+      initialColorMode: "light",
+    },
+  });
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider theme={theme}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        </Stack>
         {/* <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         </Stack> */}
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="(modals)/buy-premium"
+            options={{
+              presentation: "modal",
+              title: "",
+              headerBackground: () => (
+                <View className="bg-primary" style={{ flex: 1 }} />
+              ),
+            }}
+          />
+
+          <Stack.Screen
+            name="(modals)/add-expense-success
+            "
+            options={{ presentation: "modal", title: "Agregar Gasto" }}
+          />
+          <Stack.Screen
+            name="(modals)/export-data"
+            options={{
+              headerBackTitle: "Perfil",
+              presentation: "card",
+
+              title: "Exportar",
+              contentStyle: {
+                backgroundColor: "#368983",
+              },
+            }}
+          />
+        </Stack>
       </ThemeProvider>
     </NativeBaseProvider>
   );

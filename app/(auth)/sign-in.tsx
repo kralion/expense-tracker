@@ -1,6 +1,3 @@
-//ios  422618280931-fc0s3ktar0vcgoc80n128589e5ahhk1e.apps.googleusercontent.com
-// android  422618280931-50inl7uig7t4p5k6o89521jejcic2llj.apps.googleusercontent.com
-
 import * as Google from "expo-auth-session/providers/google";
 
 import { MaterialIcons } from "@expo/vector-icons";
@@ -8,7 +5,7 @@ import {
   AppleAuthenticationScope,
   signInAsync,
 } from "expo-apple-authentication";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import {
   Button,
   FormControl,
@@ -20,9 +17,18 @@ import {
 } from "native-base";
 import * as React from "react";
 import { Image, Pressable, SafeAreaView, Text, View } from "react-native";
+import { supabase } from "@/utils/supabase";
 export default function SignIn() {
+  {
+    /* //TODO : Agregar validación y todo el staff relacionad con formularios utilizando RHF */
+  }
   const [show, setShow] = React.useState(false);
   const [userInfo, setUserInfo] = React.useState(null);
+  const [invalidEmail, setInvalidEmail] = React.useState(false);
+  const [invalidPassword, setInvalidPassword] = React.useState(false);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
   const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId:
       "422618280931-fc0s3ktar0vcgoc80n128589e5ahhk1e.apps.googleusercontent.com",
@@ -30,6 +36,31 @@ export default function SignIn() {
       "422618280931-50inl7uig7t4p5k6o89521jejcic2llj.apps.googleusercontent.com",
     scopes: ["profile", "email"],
   });
+  async function signInWithEmail() {
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    if (error) {
+      setLoading(false);
+
+      if (error.message.includes("Invalid login credentials")) {
+        setInvalidEmail(true);
+        setInvalidPassword(true);
+        return;
+      }
+
+      if (error.message.includes("Invalid password")) {
+        setInvalidPassword(true);
+        return;
+      }
+    } else {
+      router.push("/(tabs)/");
+    }
+    setLoading(false);
+  }
   return (
     <SafeAreaView>
       <View className="flex flex-col space-y-9 justify-between mx-2">
@@ -49,12 +80,18 @@ export default function SignIn() {
             </Text>
           </View>
           <VStack space={4}>
-            <FormControl isInvalid={false} w="85%" maxW="350px">
+            <FormControl isInvalid={invalidEmail} w="85%" maxW="350px">
               <FormControl.Label marginBottom={2}>
                 Tu correo electrónico
               </FormControl.Label>
               <Input
                 size="lg"
+                value={email}
+                autoCapitalize="none"
+                onChange={(value) => {
+                  setEmail(value.nativeEvent.text);
+                  setInvalidEmail(false);
+                }}
                 borderRadius={7}
                 w={{
                   base: "90%",
@@ -65,16 +102,21 @@ export default function SignIn() {
               <FormControl.ErrorMessage
                 leftIcon={<WarningOutlineIcon size="xs" />}
               >
-                Verifica este campo
+                Correo electrónico incorrecto
               </FormControl.ErrorMessage>
             </FormControl>
-            <FormControl isInvalid={true} w="85%" maxW="350px">
+            <FormControl isInvalid={invalidPassword} w="85%" maxW="350px">
               <FormControl.Label marginBottom={2}>Contraseña</FormControl.Label>
               <Input
                 size="lg"
+                value={password}
                 w={{
                   base: "90%",
                   md: "25%",
+                }}
+                onChange={(value) => {
+                  setPassword(value.nativeEvent.text);
+                  setInvalidPassword(false);
                 }}
                 type={show ? "text" : "password"}
                 passwordRules={
@@ -106,7 +148,6 @@ export default function SignIn() {
           </VStack>
 
           <Button
-            colorScheme="teal"
             className="rounded-full"
             height={12}
             w={{
@@ -114,6 +155,7 @@ export default function SignIn() {
               md: "25%",
             }}
             maxW="350px"
+            onPress={() => signInWithEmail()}
           >
             <Text className="font-semibold text-white ">Ingresar</Text>
           </Button>
@@ -219,7 +261,7 @@ export default function SignIn() {
             ¿No tienes una cuenta?
           </Text>
           <Link asChild href={"/(auth)/sign-up"}>
-            <Button className="px-1" variant="link" colorScheme="teal">
+            <Button className="px-1" variant="link">
               Regístrate
             </Button>
           </Link>

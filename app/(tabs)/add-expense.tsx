@@ -77,12 +77,7 @@ export default function AddExpense() {
           <Input size="md" placeholder="Monto" type="text" borderRadius={7} />
         </VStack>
         <Center>
-          <Button
-            colorScheme="teal"
-            width="100"
-            className="rounded-full"
-            marginTop={16}
-          >
+          <Button width="100" className="rounded-full" marginTop={16}>
             Guardar
           </Button>
         </Center>
