@@ -90,7 +90,7 @@ export default function Export() {
                     </HStack>
                   </Pressable>
                 </Button>
-            </View> 
+            </View>
             <Button
                     colorScheme="teal"
                     className="rounded-lg mb-4 ml-3 mt-7"
@@ -98,7 +98,7 @@ export default function Export() {
                     w={40}
                     maxW="100px"
                   >
-                    <Text className="font-semibold text-white ">Exportar</Text>
+                    <Text className="font-semibold text-white ">Registrar</Text>
                 </Button> 
           </View>        
       </View>
