@@ -1,16 +1,14 @@
 //ios  422618280931-fc0s3ktar0vcgoc80n128589e5ahhk1e.apps.googleusercontent.com
 // android  422618280931-50inl7uig7t4p5k6o89521jejcic2llj.apps.googleusercontent.com
 
-import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
-import * as Facebook from "expo-auth-session/providers/facebook";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import {
   AppleAuthenticationScope,
   signInAsync,
 } from "expo-apple-authentication";
+import { Link } from "expo-router";
 import {
   Button,
   FormControl,
@@ -220,9 +218,11 @@ export default function SignIn() {
           <Text className="text-textmuted text-center">
             ¿No tienes una cuenta?
           </Text>
-          <Button className="px-1" variant="link" colorScheme="teal">
-            Regístrate
-          </Button>
+          <Link asChild href={"/(auth)/sign-up"}>
+            <Button className="px-1" variant="link" colorScheme="teal">
+              Regístrate
+            </Button>
+          </Link>
         </HStack>
       </View>
     </SafeAreaView>

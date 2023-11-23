@@ -1,32 +1,41 @@
-import { Pressable, Image, Text, View, SafeAreaView, TextInput} from "react-native";
-import { 
-    Button,
-    FormControl,
-    HStack,
-    Icon,
-    Input,
-    VStack,
-    WarningOutlineIcon,
+
+import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
+import { Link, router } from "expo-router";
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  HStack,
+  Icon,
+  Input,
+  Spacer,
+  VStack,
 } from "native-base";
 import * as React from "react";
+import { Image, Pressable, SafeAreaView, Text, View } from "react-native";
 
 export default function SignUp() {
-  
+
   const [show, setShow] = React.useState(false);
 
   return (
     <SafeAreaView>
       <View className="bg-[#F5F6F] flex items-center">
-        <Text className="text-right ml-32">
-          ¿Ya es miembro?{" "} 
-          <Text className="text-[#4285F4] font-semibold">
-            Inicie Sesión
+
+        <View className="items-center gap-1 flex ml-24  flex-row">
+          <Text className="  text-textmuted text-center">
+            Ya tienes una cuenta ?
           </Text>
-        </Text>
+          <Link asChild href="/(auth)/sign-in">
+            <Button className="px-0" variant="link" colorScheme="teal">
+              Inicia Sesión
+            </Button>
+          </Link>
+        </View>
         <Text className="mt-10 text-2xl font-semibold text-gray-700 text-center">
-          Registrarse Expense Tracker
+          Regístrate en Expense Tracker
         </Text>
-        
+
         <View className="flex flex-row justify-center items-center gap-4 mt-5">
           <Button className="bg-[#368983]">
             <Pressable>
@@ -42,70 +51,62 @@ export default function SignUp() {
                 </Text>
               </HStack>
             </Pressable>
+
           </Button>
-          <Button className="bg-[#368983]">
-            <Pressable>
-              <HStack>
+          <Button colorScheme="teal">
+            <HStack>
               <Image
                 className="w-5 h-5"
                 source={{
                   uri: "https://img.icons8.com/?size=96&id=uLWV5A9vXIPu&format=png",
                 }}
               />
-              </HStack>
-            </Pressable>
+            </HStack>
           </Button>
-          <Button className="bg-[#368983]">
-            <Pressable>
-              <HStack>
+          <Button colorScheme="teal">
+            <HStack>
               <Image
-                  className="w-5 h-5"
-                  source={{
-                    uri: "https://img.icons8.com/?size=60&id=95294&format=png",
-                  }}
-                />
-              </HStack>
-            </Pressable>
+                className="w-5 h-5"
+                source={{
+                  uri: "https://img.icons8.com/?size=60&id=95294&format=png",
+                }}
+              />
+            </HStack>
           </Button>
         </View>
-      
         <View className="mx-auto w-80 border-b border-[#AEACAC] mt-3"></View>
-
         <View className="flex flex-row justify-center gap-3 mt-3">
           <FormControl w="85%" maxW="150px">
-            <FormControl.Label marginBottom={2}>
-              Nombres
-            </FormControl.Label>
+            <FormControl.Label marginBottom={2}>Nombres</FormControl.Label>
             <Input
-                size="lg"
-                borderRadius={7}
-                w={{
-                  base: "100%",
-                  md: "25%",
-                }}
-              />
+              size="lg"
+              borderRadius={7}
+              w={{
+                base: "100%",
+                md: "25%",
+              }}
+            />
           </FormControl>
           <FormControl w="85%" maxW="150px">
-            <FormControl.Label marginBottom={2}>
-              Apellidos
-            </FormControl.Label>
+            <FormControl.Label marginBottom={2}>Apellidos</FormControl.Label>
             <Input
-                size="lg"
-                borderRadius={7}
-                w={{
-                  base: "100%",
-                  md: "25%",
-                }}
-              />
-          </FormControl>       
+              size="lg"
+              borderRadius={7}
+              w={{
+                base: "100%",
+                md: "25%",
+              }}
+            />
+          </FormControl>
         </View>
         <View className="flex flex-col items-center">
           <VStack>
-          <FormControl w="85%" maxW="350px">
-            <FormControl.Label marginBottom={2}>
-              Correo electrónico
-            </FormControl.Label>
-            <Input
+            <FormControl w="85%" maxW="350px">
+              <FormControl.Label marginBottom={2}>
+                Correo electrónico
+              </FormControl.Label>
+              <Input
+
                 size="lg"
                 borderRadius={7}
                 w={{
@@ -113,14 +114,12 @@ export default function SignUp() {
                   md: "25%",
                 }}
               />
-          </FormControl>
-          <FormControl w="85%" maxW="350px">
-            <FormControl.Label marginBottom={2}>
-              Contraseña
-            </FormControl.Label>
-            <Input
+            </FormControl>
+            <FormControl w="85%" maxW="350px">
+              <FormControl.Label marginBottom={2}>Contraseña</FormControl.Label>
+              <Input
                 size="lg"
-                borderRadius={7}
+
                 w={{
                   base: "90%",
                   md: "25%",
@@ -129,37 +128,62 @@ export default function SignUp() {
                 passwordRules={
                   "required: upper; required: lower; required: digit; minlength: 8;"
                 }
+                borderRadius={7}
+                InputRightElement={
+                  <Pressable onPress={() => setShow(!show)}>
+                    <Icon
+                      as={
+                        <MaterialIcons
+                          name={show ? "visibility" : "visibility-off"}
+                        />
+                      }
+                      size={5}
+                      mr="2"
+                      color="muted.400"
+                    />
+                  </Pressable>
+                }
+                placeholder="********"
               />
-          </FormControl>  
+            </FormControl>
           </VStack>
         </View>
-
-
-        <View className="mx-10">
-          <Text className="mt-5 text-center text-[#AEACAC]">
-            Al crear una cuenta, acepta nuestros{" "}
-          <Text className="text-primary font-semibold">Términos y condiciones.</Text>
-          </Text>
-        </View>
+        <HStack className="mr-14 " justifyContent="start" mt={5}>
+          <Checkbox
+            shadow="none"
+            borderWidth={1}
+            colorScheme="teal"
+            value="acepto"
+            accessibilityLabel="Terminos y Condiciones"
+            defaultIsChecked
+          >
+            <Text className="text-mute">Acepto los</Text>
+            <Link asChild href={"/modal"}>
+              <Button px={0} variant="link" colorScheme="teal">
+                Términos y Condiciones
+              </Button>
+            </Link>
+          </Checkbox>
+        </HStack>
 
         <Button
-            className="rounded-md mt-5 bg-[#368983]"
-            height={12}
-            w={{
-              base: "83%",
-              md: "25%",
-            }}
-            maxW="350px"
-          >
-            <Text className="font-semibold text-white ">Ingresar</Text>
-        </Button>     
+          className="rounded-md mt-5 "
+          colorScheme="teal"
+          height={12}
+          w={{
+            base: "80%",
+            md: "25%",
+          }}
+          maxW="350px"
+        >
+          <Text className="font-semibold text-white ">Ingresar</Text>
+        </Button>
 
         <View>
-          <Text className="text-[#AEACAC] mt-16 mr-28 text-[11px]">
+          <Text className="text-[#AEACAC] mt-16 mr-24 text-[11px]">
             Este sitio esta protegido por reCAPTCHA
           </Text>
         </View>
-
       </View>
     </SafeAreaView>
   );
