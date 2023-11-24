@@ -1,5 +1,5 @@
 import * as Google from "expo-auth-session/providers/google";
-
+import { useForm, Controller } from 'react-hook-form';
 import { MaterialIcons } from "@expo/vector-icons";
 import {
   AppleAuthenticationScope,
@@ -18,17 +18,12 @@ import {
 import * as React from "react";
 import { Image, Pressable, SafeAreaView, Text, View } from "react-native";
 import { supabase } from "@/utils/supabase";
+
 export default function SignIn() {
-  {
-    /* //TODO : Agregar validación y todo el staff relacionad con formularios utilizando RHF */
-  }
+  const { control, handleSubmit, formState: { errors } } = useForm();
   const [show, setShow] = React.useState(false);
-  const [userInfo, setUserInfo] = React.useState(null);
-  const [invalidEmail, setInvalidEmail] = React.useState(false);
-  const [invalidPassword, setInvalidPassword] = React.useState(false);
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+
   const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId:
       "422618280931-fc0s3ktar0vcgoc80n128589e5ahhk1e.apps.googleusercontent.com",
@@ -36,31 +31,21 @@ export default function SignIn() {
       "422618280931-50inl7uig7t4p5k6o89521jejcic2llj.apps.googleusercontent.com",
     scopes: ["profile", "email"],
   });
-  async function signInWithEmail() {
+
+  const onSubmit = async (data) => {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
+      email: data.email,
+      password: data.password,
     });
 
     if (error) {
       setLoading(false);
-
-      if (error.message.includes("Invalid login credentials")) {
-        setInvalidEmail(true);
-        setInvalidPassword(true);
-        return;
-      }
-
-      if (error.message.includes("Invalid password")) {
-        setInvalidPassword(true);
-        return;
-      }
     } else {
       router.push("/(tabs)/");
     }
-    setLoading(false);
-  }
+  };
+
   return (
     <SafeAreaView>
       <View className="flex flex-col space-y-9 justify-between mx-2">
@@ -80,69 +65,70 @@ export default function SignIn() {
             </Text>
           </View>
           <VStack space={4}>
-            <FormControl isInvalid={invalidEmail} w="85%" maxW="350px">
-              <FormControl.Label marginBottom={2}>
-                Tu correo electrónico
-              </FormControl.Label>
-              <Input
-                size="lg"
-                value={email}
-                autoCapitalize="none"
-                onChange={(value) => {
-                  setEmail(value.nativeEvent.text);
-                  setInvalidEmail(false);
-                }}
-                borderRadius={7}
-                w={{
-                  base: "90%",
-                  md: "25%",
-                }}
-                placeholder="joanhweu115@gmail.com"
+            <FormControl isInvalid={!!errors.email} w="85%" maxW="350px">
+              <FormControl.Label marginBottom={2}>Correo electrónico</FormControl.Label>
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    autoCapitalize="none"
+                    borderRadius={7}
+                    placeholder="joanhweu115@gmail.com"
+                    size="lg"
+                  />
+                )}
+                name="email"
+                rules={{ required: true }}
+                defaultValue=""
               />
               <FormControl.ErrorMessage
                 leftIcon={<WarningOutlineIcon size="xs" />}
               >
-                Correo electrónico incorrecto
+                {errors.email && "Este campo es requerido"}
               </FormControl.ErrorMessage>
             </FormControl>
-            <FormControl isInvalid={invalidPassword} w="85%" maxW="350px">
+
+            <FormControl isInvalid={!!errors.password} w="85%" maxW="350px">
               <FormControl.Label marginBottom={2}>Contraseña</FormControl.Label>
-              <Input
-                size="lg"
-                value={password}
-                w={{
-                  base: "90%",
-                  md: "25%",
-                }}
-                onChange={(value) => {
-                  setPassword(value.nativeEvent.text);
-                  setInvalidPassword(false);
-                }}
-                type={show ? "text" : "password"}
-                passwordRules={
-                  "required: upper; required: lower; required: digit; minlength: 8;"
-                }
-                borderRadius={7}
-                InputRightElement={
-                  <Pressable onPress={() => setShow(!show)}>
-                    <Icon
-                      as={
-                        <MaterialIcons
-                          name={show ? "visibility" : "visibility-off"}
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    type={show ? "text" : "password"}
+                    passwordRules={
+                      "required: upper; required: lower; required: digit; minlength: 8;"
+                    }
+                    borderRadius={7}
+                    InputRightElement={
+                      <Pressable onPress={() => setShow(!show)}>
+                        <Icon
+                          as={
+                            <MaterialIcons
+                              name={show ? "visibility" : "visibility-off"}
+                            />
+                          }
+                          size={5}
+                          mr="2"
+                          color="muted.400"
                         />
-                      }
-                      size={5}
-                      mr="2"
-                      color="muted.400"
-                    />
-                  </Pressable>
-                }
-                placeholder="********"
+                      </Pressable>
+                    }
+                  />
+                )}
+                name="password"
+                rules={{ required: true }}
+                defaultValue=""
               />
               <FormControl.ErrorMessage
                 leftIcon={<WarningOutlineIcon size="xs" />}
               >
-                Contraseña incorrecta
+                {errors.password && "Este campo es requerido"}
               </FormControl.ErrorMessage>
             </FormControl>
           </VStack>
@@ -155,11 +141,13 @@ export default function SignIn() {
               md: "25%",
             }}
             maxW="350px"
-            onPress={() => signInWithEmail()}
+            onPress={handleSubmit(onSubmit)}
+            isLoading={loading}
           >
             <Text className="font-semibold text-white ">Ingresar</Text>
           </Button>
         </View>
+        
         <View className="flex flex-row items-center text-center justify-center">
           <View className="w-36 border-[1px] h-0.5 border-gray-300"></View>
           <Text className="text-textmuted mx-2 text-center">o</Text>

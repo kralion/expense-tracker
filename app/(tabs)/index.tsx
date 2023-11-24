@@ -17,6 +17,7 @@ export default function Index() {
   const { expenses } = useExpenseContext();
   const { showNotification: show } = useNotificationContext();
   const [showNotification, setShowNotification] = React.useState(false);
+  const [nombres, setNombres] = React.useState("");
   React.useEffect(() => {
     show({
       title: "Gasto Realizado",
@@ -24,7 +25,19 @@ export default function Index() {
     });
   }, []);
   const [session, setSession] = React.useState<Session | null>(null);
+  async function fetchUserName(userId: string) {
+    const { data, error } = await supabase
+      .from("app_users")
+      .select("nombres")
+      .eq("id", userId)
+      .single();
 
+    if (error) {
+      console.error(error);
+    } else if (data) {
+      setNombres(data.nombres);
+    }
+  }
   React.useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -33,7 +46,13 @@ export default function Index() {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
-  }, []);
+
+    if (session?.user?.id) {
+      fetchUserName(session.user.id);
+    }
+  }, [
+    session?.user?.id,
+  ]);
   return (
     <SafeAreaView className="bg-primary space-y-7">
       <View className="bg-primary space-y-7">
@@ -52,13 +71,10 @@ export default function Index() {
               }
             </Text>
             <Text className="font-bold text-[16px] text-white  tracking-tight">
-              {session &&
-                session.user &&
-                `Hola, ${session.user.role} 👋
-                `}
+              {nombres}
             </Text>
           </View>
-          {session?.user.role === "authenticated" && (
+          {/* {session?.user.role === "authenticated" && (
             <Pressable
               onPress={() => setShowNotification(true)}
               className="rounded-lg"
@@ -70,10 +86,10 @@ export default function Index() {
                 className="rounded-lg"
               />
             </Pressable>
-          )}
+          )} */}
           {/* //TODO: Cambiar la condicional para mostrar a los usuario con role==="guest"  */}
-          {/* {session?.user.role === "authenticated" && (
-            <Link href="/modal" asChild>
+          {session?.user.role === "authenticated" && (
+            <Link href="/(modals)/buy-premium" asChild>
               <Pressable className="bg-accent rounded-md p-2 mr-3 active:opacity-70">
                 {({ pressed }) => (
                   <View className="flex flex-row items-center">
@@ -89,7 +105,7 @@ export default function Index() {
                 )}
               </Pressable>
             </Link>
-          )} */}
+          )}
         </View>
         <View className="flex flex-row justify-center items-center ">
           <Card />
