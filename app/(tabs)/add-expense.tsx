@@ -11,6 +11,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import PushNotification from "@/components/shared/push-notification";
 
 export default function AddExpense() {
   const [category, setCategory] = useState("");
@@ -104,6 +105,8 @@ export default function AddExpense() {
           </Button>
         </Center>
       </View>
+      {/* //! Probar esto solo el los dispositivos, en los emuladores no funciona
+      <PushNotification /> */}
     </SafeAreaView>
   );
 }

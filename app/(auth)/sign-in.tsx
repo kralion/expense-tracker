@@ -1,5 +1,5 @@
 import * as Google from "expo-auth-session/providers/google";
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, set } from "react-hook-form";
 import { MaterialIcons } from "@expo/vector-icons";
 import {
   AppleAuthenticationScope,
@@ -20,9 +20,14 @@ import { Image, Pressable, SafeAreaView, Text, View } from "react-native";
 import { supabase } from "@/utils/supabase";
 
 export default function SignIn() {
-  const { control, handleSubmit, formState: { errors } } = useForm();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [show, setShow] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [invalidCredentials, setInvalidCredentials] = React.useState(false);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId:
@@ -41,6 +46,10 @@ export default function SignIn() {
 
     if (error) {
       setLoading(false);
+      setInvalidCredentials(true);
+      setTimeout(() => {
+        setInvalidCredentials(false);
+      }, 3000);
     } else {
       router.push("/(tabs)/");
     }
@@ -48,7 +57,7 @@ export default function SignIn() {
 
   return (
     <SafeAreaView>
-      <View className="flex flex-col space-y-9 justify-between mx-2">
+      <View className="flex flex-col space-y-7 justify-between mx-2">
         <View className="items-center space-y-7">
           <View className="justify-center text-center  mt-10">
             <View className="flex flex-row  items-center gap-2 justify-center ">
@@ -64,19 +73,19 @@ export default function SignIn() {
               Controla tus gastos desde tu bolsillo
             </Text>
           </View>
-          <VStack space={4}>
-            <FormControl isInvalid={!!errors.email} w="85%" maxW="350px">
-              <FormControl.Label marginBottom={2}>Correo electrónico</FormControl.Label>
+          <VStack space={5}>
+            <FormControl isInvalid={!!errors.email} w="85%" width={315}>
               <Controller
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
+                    py={3}
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
                     autoCapitalize="none"
-                    borderRadius={7}
-                    placeholder="joanhweu115@gmail.com"
+                    borderRadius={10}
+                    placeholder="Correo electrónico"
                     size="lg"
                   />
                 )}
@@ -91,20 +100,22 @@ export default function SignIn() {
               </FormControl.ErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.password} w="85%" maxW="350px">
-              <FormControl.Label marginBottom={2}>Contraseña</FormControl.Label>
+            <FormControl isInvalid={!!errors.password} w="80%" width={315}>
               <Controller
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
+                    py={3}
                     onBlur={onBlur}
+                    placeholder="Contraseña"
+                    size="lg"
                     onChangeText={onChange}
                     value={value}
                     type={show ? "text" : "password"}
                     passwordRules={
                       "required: upper; required: lower; required: digit; minlength: 8;"
                     }
-                    borderRadius={7}
+                    borderRadius={10}
                     InputRightElement={
                       <Pressable onPress={() => setShow(!show)}>
                         <Icon
@@ -132,9 +143,15 @@ export default function SignIn() {
               </FormControl.ErrorMessage>
             </FormControl>
           </VStack>
+          {invalidCredentials && (
+            <HStack space={1} alignContent="center">
+              <MaterialIcons color="#ef4444" name="dangerous" size={16} />
+              <Text className="text-red-500">Credenciales inválidas</Text>
+            </HStack>
+          )}
 
           <Button
-            className="rounded-full"
+            rounded={10}
             height={12}
             w={{
               base: "83%",
@@ -147,7 +164,7 @@ export default function SignIn() {
             <Text className="font-semibold text-white ">Ingresar</Text>
           </Button>
         </View>
-        
+
         <View className="flex flex-row items-center text-center justify-center">
           <View className="w-36 border-[1px] h-0.5 border-gray-300"></View>
           <Text className="text-textmuted mx-2 text-center">o</Text>

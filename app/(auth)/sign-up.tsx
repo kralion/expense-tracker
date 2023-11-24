@@ -1,8 +1,10 @@
 import { supabase } from "@/utils/supabase";
+import { FontAwesome5 } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
 import { Link } from "expo-router";
 import {
   Button,
+  Center,
   Checkbox,
   FormControl,
   HStack,
@@ -36,122 +38,105 @@ export default function SignUp() {
       email: email,
       password: password,
     });
-  
+
     if (error) {
       Alert.alert(error.message);
     } else if (data && data.user) {
       // Agregar nombres y apellidos a la tabla de usuarios
       const { data: userData, error: userError } = await supabase
-        .from('app_users')
-        .insert([
-          { id: data.user.id, nombres: nombres },
-        ])
-  
+        .from("app_users")
+        .insert([{ id: data.user.id, nombres: nombres }]);
+
       if (userError) {
         Alert.alert(userError.message);
       }
     }
-  
+
     setLoading(false);
   }
   return (
-    <SafeAreaView>
-      <View className="bg-[#F5F6F] flex items-center">
-        <View className="items-center gap-1 flex ml-24  flex-row">
-          <Text className="  text-textmuted text-center">
-            Ya tienes una cuenta ?
-          </Text>
-          <Link asChild href="/(auth)/sign-in">
-            <Button className="px-0" variant="link">
-              Inicia Sesión
-            </Button>
-          </Link>
+    <SafeAreaView className="mx-7">
+      <View className="bg-background ">
+        <View className="flex items-start">
+          <Text className="mt-10 text-3xl font-bold ">Crea una cuenta</Text>
+          <View className="items-center gap-1 flex   flex-row">
+            <Text className=" ">Si ya tienes una cuenta ?</Text>
+            <Link asChild href="/(auth)/sign-in">
+              <Button className="px-0" variant="link">
+                Inicia Sesión
+              </Button>
+            </Link>
+          </View>
         </View>
-        <Text className="mt-10 text-2xl font-semibold text-gray-700 text-center">
-          Regístrate en Expense Tracker
-        </Text>
-        <VStack alignItems="center" space={4}>
-          <View className="flex flex-row justify-center items-center gap-4 mt-5">
-            <Button>
-              <HStack>
-                <Image
-                  className="w-5 h-5 mr-2"
-                  source={{
-                    uri: "https://img.icons8.com/?size=96&id=17949&format=png",
-                  }}
-                />
-                <Text className="font-semibold text-white">
-                  Registrarse con Google
-                </Text>
-              </HStack>
+        <VStack justifyContent="center" space={4}>
+          <HStack mt={4} space={6}>
+            <Button bgColor="black" rounded={7} width={24} height={12}>
+              <FontAwesome5 size={24} color="white" name="apple" />
             </Button>
-            <Button>
-              <HStack>
-                <Image
-                  className="w-5 h-5"
-                  source={{
-                    uri: "https://img.icons8.com/?size=50&id=8818&format=png",
-                  }}
-                />
-              </HStack>
+            <Button colorScheme="blue" rounded={7} width={24} height={12}>
+              <FontAwesome5 size={24} color="white" name="facebook" />
             </Button>
-            <Button>
-              <HStack>
-                <Image
-                  className="w-5 h-5"
-                  source={{
-                    uri: "https://img.icons8.com/?size=60&id=95294&format=png",
-                  }}
-                />
-              </HStack>
+            <Button
+              background="#F5F3F3"
+              rounded={7}
+              borderWidth={0.2}
+              width={24}
+              height={12}
+            >
+              <Image
+                className="w-5 h-5 mr-2"
+                source={{
+                  uri: "https://img.icons8.com/?size=96&id=17949&format=png",
+                }}
+              />
             </Button>
+          </HStack>
+          <View className="flex flex-row items-center text-center justify-center">
+            <View className="w-[155px] border-[1px] h-0.5 border-gray-300"></View>
+            <Text className="text-textmuted mx-2 text-center">o</Text>
+            <View className="w-[153px] border-[1px] h-0.5 border-gray-300"></View>
           </View>
 
           <HStack space={3}>
-            <FormControl w="85%" maxW="150px">
-              <FormControl.Label marginBottom={2}>Nombre</FormControl.Label>
+            <FormControl maxW={160}>
               <Input
                 value={nombres}
                 size="lg"
+                py={3}
                 borderRadius={7}
                 onChange={(value) => setNombres(value.nativeEvent.text)}
-                w={{
-                  base: "100%",
-                  md: "25%",
-                }}
+                placeholder="Nombres"
               />
             </FormControl>
-            {/* <FormControl w="85%" maxW="150px">
-              <FormControl.Label marginBottom={2}>Apellidos</FormControl.Label>
+            <FormControl maxW={160}>
               <Input
                 size="lg"
                 borderRadius={7}
+                py={3}
                 w={{
                   base: "100%",
                   md: "25%",
                 }}
+                placeholder="Apellidos"
               />
-            </FormControl> */}
+            </FormControl>
           </HStack>
 
-          <FormControl w="85%" maxW="350px">
-            <FormControl.Label marginBottom={2}>
-              Correo electrónico
-            </FormControl.Label>
+          <FormControl width={370}>
             <Input
               size="lg"
               value={email}
-              onChange={(value) => setEmail(value.nativeEvent.text)}
-              borderRadius={7}
               w={{
                 base: "90%",
                 md: "25%",
               }}
-              placeholder="joanhweu115@gmail.com"
+              py={3}
+              onChange={(value) => setEmail(value.nativeEvent.text)}
+              borderRadius={7}
+              placeholder="Email"
             />
           </FormControl>
-          <FormControl w="85%" maxW="350px">
-            <FormControl.Label marginBottom={2}>Contraseña</FormControl.Label>
+          <FormControl width={370}>
             <Input
               size="lg"
               value={password}
@@ -159,6 +144,7 @@ export default function SignUp() {
                 base: "90%",
                 md: "25%",
               }}
+              py={3}
               onChange={(value) => setPassword(value.nativeEvent.text)}
               type={show ? "text" : "password"}
               passwordRules={
@@ -174,16 +160,16 @@ export default function SignUp() {
                       />
                     }
                     size={5}
-                    mr="2"
+                    mr="3"
                     color="muted.400"
                   />
                 </Pressable>
               }
-              placeholder="********"
+              placeholder="Contraseña"
             />
           </FormControl>
         </VStack>
-        <HStack className="mr-14 " justifyContent="start" mt={5}>
+        <HStack mt={5}>
           <Checkbox
             shadow="none"
             borderWidth={1}
@@ -191,31 +177,36 @@ export default function SignUp() {
             accessibilityLabel="Terminos y Condiciones"
             defaultIsChecked
           >
-            <Text className="text-mute">Acepto los</Text>
-            <Link asChild href={"/modal"}>
-              <Button px={0} variant="link">
-                Términos y Condiciones
-              </Button>
-            </Link>
+            <Text className="text-mute">Acepto los Términos y Condiciones</Text>
           </Checkbox>
         </HStack>
 
         <Button
           className="rounded-md mt-5 "
-          height={12}
+          size="lg"
           onPress={() => signUpWithEmail()}
           w={{
-            base: "80%",
             md: "25%",
           }}
-          maxW="350px"
+          py={4}
+          width={333}
         >
           <Text className="font-semibold text-white ">Registrarse</Text>
         </Button>
 
+        <Text className="text-mute text-[12px] mt-3  ">
+          Al continuar aceptas el como seran tratados tus datos, si lo deseas
+          puedes revisar los
+          <Link asChild href={"/modal"}>
+            <Text className="text-[12px] text-primary">
+              {" "}
+              Términos y Condiciones
+            </Text>
+          </Link>
+        </Text>
         <View>
-          <Text className="text-[#AEACAC] mt-16 mr-24 text-[11px]">
-            Este sitio esta protegido por reCAPTCHA
+          <Text className="text-mute text-[12px] mt-16">
+            Copyright © UNCP Association Inc. Derechos Reservados
           </Text>
         </View>
       </View>
