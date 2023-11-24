@@ -36,7 +36,7 @@ export default function TabLayout() {
               title: "",
               headerShown: false,
               tabBarIcon: ({ color }) => (
-                <TabBarIcon name="home" color={color} />
+                <TabBarIcon name="tachometer-alt" color={color} />
               ),
             }}
           />
@@ -59,7 +59,7 @@ export default function TabLayout() {
               tabBarIcon: ({ color }) => (
                 <TabBarIcon
                   className="rotate-45"
-                  size={60}
+                  size={55}
                   style={{ marginBottom: -15 }}
                   name="times-circle"
                   color={color}

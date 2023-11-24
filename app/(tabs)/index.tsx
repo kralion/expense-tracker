@@ -50,79 +50,64 @@ export default function Index() {
     if (session?.user?.id) {
       fetchUserName(session.user.id);
     }
-  }, [
-    session?.user?.id,
-  ]);
+  }, [session?.user?.id]);
   return (
-    <SafeAreaView className="bg-primary space-y-7">
-      <View className="bg-primary space-y-7">
-        <View className="flex flex-row justify-between items-center mx-4">
-          <View className="flex flex-col text-left justify-start">
-            <Text className="text-mutedwhite text-[12px] ">
-              {
-                new Date()
-                  .toLocaleDateString("es-ES", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })
-                  .split(",")[1]
-              }
-            </Text>
-            <Text className="font-bold text-[16px] text-white  tracking-tight">
-              {nombres}
-            </Text>
-          </View>
-          {/* {session?.user.role === "authenticated" && (
-            <Pressable
-              onPress={() => setShowNotification(true)}
-              className="rounded-lg"
+    <SafeAreaView className="bg-primary space-y-7 ">
+      <HStack justifyContent="space-between" mx={4}>
+        <VStack>
+          <Text className="text-mutedwhite text-[12px] ">
+            {
+              new Date()
+                .toLocaleDateString("es-ES", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })
+                .split(",")[1]
+            }
+          </Text>
+          <Text className="font-bold text-[16px] text-white  tracking-tight">
+            Hola, {nombres} 👋
+          </Text>
+        </VStack>
+
+        <View>
+          <Link href="/(modals)/buy-premium" asChild>
+            <Button
+              isPressed={true}
+              colorScheme="A3E062"
+              className="rounded-full active:opacity-70"
+              variant="ghost"
             >
               <FontAwesome
-                color="#BCE15B"
-                name="flash"
-                size={24}
-                className="rounded-lg"
+                color="#A3E062"
+                name={session?.user.role === "premium" ? "unlock" : "lock"}
+                size={20}
               />
-            </Pressable>
-          )} */}
-          {/* //TODO: Cambiar la condicional para mostrar a los usuario con role==="guest"  */}
-          {session?.user.role === "authenticated" && (
-            <Link href="/(modals)/buy-premium" asChild>
-              <Pressable className="bg-accent rounded-md p-2 mr-3 active:opacity-70">
-                {({ pressed }) => (
-                  <View className="flex flex-row items-center">
-                    <Text className="font-semibold text-xm mr-2">
-                      Prueba Premium
-                    </Text>
-                    <FontAwesome
-                      name="diamond"
-                      size={20}
-                      style={{ opacity: pressed ? 0.5 : 1 }}
-                    />
-                  </View>
-                )}
-              </Pressable>
-            </Link>
-          )}
+            </Button>
+          </Link>
         </View>
-        <View className="flex flex-row justify-center items-center ">
-          <Card />
-        </View>
+      </HStack>
+      <View className="z-10 h-20">
+        <Card />
       </View>
-      <VStack space={5} className="bg-slate-100">
+      <VStack space={5} className="bg-background ">
         <BudgetLimitExceededModal
           setShowNotification={setShowNotification}
           showNotification={showNotification}
         />
-        <HStack className="items-center" mx={3}>
+        <HStack
+          marginTop={100}
+          className="items-center"
+          mx={3}
+          justifyContent="space-between"
+        >
           <Heading size="md">Historial de Gastos</Heading>
 
-          <Spacer />
           <Button
             onPress={() => setShowNotification(true)}
-            variant="subtle"
+            variant="ghost"
             className="rounded-lg"
             colorScheme="gray"
           >

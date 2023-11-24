@@ -8,7 +8,7 @@ export default function Export() {
 
   return (
     <View className="flex flex-col space-y-6 justify-between">
-      <VStack space={1} className="bg-mutedwhite rounded-b-lg py-4 px-7">
+      <VStack space={1} className="bg-background rounded-b-lg py-4 px-7">
         <HStack>
           <View className="bg-accent w-2 h-8 rounded-full my-3 " />
           <Text className="text-[#464444] p-3 font-bold text-lg">
