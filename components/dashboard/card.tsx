@@ -6,12 +6,12 @@ import { ImageBackground, Pressable, Text, View } from "react-native";
 export default function Card() {
   return (
     <ImageBackground
-      className="flex p-4 space-y-12 w-80 shadow-lg shadow-teal-500 flex-col  "
-      source={require("../../assets/images/card-cover.png")}
+      className="flex z-10 absolute  p-10 space-y-12 ml-0.5 w-96 shadow-lg flex-col  "
+      source={require("../../assets/cover.png")}
     >
       <View className="flex flex-row items-start justify-between">
         <View>
-          <Text className="text-mutedwhite  font-semibold items-center space-x-2">
+          <Text className="text-mutedwhite text-[18px]  font-semibold items-center space-x-2">
             Balance
           </Text>
           <Text className="text-3xl font-bold tracking-tighter  text-mutedwhite">

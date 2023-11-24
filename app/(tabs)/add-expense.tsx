@@ -1,4 +1,12 @@
-import { Button, Center, Input, Select, TextArea, VStack } from "native-base";
+import {
+  Button,
+  Center,
+  Input,
+  InputLeftAddon,
+  Select,
+  TextArea,
+  VStack,
+} from "native-base";
 import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
@@ -8,19 +16,18 @@ export default function AddExpense() {
   const [category, setCategory] = useState("");
   const [type, setType] = useState("");
   return (
-    <SafeAreaView className="bg-primary">
+    <SafeAreaView className="bg-primary rounded-b-xl">
       <Text className="font-bold text-center text-xl text-white">
         Añadir Gasto
       </Text>
-      <View className="bg-mutedwhite shadow-xl space-y-5 rounded-3xl p-5 m-5">
-        <Text className="font-semibold text-left text-xl ">Detalles</Text>
+      <View className="bg-mutedwhite shadow-xl space-y-5 rounded-xl p-5 m-5">
         {/* //TODO: Change the value and selected value of each select component */}
         <VStack space={4}>
           <Select
             id="categorias"
             selectedValue={category}
             size="md"
-            color="gray.400"
+            color="gray.800"
             minWidth="105"
             placeholder="Categoría"
             borderRadius={7}
@@ -48,13 +55,16 @@ export default function AddExpense() {
             autoCompleteType
             placeholder="Descripción del Gasto"
             minH={20}
+            borderRadius={7}
+            size="md"
           />
-          <Select
+          {/* //! Quiza despues se implemente esta feature */}
+          {/* <Select
             id="tipo"
             borderRadius={7}
             selectedValue={type}
             size="md"
-            color="gray.400"
+            color="gray.800"
             placeholder="Tipo"
             minWidth="105"
             dropdownIcon={
@@ -73,8 +83,20 @@ export default function AddExpense() {
           >
             <Select.Item label="Fijo" value="transporte" />
             <Select.Item label="Variable" value="variable" />
-          </Select>
-          <Input size="md" placeholder="Monto" type="text" borderRadius={7} />
+          </Select> */}
+          <Input
+            size="md"
+            rightElement={
+              <FontAwesome5
+                name="dollar-sign"
+                color="#6D6868"
+                marginRight={10}
+                size={10}
+              />
+            }
+            placeholder="65.00"
+            borderRadius={7}
+          />
         </VStack>
         <Center>
           <Button width="100" className="rounded-full" marginTop={16}>
