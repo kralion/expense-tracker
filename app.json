@@ -45,7 +45,6 @@
       [
         "@stripe/stripe-react-native",
         {
-          "merchantIdentifier": "merchant.com.expensetracker.app",
           "enableGooglePay": true
         }
       ]
