@@ -10,6 +10,7 @@ import { NativeBaseProvider, extendTheme } from "native-base";
 import * as React from "react";
 import { useEffect } from "react";
 import { View, useColorScheme } from "react-native";
+import { StripeProvider } from "@stripe/stripe-react-native";
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -57,6 +58,10 @@ function RootLayoutNav() {
         600: "#10828D", // Primary (default) color
         800: "#387682", // Active color
       },
+      accent: {
+        600: "#A3E062",
+        800: "#75934C",
+      },
 
       // Redefine only one shade, other color remains same
       amber: {
@@ -69,43 +74,50 @@ function RootLayoutNav() {
     },
   });
   return (
-    <NativeBaseProvider theme={theme}>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        {/* <Stack>
+    <StripeProvider publishableKey={process.env.STRIPE_PUBLISHABLE_KEY || ""}>
+      <NativeBaseProvider theme={theme}>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          {/* <Stack>
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         </Stack> */}
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="(modals)/buy-premium"
-            options={{
-              presentation: "modal",
-              title: "",
-              headerBackground: () => (
-                <View className="bg-primary" style={{ flex: 1 }} />
-              ),
-            }}
-          />
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="(modals)/buy-premium"
+              options={{
+                presentation: "modal",
+                title: "",
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="(modals)/edit-payment-info
+                "
+              options={{ presentation: "modal", title: "Editar" }}
+            />
 
-          <Stack.Screen
-            name="(modals)/add-expense-success
+            <Stack.Screen
+              name="(modals)/add-expense-success
             "
-            options={{ presentation: "modal", title: "Agregar Gasto" }}
-          />
-          <Stack.Screen
-            name="(modals)/export-data"
-            options={{
-              headerBackTitle: "Perfil",
-              presentation: "card",
+              options={{ presentation: "modal", title: "Agregar Gasto" }}
+            />
+            <Stack.Screen
+              name="(modals)/export-data"
+              options={{
+                headerBackTitle: "Perfil",
+                presentation: "card",
 
-              title: "Exportar",
-              contentStyle: {
-                backgroundColor: "#368983",
-              },
-            }}
-          />
-        </Stack>
-      </ThemeProvider>
-    </NativeBaseProvider>
+                title: "Exportar",
+                contentStyle: {
+                  backgroundColor: "#368983",
+                },
+              }}
+            />
+          </Stack>
+        </ThemeProvider>
+      </NativeBaseProvider>
+    </StripeProvider>
   );
 }

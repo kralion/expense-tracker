@@ -87,6 +87,7 @@ export default function AddExpense() {
           </Select> */}
           <Input
             size="md"
+            keyboardType="numeric"
             rightElement={
               <FontAwesome5
                 name="dollar-sign"
