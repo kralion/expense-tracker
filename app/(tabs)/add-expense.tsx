@@ -1,6 +1,7 @@
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   Button,
+  CheckIcon,
   Divider,
   FormControl,
   HStack,
@@ -11,28 +12,41 @@ import {
   VStack,
   WarningOutlineIcon,
 } from "native-base";
-import React, { useState } from "react";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+interface FormData {
+  cantidad: string;
+  divisa: string;
+  categoria: string;
+  descripcion: string;
+}
 export default function AddExpense() {
-  const [category, setCategory] = useState("");
-  const [type, setType] = useState("");
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+    reset,
+    setValue,
+  } = useForm<FormData>({
+    defaultValues: {
+      divisa: "pen",
+    },
+  });
 
-  async function onSubmit(values) {
-    alert(values);
+  async function onSubmit(data: FormData) {
+    alert(JSON.stringify(data));
   }
   return (
     <SafeAreaView className="bg-background h-screen rounded-b-xl">
       <HStack justifyContent="space-between" className="px-7">
         <Text className="font-bold text-center text-xl ">Registrar Gasto</Text>
         <Button
+          onPress={() => {
+            reset();
+            setValue("categoria", "");
+          }}
           colorScheme="red"
           background="red.100"
           className="rounded-full active:opacity-70"
@@ -41,8 +55,13 @@ export default function AddExpense() {
           <MaterialCommunityIcons color="red" name="broom" size={20} />
         </Button>
       </HStack>
-      <VStack px={7} py={3}>
-        <FormControl isRequired isInvalid={!!errors.email} w="90%" width={335}>
+      <VStack px={7} space={4} py={3}>
+        <FormControl
+          isInvalid={!!errors.categoria}
+          isRequired
+          w="90%"
+          width={335}
+        >
           <VStack space={1}>
             <FormControl.Label>
               <Text className="font-semibold text-[18px]">Categoría</Text>
@@ -50,15 +69,18 @@ export default function AddExpense() {
             <Text className="text-textmuted">Como se categoriza el gasto</Text>
           </VStack>
           <Controller
+            name="categoria"
             control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
+            render={({ field: { onChange, value } }) => (
               <Select
                 id="categorias"
-                selectedValue={category}
+                selectedValue={value}
                 size="lg"
+                minWidth={300}
                 color="gray.800"
                 marginY={3}
-                placeholder="Alimentación"
+                accessibilityLabel="Seleccineuna categoria"
+                placeholder="Seleccione"
                 borderRadius={7}
                 dropdownIcon={
                   <FontAwesome5
@@ -69,10 +91,10 @@ export default function AddExpense() {
                   />
                 }
                 _selectedItem={{
-                  bg: "teal.500",
+                  bg: "gray.200",
+                  endIcon: <CheckIcon size={4} />,
                 }}
-                mt={1}
-                onValueChange={(itemValue) => setCategory(itemValue)}
+                onValueChange={(value) => onChange(value)}
               >
                 <Select.Item label="Transporte" value="transporte" />
                 <Select.Item label="Alimentación" value="alimentacion" />
@@ -81,24 +103,22 @@ export default function AddExpense() {
                 <Select.Item label="Salud" value="salud" />
               </Select>
             )}
-            name="email"
             rules={{ required: true }}
-            defaultValue=""
           />
-          <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-            {errors.email && "Este campo es requerido"}
+          <FormControl.ErrorMessage
+            marginTop={-1}
+            leftIcon={<WarningOutlineIcon size="xs" />}
+          >
+            {errors.categoria && "Selecciona una categoría"}
           </FormControl.ErrorMessage>
         </FormControl>
-        <Divider
-          my={3}
-          _light={{
-            bg: "muted.200",
-          }}
-          _dark={{
-            bg: "muted.50",
-          }}
-        />
-        <FormControl isRequired isInvalid={!!errors.email} w="90%" width={335}>
+
+        <FormControl
+          isInvalid={!!errors.cantidad}
+          isRequired
+          w="90%"
+          width={335}
+        >
           <VStack space={1}>
             <FormControl.Label>
               <Text className="font-semibold text-[18px]">Monto</Text>
@@ -109,12 +129,13 @@ export default function AddExpense() {
           </VStack>
           <Controller
             control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
+            render={({ field: { onChange, value } }) => (
               <Input
                 size="lg"
                 keyboardType="numeric"
-                isRequired
                 marginY={3}
+                value={value}
+                onChangeText={(value) => onChange(value)}
                 rightElement={
                   <FontAwesome5
                     name="dollar-sign"
@@ -127,21 +148,31 @@ export default function AddExpense() {
                 borderRadius={7}
               />
             )}
-            name="email"
-            rules={{ required: true }}
-            defaultValue=""
+            name="cantidad"
+            rules={{
+              required: { value: true, message: "Ingrese el monto" },
+              pattern: {
+                value: /^\d+(\.\d*)?$/,
+                message: "Solo se permiten números",
+              },
+            }}
           />
-          <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-            {errors.email && "Este campo es requerido"}
+          <FormControl.ErrorMessage
+            marginTop={-1}
+            leftIcon={<WarningOutlineIcon size="xs" />}
+          >
+            {errors.cantidad && errors.cantidad.message}
           </FormControl.ErrorMessage>
         </FormControl>
-        <FormControl marginY={3} isInvalid={!!errors.email} w="90%" width={335}>
+        <FormControl marginY={3} w="90%" width={335}>
           <Controller
+            name="divisa"
             control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
+            render={({ field: { onChange, value } }) => (
               <Radio.Group
-                defaultValue="pen"
+                value={value}
                 name="currency"
+                onChange={(value) => onChange(value)}
                 accessibilityLabel="Divisa de Gasto"
               >
                 <HStack space={4}>
@@ -151,14 +182,9 @@ export default function AddExpense() {
                 </HStack>
               </Radio.Group>
             )}
-            name="currency"
           />
-          <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-            {errors.email && "Este campo es requerido"}
-          </FormControl.ErrorMessage>
         </FormControl>
         <Divider
-          my={3}
           _light={{
             bg: "muted.200",
           }}
@@ -168,18 +194,18 @@ export default function AddExpense() {
         />
         <Controller
           control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
+          name="descripcion"
+          render={({ field: { onChange, value } }) => (
             <TextArea
               autoCompleteType
               placeholder="Breve descripcion ..."
               minH={35}
-              marginY={3}
+              value={value}
+              onChangeText={(value) => onChange(value)}
               borderRadius={5}
               size="lg"
             />
           )}
-          name="email"
-          rules={{ required: true }}
           defaultValue=""
         />
 
@@ -214,8 +240,9 @@ export default function AddExpense() {
         onPress={handleSubmit(onSubmit)}
         className="rounded-full m-7"
         marginTop={16}
+        height={12}
       >
-        Guardar
+        Registrar
       </Button>
       {/* //! Probar esto solo el los dispositivos, en los emuladores no funciona
       <PushNotification /> */}
