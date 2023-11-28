@@ -13,10 +13,11 @@ import {
 import { Text } from "react-native";
 import { IGasto } from "@/interfaces";
 import { supabase } from "@/utils/supabase";
-import { useLocalSearchParams, Stack, Link } from "expo-router";
+import { useRouter, Stack, Link } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function ExpenseDetailsModal(expense: IGasto) {
+  const router = useRouter();
   const handleDeleteExpense = async (id: string) => {
     try {
       const { data, error } = await supabase
@@ -37,13 +38,13 @@ export default function ExpenseDetailsModal(expense: IGasto) {
   const totalPercentageExpensed = (monto_gastado / monto_presupuestado) * 100;
 
   return (
-    <VStack bgColor="white" rounded={7} m={5}>
+    <VStack bgColor="white" rounded={7} p={3}>
       <Stack.Screen
         options={{
           presentation: "card",
           headerBackTitle: "Gastos",
           headerRight: () => (
-            <Link href="/expenses/edit/1" asChild>
+            <Link href="/(expenses)/edit/12" asChild>
               <Pressable className="active:opacity-50">
                 <Text className="text-blue-500 text-[17px]">Editar</Text>
               </Pressable>
@@ -169,8 +170,8 @@ export default function ExpenseDetailsModal(expense: IGasto) {
       <HStack justifyContent="center" p={5} space={3}>
         <Button
           onPress={() => handleDeleteExpense(expense.id)}
-          className="w-full"
-          rounded={7}
+          className="w-full rounded-full"
+          height={12}
           variant="solid"
           colorScheme="rose"
         >

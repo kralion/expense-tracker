@@ -6,7 +6,7 @@ import { IGasto } from "../../interfaces";
 
 export function Expense(expense: IGasto) {
   return (
-    <Link href={`/expenses/details/${expense.id}`} asChild>
+    <Link href={`/(expenses)/details/12`} asChild>
       <Pressable>
         {({ isHovered, isPressed }) => {
           return (
