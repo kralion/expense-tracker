@@ -19,12 +19,17 @@ import * as React from "react";
 import { Image, Pressable, SafeAreaView, Text, View } from "react-native";
 import { supabase } from "@/utils/supabase";
 
+type FormData = {
+  email: string;
+  password: string;
+};
+
 export default function SignIn() {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<FormData>();
   const [show, setShow] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [invalidCredentials, setInvalidCredentials] = React.useState(false);
@@ -37,7 +42,7 @@ export default function SignIn() {
     scopes: ["profile", "email"],
   });
 
-  const onSubmit = async (data) => {
+  async function signInWithEmail(data: FormData) {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
       email: data.email,
@@ -53,7 +58,7 @@ export default function SignIn() {
     } else {
       router.push("/(tabs)/");
     }
-  };
+  }
 
   return (
     <SafeAreaView>
@@ -70,7 +75,7 @@ export default function SignIn() {
               <Text className="font-bold text-xl">Expense Tracker</Text>
             </View>
             <Text className="text-textmuted text-center">
-              Controla tus gastos desde tu bolsillo
+              Controla tus gastos desde el bolsillo
             </Text>
           </View>
           <VStack space={5}>
@@ -84,19 +89,28 @@ export default function SignIn() {
                     onChangeText={onChange}
                     value={value}
                     autoCapitalize="none"
-                    borderRadius={10}
+                    borderRadius={7}
                     placeholder="Correo electrónico"
                     size="lg"
                   />
                 )}
                 name="email"
-                rules={{ required: true }}
+                rules={{
+                  required: {
+                    value: true,
+                    message: "Email es requerido",
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                    message: "Email no es válido",
+                  },
+                }}
                 defaultValue=""
               />
               <FormControl.ErrorMessage
                 leftIcon={<WarningOutlineIcon size="xs" />}
               >
-                {errors.email && "Este campo es requerido"}
+                {errors.email && errors.email.message}
               </FormControl.ErrorMessage>
             </FormControl>
 
@@ -115,7 +129,7 @@ export default function SignIn() {
                     passwordRules={
                       "required: upper; required: lower; required: digit; minlength: 8;"
                     }
-                    borderRadius={10}
+                    borderRadius={7}
                     InputRightElement={
                       <Pressable onPress={() => setShow(!show)}>
                         <Icon
@@ -151,14 +165,16 @@ export default function SignIn() {
           )}
 
           <Button
-            rounded={10}
-            height={12}
+            rounded={7}
+            py={5}
             w={{
               base: "83%",
               md: "25%",
             }}
             maxW="350px"
-            onPress={handleSubmit(onSubmit)}
+            onPress={handleSubmit((data) => {
+              signInWithEmail(data);
+            })}
             isLoading={loading}
           >
             <Text className="font-semibold text-white ">Ingresar</Text>
@@ -217,11 +233,29 @@ export default function SignIn() {
                     ],
                   });
                   // signed in
-                } catch (e) {
+                } catch (e: any) {
                   if (e.code === "ERR_REQUEST_CANCELED") {
-                    // handle that the user canceled the sign-in flow
+                    <HStack space={1} alignContent="center">
+                      <MaterialIcons
+                        color="#ef4444"
+                        name="dangerous"
+                        size={16}
+                      />
+                      <Text className="text-red-500">
+                        Debes iniciar sesión con Apple para continuar
+                      </Text>
+                    </HStack>;
                   } else {
-                    // handle other errors
+                    <HStack space={1} alignContent="center">
+                      <MaterialIcons
+                        color="#ef4444"
+                        name="dangerous"
+                        size={16}
+                      />
+                      <Text className="text-red-500">
+                        Ocurrió un error al iniciar sesión con Apple
+                      </Text>
+                    </HStack>;
                   }
                 }
               }}

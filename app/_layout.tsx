@@ -79,58 +79,8 @@ function RootLayoutNav() {
         <ThemeProvider
           value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
-          {/* <Stack>
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        </Stack> */}
           <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="(modals)/buy-premium"
-              options={{
-                presentation: "modal",
-                title: "",
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="(modals)/edit-payment-info
-                "
-              options={{ presentation: "modal", title: "Editar" }}
-            />
-
-            <Stack.Screen
-              name="(modals)/add-expense-success
-            "
-              options={{ presentation: "modal", title: "Agregar Gasto" }}
-            />
-            <Stack.Screen
-              name="(expenses)/edit/12"
-              options={{
-                presentation: "card",
-                headerBackTitle: "Detalles",
-                headerRight: () => (
-                  <Pressable className="active:opacity-50">
-                    <Text className="text-red-500 text-[17px]">Cancelar</Text>
-                  </Pressable>
-                ),
-
-                title: ` Detalles del Gasto
-          1 `,
-              }}
-            />
-
-            <Stack.Screen
-              name="(modals)/export-data"
-              options={{
-                headerBackTitle: "Perfil",
-                presentation: "card",
-
-                title: "Exportar",
-                contentStyle: {
-                  backgroundColor: "#368983",
-                },
-              }}
-            />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           </Stack>
         </ThemeProvider>
       </NativeBaseProvider>
