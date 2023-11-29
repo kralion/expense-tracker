@@ -5,11 +5,11 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack } from "expo-router";
+import { Link, SplashScreen, Stack } from "expo-router";
 import { NativeBaseProvider, extendTheme } from "native-base";
 import * as React from "react";
 import { useEffect } from "react";
-import { View, useColorScheme } from "react-native";
+import { Pressable, View, Text, useColorScheme } from "react-native";
 import { StripeProvider } from "@stripe/stripe-react-native";
 export {
   // Catch any errors thrown by the Layout component.
@@ -103,6 +103,22 @@ function RootLayoutNav() {
             "
               options={{ presentation: "modal", title: "Agregar Gasto" }}
             />
+            <Stack.Screen
+              name="(expenses)/edit/12"
+              options={{
+                presentation: "card",
+                headerBackTitle: "Detalles",
+                headerRight: () => (
+                  <Pressable className="active:opacity-50">
+                    <Text className="text-red-500 text-[17px]">Cancelar</Text>
+                  </Pressable>
+                ),
+
+                title: ` Detalles del Gasto
+          1 `,
+              }}
+            />
+
             <Stack.Screen
               name="(modals)/export-data"
               options={{

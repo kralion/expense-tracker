@@ -1,4 +1,4 @@
-import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import {
   Button,
   CheckIcon,
@@ -14,8 +14,7 @@ import {
 } from "native-base";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Text, View } from "react-native";
 interface FormData {
   cantidad: string;
   divisa: string;
@@ -37,26 +36,18 @@ export default function AddExpense() {
 
   async function onSubmit(data: FormData) {
     data.cantidad = parseFloat(data.cantidad).toString();
+
     alert(JSON.stringify(data));
   }
   return (
-    <SafeAreaView className="bg-background h-screen rounded-b-xl">
-      <HStack justifyContent="space-between" className="px-7">
-        <Text className="font-bold text-center text-xl ">Registrar Gasto</Text>
-        <Button
-          onPress={() => {
-            reset();
-            setValue("categoria", "");
-          }}
-          colorScheme="red"
-          background="red.100"
-          className="rounded-full active:opacity-70"
-          variant="ghost"
-        >
-          <MaterialCommunityIcons color="red" name="broom" size={20} />
-        </Button>
+    <View className="bg-background h-screen px-7 mt-6 rounded-b-xl">
+      <HStack space={3}>
+        <Text className=" text-textmuted text-center text-xl ">
+          Editar Gasto
+        </Text>
+        <Text className="font-bold text-center text-xl ">#172</Text>
       </HStack>
-      <VStack px={7} space={4} py={3}>
+      <VStack space={4} py={3}>
         <FormControl
           isInvalid={!!errors.categoria}
           isRequired
@@ -67,7 +58,6 @@ export default function AddExpense() {
             <FormControl.Label>
               <Text className="font-semibold text-[18px]">Categoría</Text>
             </FormControl.Label>
-            <Text className="text-textmuted">Como se categoriza el gasto</Text>
           </VStack>
           <Controller
             name="categoria"
@@ -124,9 +114,6 @@ export default function AddExpense() {
             <FormControl.Label>
               <Text className="font-semibold text-[18px]">Monto</Text>
             </FormControl.Label>
-            <Text className="text-textmuted">
-              Cantidad de dinero expedido en el gasto
-            </Text>
           </VStack>
           <Controller
             control={control}
@@ -145,7 +132,7 @@ export default function AddExpense() {
                     size={10}
                   />
                 }
-                placeholder="65.00"
+                placeholder="65.99"
                 borderRadius={7}
               />
             )}
@@ -243,10 +230,10 @@ export default function AddExpense() {
         marginTop={16}
         height={12}
       >
-        Registrar
+        Guardar
       </Button>
       {/* //! Probar esto solo el los dispositivos, en los emuladores no funciona
       <PushNotification /> */}
-    </SafeAreaView>
+    </View>
   );
 }
