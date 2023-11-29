@@ -8,6 +8,7 @@ import {
 import { Link, router } from "expo-router";
 import {
   Button,
+  Center,
   FormControl,
   HStack,
   Icon,
@@ -63,22 +64,33 @@ export default function SignIn() {
   return (
     <SafeAreaView>
       <View className="flex flex-col space-y-7 justify-between mx-2">
-        <View className="items-center space-y-7">
-          <View className="justify-center text-center  mt-10">
-            <View className="flex flex-row  items-center gap-2 justify-center ">
+        <View className="space-y-7 ">
+          <VStack space={5} className="flex items-start mx-7">
+            <HStack space={2} alignItems="center">
               <Image
                 className="w-10 h-10"
                 source={{
                   uri: "https://img.icons8.com/?size=100&id=ogMD71G6DBkF&format=png",
                 }}
               />
-              <Text className="font-bold text-xl">Expense Tracker</Text>
-            </View>
-            <Text className="text-textmuted text-center">
-              Controla tus gastos desde el bolsillo
-            </Text>
-          </View>
-          <VStack space={5}>
+              <Link asChild href="/(auth)/sign-in">
+                <Button className="px-0" variant="link">
+                  <Text className=" text-xl font-bold text-zinc-700 tracking-tight">
+                    Expense Tracker
+                  </Text>
+                </Button>
+              </Link>
+            </HStack>
+            <VStack space={2}>
+              <Text className=" text-3xl font-bold tracking-tight">
+                Inicio de Sesión
+              </Text>
+
+              <Text>Disfruta las bondades de la aplicacion</Text>
+            </VStack>
+          </VStack>
+
+          <VStack alignItems="center" space={5}>
             <FormControl isInvalid={!!errors.email} w="85%" width={315}>
               <Controller
                 control={control}
@@ -164,21 +176,24 @@ export default function SignIn() {
             </HStack>
           )}
 
-          <Button
-            rounded={7}
-            py={5}
-            w={{
-              base: "83%",
-              md: "25%",
-            }}
-            maxW="350px"
-            onPress={handleSubmit((data) => {
-              signInWithEmail(data);
-            })}
-            isLoading={loading}
-          >
-            <Text className="font-semibold text-white ">Ingresar</Text>
-          </Button>
+          <Center>
+            <Button
+              rounded={7}
+              py={5}
+              alignItems="center"
+              w={{
+                base: "83%",
+                md: "25%",
+              }}
+              maxW="350px"
+              onPress={handleSubmit((data) => {
+                signInWithEmail(data);
+              })}
+              isLoading={loading}
+            >
+              <Text className="font-semibold text-white ">Ingresar</Text>
+            </Button>
+          </Center>
         </View>
 
         <View className="flex flex-row items-center text-center justify-center">
