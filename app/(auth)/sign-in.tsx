@@ -66,12 +66,10 @@ export default function SignIn() {
       <View className="flex flex-col space-y-7 justify-between mx-2">
         <View className="space-y-7 ">
           <VStack space={5} className="flex items-start mx-7">
-            <HStack space={2} alignItems="center">
+            <HStack space={1} alignItems="center">
               <Image
-                className="w-10 h-10"
-                source={{
-                  uri: "https://img.icons8.com/?size=100&id=ogMD71G6DBkF&format=png",
-                }}
+                className="w-7 h-7"
+                source={require("../../assets/icon.png")}
               />
               <Link asChild href="/(auth)/sign-in">
                 <Button className="px-0" variant="link">
