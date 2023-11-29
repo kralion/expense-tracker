@@ -1,51 +1,53 @@
 import {
   Alert,
+  Badge,
   Box,
   Button,
   Center,
   Heading,
-  NativeBaseProvider,
   Text,
   VStack,
 } from "native-base";
 import React from "react";
-import { Image, SafeAreaView } from "react-native";
+import { Image, ImageBackground, SafeAreaView } from "react-native";
 
 export default function AddExpenseSuccesModal() {
   return (
-    <NativeBaseProvider>
-      <SafeAreaView className="bg-primary h-screen">
-        <Center>
-          <Alert
-            borderRadius={20}
-            maxW="400"
-            colorScheme="white"
-            backgroundColor="white"
-            w="90%"
-            h="90%"
-            shadow="2xl"
-          >
-            <VStack alignItems="center" space={5} flexShrink={1} w="100%">
-              <Box width={300} flexShrink={1} alignItems="center">
-                <Image
-                  className="w-64 h-64 "
-                  source={require("../../assets/images/success-asset.png")}
-                />
-              </Box>
-              <Heading size="md">Registro Exitoso</Heading>
-              <Text textAlign="center" px={12}>
-                <Text className="font-bold" px={2}>
-                  S/. 50.99{" "}
-                </Text>
-                nuevos soles registrados en tu historial de gastos
-              </Text>
-              <Button className="rounded-full" width={40}>
-                <Text className=" font-semibold text-white">Aceptar</Text>
-              </Button>
-            </VStack>
-          </Alert>
-        </Center>
-      </SafeAreaView>
-    </NativeBaseProvider>
+    <ImageBackground
+      source={{
+        uri: "https://img.freepik.com/free-vector/wave-vector-abstract-background-flat-design-stock-illustration-vector-illustration_1142-13277.jpg?size=626&ext=jpg&ga=GA1.1.1574565953.1694553592&semt=sph",
+      }}
+      style={{ flex: 1, filter: "blur(20px)" }}
+      className=" h-screen px-5 py-10"
+    >
+      <Center>
+        <VStack
+          background="white"
+          className="shadow-md rounded-2xl"
+          p={7}
+          alignItems="center"
+          space={5}
+          w="100%"
+        >
+          <Box width={300} flexShrink={1} alignItems="center">
+            <Image
+              className="w-64 h-64 "
+              source={require("../../assets/images/success.png")}
+            />
+          </Box>
+          <Heading size="md">Registro Exitoso</Heading>
+          <Text textAlign="center">
+            Para mas detalles sobre este registro puedes revisar el historial de
+            gastos.
+          </Text>
+          <Badge className="rounded-lg w-full py-4 bg-zinc-200">
+            <Text className="font-bold text-xl">S/. 140.00</Text>
+          </Badge>
+          <Button className="rounded-full w-full py-4">
+            <Text className=" font-semibold text-white">Aceptar</Text>
+          </Button>
+        </VStack>
+      </Center>
+    </ImageBackground>
   );
 }

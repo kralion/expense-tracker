@@ -20,9 +20,9 @@ export default function App() {
   }
   async function fetchUserName(userId: string) {
     const { data, error } = await supabase
-      .from('app_users')
-      .select('nombres')
-      .eq('id', userId)
+      .from("app_users")
+      .select("nombres")
+      .eq("id", userId)
       .single();
 
     if (error) {
@@ -43,9 +43,7 @@ export default function App() {
     if (session?.user?.id) {
       fetchUserName(session.user.id);
     }
-  }, [
-    session?.user?.id
-  ]);
+  }, [session?.user?.id]);
   return (
     <View>
       <View className="bg-accent relative h-20">
@@ -91,7 +89,7 @@ export default function App() {
           alignItems="flex-start"
           marginTop={200}
         >
-          <Link asChild href="/(modals)/export-data">
+          <Link asChild href="/(modals)/add-expense-sucess">
             <Pressable className="flex flex-row gap-3 p-2 items-center active:opacity-30">
               <Icon
                 color="gray.500"

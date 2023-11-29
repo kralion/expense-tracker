@@ -6,8 +6,8 @@ export default function Welcome() {
     <SafeAreaView>
       <View className="items-center space-y-12">
         <Image
-          className="w-72  h-72 mt-10"
-          source={require("../../assets/images/hero.png")}
+          className="w-72  h-72 mt-10 shadow-xl"
+          source={require("../../assets/hero1.png")}
         />
         <View className="items-center space-y-3.5">
           <Text className="font-bold text-2xl">Controla tus gastos</Text>
@@ -18,21 +18,11 @@ export default function Welcome() {
         </View>
         <Center>
           <Link asChild href="/(auth)/sign-up">
-            <Button className="px-10 rounded-full" size="lg">
-              Iniciar sesión
+            <Button className="px-10 py-4 rounded-full" size="lg">
+              Empezar a usarlo
             </Button>
           </Link>
         </Center>
-      </View>
-      <View className="items-center gap-1 text-center justify-center mt-32 flex  flex-row">
-        <Text className="  text-textmuted text-center">
-          No tienes una cuenta?
-        </Text>
-        <Link asChild href="/(auth)/sign-up">
-          <Button className="px-0" variant="link">
-            Regístrate
-          </Button>
-        </Link>
       </View>
     </SafeAreaView>
   );
