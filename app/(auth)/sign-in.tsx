@@ -69,6 +69,7 @@ export default function SignIn() {
             <HStack space={1} alignItems="center">
               <Image
                 className="w-7 h-7"
+                //link : https://icons8.com/icons/set/wallet
                 source={require("../../assets/icon.png")}
               />
               <Link asChild href="/(auth)/sign-in">

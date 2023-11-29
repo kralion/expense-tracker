@@ -29,6 +29,7 @@ type FormData = {
   apellidos: string;
   email: string;
   password: string;
+  termsAndConditions: boolean;
 };
 
 export default function SignUp() {
@@ -57,6 +58,7 @@ export default function SignUp() {
           apellidos: data.apellidos,
           email: data.email,
           password: data.password,
+          termsAndConditions: data.termsAndConditions,
         },
       ]);
 
@@ -297,17 +299,41 @@ export default function SignUp() {
             </FormControl.ErrorMessage>
           </FormControl>
         </VStack>
-        <HStack mt={5}>
-          <Checkbox
-            shadow="none"
-            borderWidth={1}
-            value="acepto"
-            accessibilityLabel="Terminos y Condiciones"
-            defaultIsChecked
-          >
-            <Text className="text-mute">Acepto los Términos y Condiciones</Text>
-          </Checkbox>
-        </HStack>
+        <FormControl
+          width={370}
+          isInvalid={
+            !!errors.termsAndConditions && !!errors.termsAndConditions.message
+          }
+        >
+          <HStack mt={5}>
+            <Controller
+              control={control}
+              name="termsAndConditions"
+              defaultValue={false}
+              rules={{
+                required: {
+                  value: true,
+                  message:
+                    "Debe aceptar los Términos y Condiciones para continuar",
+                },
+              }}
+              render={({ field }) => (
+                <Checkbox
+                  value={field.value.toString()}
+                  isChecked={field.value}
+                  onChange={(isChecked) => field.onChange(isChecked)}
+                >
+                  <Text className="text-mute">
+                    Acepto los Términos y Condiciones
+                  </Text>
+                </Checkbox>
+              )}
+            />
+          </HStack>
+          <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+            {errors.termsAndConditions && errors.termsAndConditions.message}
+          </FormControl.ErrorMessage>
+        </FormControl>
 
         <Button
           className="mt-5 "
