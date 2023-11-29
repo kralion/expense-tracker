@@ -6,8 +6,8 @@ export default function Welcome() {
     <SafeAreaView>
       <View className="items-center space-y-12">
         <Image
-          className="w-72  h-72 mt-10"
-          source={require("../../assets/images/hero.png")}
+          className="w-72  h-72 mt-10 shadow-xl"
+          source={require("../../assets/hero1.png")}
         />
         <View className="items-center space-y-3.5">
           <Text className="font-bold text-2xl">Controla tus gastos</Text>
