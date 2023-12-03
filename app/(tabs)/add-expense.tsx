@@ -1,3 +1,5 @@
+import { useNotificationContext } from "@/context";
+import { supabase } from "@/utils/supabase";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   Button,
@@ -34,11 +36,32 @@ export default function AddExpense() {
       divisa: "pen",
     },
   });
-
+  const { showNotification } = useNotificationContext();
   async function onSubmit(data: FormData) {
     data.cantidad = parseFloat(data.cantidad).toString();
-    alert(JSON.stringify(data));
+    const storageData = alert(JSON.stringify(data));
+    try {
+      //TODO: Agregar el id del usuario, y corroborar el nombre de la tabla
+      await supabase.from("gastos").insert(data);
+
+      showNotification({
+        alertStatus: "success",
+        title: "Gasto registrado",
+      });
+      reset();
+    } catch (error) {
+      showNotification({
+        alertStatus: "error",
+        title: "Error al registrar el gasto",
+      });
+    }
   }
+  setTimeout(() => {
+    showNotification({
+      alertStatus: "success",
+      title: "Gasto registrado",
+    });
+  }, 2000);
   return (
     <SafeAreaView className="bg-background h-screen rounded-b-xl">
       <HStack justifyContent="space-between" className="px-7">

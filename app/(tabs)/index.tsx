@@ -15,17 +15,13 @@ import { Session } from "@supabase/supabase-js";
 
 export default function Index() {
   const { expenses } = useExpenseContext();
-  const { showNotification: show } = useNotificationContext();
-  const [showNotification, setShowNotification] = React.useState(false);
+  const [showBudgetLimitNotification, setShowBudgetLimitNotification] =
+    React.useState(false);
   const [nombres, setNombres] = React.useState("");
-  React.useEffect(() => {
-    show({
-      title: "Gasto Realizado",
-      alertStatus: "success",
-    });
-  }, []);
+
   const [session, setSession] = React.useState<Session | null>(null);
   async function fetchUserName(userId: string) {
+    //TODO Cambiar el nombre de la tabla
     const { data, error } = await supabase
       .from("app_users")
       .select("nombres")
@@ -94,8 +90,8 @@ export default function Index() {
       </View>
       <VStack space={5} className="bg-background ">
         <BudgetLimitExceededModal
-          setShowNotification={setShowNotification}
-          showNotification={showNotification}
+          setShowNotification={setShowBudgetLimitNotification}
+          showNotification={showBudgetLimitNotification}
         />
         <HStack
           marginTop={100}
@@ -106,7 +102,7 @@ export default function Index() {
           <Heading size="md">Historial de Gastos</Heading>
 
           <Button
-            onPress={() => setShowNotification(true)}
+            onPress={() => setShowBudgetLimitNotification(true)}
             variant="ghost"
             className="rounded-lg"
             colorScheme="gray"
