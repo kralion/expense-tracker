@@ -44,6 +44,7 @@ export const NotificationContextProvider = ({
       {notification.title && (
         <Alert
           variant="subtle"
+          shadow="3"
           rounded={7}
           position="absolute"
           top={16}

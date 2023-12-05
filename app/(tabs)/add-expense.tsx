@@ -58,7 +58,7 @@ export default function AddExpense() {
   }
 
   return (
-    <SafeAreaView className="bg-background h-screen rounded-b-xl">
+    <SafeAreaView>
       <HStack justifyContent="space-between" className="px-7">
         <Text className="font-bold text-center text-xl ">Registrar Gasto</Text>
         <Button

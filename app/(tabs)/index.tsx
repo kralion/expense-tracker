@@ -18,6 +18,7 @@ export default function Index() {
   const [showBudgetLimitNotification, setShowBudgetLimitNotification] =
     React.useState(false);
   const [nombres, setNombres] = React.useState("");
+  const { showNotification } = useNotificationContext();
 
   const [session, setSession] = React.useState<Session | null>(null);
   async function fetchUserName(userId: string) {
@@ -103,7 +104,15 @@ export default function Index() {
             <Heading size="md">Historial de Gastos</Heading>
 
             <Button
-              onPress={() => setShowBudgetLimitNotification(true)}
+              onPress={() =>
+                // {setShowBudgetLimitNotification(true)
+                {
+                  showNotification({
+                    title: "Premium acquired",
+                    alertStatus: "success",
+                  });
+                }
+              }
               variant="ghost"
               className="rounded-lg"
               colorScheme="gray"
