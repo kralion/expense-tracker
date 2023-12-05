@@ -56,7 +56,7 @@ export default function App() {
           <Image
             source={{
               uri:
-                "https://userstock.io/data/wp-content/uploads/2017/09/bewakoof-com-official-219589-300x300.jpg" ||
+                "https://img.icons8.com/?size=160&id=492ILERveW8G&format=png" ||
                 session?.user?.user_metadata?.avatar_url,
             }}
             alt="profile-pic"

@@ -349,7 +349,7 @@ export default function SignUp() {
           }}
           py={5}
           width={333}
-          rounded={7}
+          rounded={10}
           isLoading={loading}
         >
           <Text className="font-semibold text-white ">Registrarse</Text>
