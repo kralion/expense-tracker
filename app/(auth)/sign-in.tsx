@@ -8,6 +8,7 @@ import {
 import { Link, router } from "expo-router";
 import {
   Button,
+  Center,
   FormControl,
   HStack,
   Icon,
@@ -19,12 +20,17 @@ import * as React from "react";
 import { Image, Pressable, SafeAreaView, Text, View } from "react-native";
 import { supabase } from "@/utils/supabase";
 
+type FormData = {
+  email: string;
+  password: string;
+};
+
 export default function SignIn() {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<FormData>();
   const [show, setShow] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [invalidCredentials, setInvalidCredentials] = React.useState(false);
@@ -37,7 +43,7 @@ export default function SignIn() {
     scopes: ["profile", "email"],
   });
 
-  const onSubmit = async (data) => {
+  async function signInWithEmail(data: FormData) {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
       email: data.email,
@@ -53,27 +59,37 @@ export default function SignIn() {
     } else {
       router.push("/(tabs)/");
     }
-  };
+  }
 
   return (
     <SafeAreaView>
       <View className="flex flex-col space-y-7 justify-between mx-2">
-        <View className="items-center space-y-7">
-          <View className="justify-center text-center  mt-10">
-            <View className="flex flex-row  items-center gap-2 justify-center ">
+        <View className="space-y-7 ">
+          <VStack space={5} className="flex items-start mx-7">
+            <HStack space={1} alignItems="center">
               <Image
-                className="w-10 h-10"
-                source={{
-                  uri: "https://img.icons8.com/?size=100&id=ogMD71G6DBkF&format=png",
-                }}
+                className="w-7 h-7"
+                //link : https://icons8.com/icons/set/wallet
+                source={require("../../assets/icon.png")}
               />
-              <Text className="font-bold text-xl">Expense Tracker</Text>
-            </View>
-            <Text className="text-textmuted text-center">
-              Controla tus gastos desde tu bolsillo
-            </Text>
-          </View>
-          <VStack space={5}>
+              <Link asChild href="/(auth)/sign-in">
+                <Button className="px-0" variant="link">
+                  <Text className=" text-xl font-bold text-zinc-700 tracking-tight">
+                    Expense Tracker
+                  </Text>
+                </Button>
+              </Link>
+            </HStack>
+            <VStack space={2}>
+              <Text className=" text-3xl font-bold tracking-tight">
+                Inicio de Sesión
+              </Text>
+
+              <Text>Disfruta las bondades de la aplicacion</Text>
+            </VStack>
+          </VStack>
+
+          <VStack alignItems="center" space={5}>
             <FormControl isInvalid={!!errors.email} w="85%" width={315}>
               <Controller
                 control={control}
@@ -84,19 +100,28 @@ export default function SignIn() {
                     onChangeText={onChange}
                     value={value}
                     autoCapitalize="none"
-                    borderRadius={10}
+                    borderRadius={7}
                     placeholder="Correo electrónico"
                     size="lg"
                   />
                 )}
                 name="email"
-                rules={{ required: true }}
+                rules={{
+                  required: {
+                    value: true,
+                    message: "Email es requerido",
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                    message: "Email no es válido",
+                  },
+                }}
                 defaultValue=""
               />
               <FormControl.ErrorMessage
                 leftIcon={<WarningOutlineIcon size="xs" />}
               >
-                {errors.email && "Este campo es requerido"}
+                {errors.email && errors.email.message}
               </FormControl.ErrorMessage>
             </FormControl>
 
@@ -115,7 +140,7 @@ export default function SignIn() {
                     passwordRules={
                       "required: upper; required: lower; required: digit; minlength: 8;"
                     }
-                    borderRadius={10}
+                    borderRadius={7}
                     InputRightElement={
                       <Pressable onPress={() => setShow(!show)}>
                         <Icon
@@ -150,19 +175,24 @@ export default function SignIn() {
             </HStack>
           )}
 
-          <Button
-            rounded={10}
-            height={12}
-            w={{
-              base: "83%",
-              md: "25%",
-            }}
-            maxW="350px"
-            onPress={handleSubmit(onSubmit)}
-            isLoading={loading}
-          >
-            <Text className="font-semibold text-white ">Ingresar</Text>
-          </Button>
+          <Center>
+            <Button
+              rounded={7}
+              py={5}
+              alignItems="center"
+              w={{
+                base: "83%",
+                md: "25%",
+              }}
+              maxW="350px"
+              onPress={handleSubmit((data) => {
+                signInWithEmail(data);
+              })}
+              isLoading={loading}
+            >
+              <Text className="font-semibold text-white ">Ingresar</Text>
+            </Button>
+          </Center>
         </View>
 
         <View className="flex flex-row items-center text-center justify-center">
@@ -217,11 +247,29 @@ export default function SignIn() {
                     ],
                   });
                   // signed in
-                } catch (e) {
+                } catch (e: any) {
                   if (e.code === "ERR_REQUEST_CANCELED") {
-                    // handle that the user canceled the sign-in flow
+                    <HStack space={1} alignContent="center">
+                      <MaterialIcons
+                        color="#ef4444"
+                        name="dangerous"
+                        size={16}
+                      />
+                      <Text className="text-red-500">
+                        Debes iniciar sesión con Apple para continuar
+                      </Text>
+                    </HStack>;
                   } else {
-                    // handle other errors
+                    <HStack space={1} alignContent="center">
+                      <MaterialIcons
+                        color="#ef4444"
+                        name="dangerous"
+                        size={16}
+                      />
+                      <Text className="text-red-500">
+                        Ocurrió un error al iniciar sesión con Apple
+                      </Text>
+                    </HStack>;
                   }
                 }
               }}

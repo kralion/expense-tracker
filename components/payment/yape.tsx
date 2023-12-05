@@ -1,4 +1,4 @@
-import { MaterialIcons } from "@expo/vector-icons";
+import { Fontisto } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { Button, Center, VStack, View } from "native-base";
 import React from "react";
@@ -35,12 +35,10 @@ export default function Yape() {
           rounded={7}
           width={150}
           colorScheme="purple"
-          endIcon={
-            <MaterialIcons name="arrow-forward-ios" size={20} color="#fff" />
-          }
+          startIcon={<Fontisto name="arrow-right-l" size={25} color="#ffff" />}
         >
           <Image
-            className="scale-[0.2]"
+            className="scale-[0.7] mt-2"
             source={require("../../assets/yape-logo.png")}
           />
         </Button>
