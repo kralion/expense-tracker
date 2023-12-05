@@ -11,6 +11,7 @@ import * as React from "react";
 import { useEffect } from "react";
 import { Pressable, View, Text, useColorScheme } from "react-native";
 import { StripeProvider } from "@stripe/stripe-react-native";
+import { Session, Provider } from "@supabase/supabase-js";
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,

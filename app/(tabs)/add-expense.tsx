@@ -56,12 +56,7 @@ export default function AddExpense() {
       });
     }
   }
-  setTimeout(() => {
-    showNotification({
-      alertStatus: "success",
-      title: "Gasto registrado",
-    });
-  }, 2000);
+
   return (
     <SafeAreaView className="bg-background h-screen rounded-b-xl">
       <HStack justifyContent="space-between" className="px-7">

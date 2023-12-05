@@ -2,7 +2,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link } from "expo-router";
 import { Button, HStack, Heading, Spacer, Text, VStack } from "native-base";
 import * as React from "react";
-import { Pressable, SafeAreaView, View } from "react-native";
+import { Pressable, SafeAreaView, ScrollView, View } from "react-native";
 import Card from "@/components/dashboard/card";
 import { Expense } from "@/components/shared";
 import { ExpenseSkeleton } from "@/components/skeletons/expense";
@@ -49,87 +49,89 @@ export default function Index() {
   }, [session?.user?.id]);
   return (
     <SafeAreaView className="bg-primary space-y-7 ">
-      <HStack justifyContent="space-between" mx={4}>
-        <VStack>
-          <Text className="text-mutedwhite text-[12px] ">
-            {
-              new Date()
-                .toLocaleDateString("es-ES", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })
-                .split(",")[1]
-            }
-          </Text>
-          <Text className="font-bold text-[16px] text-white  tracking-tight">
-            Hola, {nombres} 👋
-          </Text>
-        </VStack>
+      <ScrollView>
+        <HStack justifyContent="space-between" mx={4}>
+          <VStack>
+            <Text className="text-mutedwhite text-[12px] ">
+              {
+                new Date()
+                  .toLocaleDateString("es-ES", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })
+                  .split(",")[1]
+              }
+            </Text>
+            <Text className="font-bold text-[16px] text-white  tracking-tight">
+              Hola, {nombres} 👋
+            </Text>
+          </VStack>
 
-        <View>
-          <Link href="/(modals)/buy-premium" asChild>
-            <Button
-              isPressed={true}
-              colorScheme="A3E062"
-              className="rounded-full active:opacity-70"
-              variant="ghost"
-            >
-              <FontAwesome
-                color="#A3E062"
-                name={session?.user.role === "premium" ? "unlock" : "lock"}
-                size={20}
-              />
-            </Button>
-          </Link>
-        </View>
-      </HStack>
-      <View className="z-10 h-20">
-        <Card />
-      </View>
-      <VStack space={5} className="bg-background ">
-        <BudgetLimitExceededModal
-          setShowNotification={setShowBudgetLimitNotification}
-          showNotification={showBudgetLimitNotification}
-        />
-        <HStack
-          marginTop={100}
-          className="items-center"
-          mx={3}
-          justifyContent="space-between"
-        >
-          <Heading size="md">Historial de Gastos</Heading>
-
-          <Button
-            onPress={() => setShowBudgetLimitNotification(true)}
-            variant="ghost"
-            className="rounded-lg"
-            colorScheme="gray"
-          >
-            Ver Todo
-          </Button>
+          <View>
+            <Link href="/(modals)/buy-premium" asChild>
+              <Button
+                isPressed={true}
+                colorScheme="A3E062"
+                className="rounded-full active:opacity-70"
+                variant="ghost"
+              >
+                <FontAwesome
+                  color="#A3E062"
+                  name={session?.user.role === "premium" ? "unlock" : "lock"}
+                  size={20}
+                />
+              </Button>
+            </Link>
+          </View>
         </HStack>
-        <VStack space={4} className="mx-2">
-          {expenses?.map((expense) => (
-            <React.Suspense fallback={<ExpenseSkeleton />}>
-              <Expense
-                key={expense.id}
-                id={expense.id}
-                assetIdentificador={
-                  expensesIdentifiers.find(
-                    (icon) => icon.label === expense.categoria
-                  )?.iconHref ||
-                  "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png"
-                }
-                categoria={expense.categoria}
-                cantidad={expense.cantidad}
-                fecha={expense.fecha}
-              />
-            </React.Suspense>
-          ))}
+        <View className="z-10 h-20">
+          <Card />
+        </View>
+        <VStack space={5} className="bg-background ">
+          <BudgetLimitExceededModal
+            setShowNotification={setShowBudgetLimitNotification}
+            showNotification={showBudgetLimitNotification}
+          />
+          <HStack
+            marginTop={100}
+            className="items-center"
+            mx={3}
+            justifyContent="space-between"
+          >
+            <Heading size="md">Historial de Gastos</Heading>
+
+            <Button
+              onPress={() => setShowBudgetLimitNotification(true)}
+              variant="ghost"
+              className="rounded-lg"
+              colorScheme="gray"
+            >
+              Ver Todo
+            </Button>
+          </HStack>
+          <VStack space={4} className="mx-2">
+            {expenses?.map((expense) => (
+              <React.Suspense fallback={<ExpenseSkeleton />}>
+                <Expense
+                  key={expense.id}
+                  id={expense.id}
+                  assetIdentificador={
+                    expensesIdentifiers.find(
+                      (icon) => icon.label === expense.categoria
+                    )?.iconHref ||
+                    "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png"
+                  }
+                  categoria={expense.categoria}
+                  cantidad={expense.cantidad}
+                  fecha={expense.fecha}
+                />
+              </React.Suspense>
+            ))}
+          </VStack>
         </VStack>
-      </VStack>
+      </ScrollView>
     </SafeAreaView>
   );
 }
