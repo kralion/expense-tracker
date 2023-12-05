@@ -43,14 +43,17 @@ export const NotificationContextProvider = ({
     <NotificationContext.Provider value={{ showNotification, notification }}>
       {notification.title && (
         <Alert
-          variant="top-accent"
+          variant="subtle"
+          shadow="3"
+          rounded={7}
           position="absolute"
           top={16}
-          left={0}
+          left={2}
           right={0}
+          px={3}
           zIndex={1}
           status={notification.alertStatus}
-          w="100%"
+          w="95%"
         >
           <VStack space={2} flexShrink={1} w="100%">
             <HStack flexShrink={1} space={2} justifyContent="space-between">

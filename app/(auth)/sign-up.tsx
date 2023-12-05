@@ -46,6 +46,9 @@ export default function SignUp() {
     const { error } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
+      options: {
+        emailRedirectTo: "https://expense-tracker-web-nine.vercel.app",
+      },
     });
     if (error) {
       Alert.alert(error.message);
