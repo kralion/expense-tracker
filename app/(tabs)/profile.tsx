@@ -89,7 +89,9 @@ export default function App() {
           alignItems="flex-start"
           marginTop={200}
         >
-          <Link asChild href="/(modals)/add-expense-sucess">
+
+          <Link asChild href="/(modals)/personal-info">
+
             <Pressable className="flex flex-row gap-3 p-2 items-center active:opacity-30">
               <Icon
                 color="gray.500"
@@ -115,7 +117,7 @@ export default function App() {
               </Text>
             </Pressable>
           </Link>
-          <Link asChild href="/(modals)/export-data">
+          <Link asChild href="/(modals)/notifications">
             <Pressable className="flex gap-3 flex-row p-2 items-center active:opacity-30">
               <Icon color="gray.500" as={Entypo} size={21} name="bell" />
 
