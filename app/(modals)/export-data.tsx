@@ -22,7 +22,7 @@ export default function Export() {
         </Text>
 
         <VStack mt={10} space={4}>
-          <Button colorScheme="blue" variant="subtle" borderWidth={0.2}>
+          <Button colorScheme="blue" variant="subtle" shadow={2} py={4}>
             <HStack alignItems="center">
               <Image
                 className="w-5 h-5 mr-2"
@@ -36,7 +36,7 @@ export default function Export() {
             </HStack>
           </Button>
 
-          <Button colorScheme="green" variant="subtle" borderWidth={0.2}>
+          <Button colorScheme="green" variant="subtle" shadow={2} py={4}>
             <HStack alignItems="center">
               <Image
                 className="w-5 h-5 mr-2"
@@ -48,7 +48,7 @@ export default function Export() {
             </HStack>
           </Button>
 
-          <Button colorScheme="red" variant="subtle" borderWidth={0.2}>
+          <Button colorScheme="red" variant="subtle" shadow={2} py={4}>
             <HStack alignItems="center">
               <Image
                 className="w-5 h-5 mr-2"
