@@ -79,7 +79,6 @@ export default function SignIn() {
               </Text>
             </VStack>
           </VStack>
-
           <VStack alignItems="center" space={5}>
             <FormControl isInvalid={!!errors.email} w="85%" width={315}>
               <Controller
@@ -160,7 +159,7 @@ export default function SignIn() {
             </FormControl>
           </VStack>
           {invalidCredentials && (
-            <HStack space={1} alignContent="center">
+            <HStack space={1} justifyContent="center" alignContent="center">
               <MaterialIcons color="#ef4444" name="dangerous" size={16} />
               <Text className="text-red-500">Credenciales inválidas</Text>
             </HStack>
