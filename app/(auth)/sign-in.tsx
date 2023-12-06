@@ -66,26 +66,17 @@ export default function SignIn() {
       <View className="flex flex-col space-y-7 justify-between mx-2">
         <View className="space-y-7 ">
           <VStack space={5} className="flex items-start mx-7">
-            <HStack space={1} alignItems="center">
-              <Image
-                className="w-7 h-7"
-                //link : https://icons8.com/icons/set/wallet
-                source={require("../../assets/icon.png")}
-              />
-              <Link asChild href="/(auth)/sign-in">
-                <Button className="px-0" variant="link">
-                  <Text className=" text-xl font-bold text-zinc-700 tracking-tight">
-                    Expense Tracker
-                  </Text>
-                </Button>
-              </Link>
-            </HStack>
             <VStack space={2}>
-              <Text className=" text-3xl font-bold tracking-tight">
+              <Text className=" text-3xl font-bold tracking-tight mt-10">
                 Inicio de Sesión
               </Text>
 
-              <Text>Disfruta las bondades de la aplicacion</Text>
+              <Text>
+                Disfruta las bondades de la{" "}
+                <Text className="font-semibold text-primary">
+                  Expense Tracker
+                </Text>
+              </Text>
             </VStack>
           </VStack>
 
@@ -177,7 +168,7 @@ export default function SignIn() {
 
           <Center>
             <Button
-              rounded={7}
+              rounded={10}
               py={5}
               alignItems="center"
               w={{
