@@ -1,7 +1,7 @@
 import { supabase } from "@/utils/supabase";
 import { FontAwesome5 } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import {
   Button,
   Checkbox,
@@ -22,7 +22,6 @@ import {
   Text,
   View,
 } from "react-native";
-import { v4 as uuidv4 } from "uuid";
 
 type FormData = {
   nombres: string;
@@ -36,6 +35,7 @@ export default function SignUp() {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormData>();
   const [show, setShow] = React.useState(false);
@@ -53,23 +53,27 @@ export default function SignUp() {
     if (error) {
       Alert.alert(error.message);
     } else {
-      //TODO Corroborar el nombre de la tabla
-      const { error: insertError } = await supabase.from("usuarios").insert([
-        {
-          id: uuidv4(),
-          nombres: data.nombres,
-          apellidos: data.apellidos,
-          email: data.email,
-          password: data.password,
-          termsAndConditions: data.termsAndConditions,
-        },
-      ]);
+      Alert.alert(
+        `${data.nombres}, Por favor revisa tu correo para verificar tu cuenta`
+      );
+      const { error: insertError } = await supabase
+        .from("usuarios_expense")
+        .insert([
+          {
+            nombres: data.nombres,
+            apellidos: data.apellidos,
+            termsAndConditions: data.termsAndConditions,
+          },
+        ]);
 
       if (insertError) {
         Alert.alert(insertError.message);
       } else {
         Alert.alert("Revisa tu correo para verificar tu cuenta");
       }
+      setLoading(false);
+      reset();
+      router.push("/(auth)/sign-in");
     }
   }
 
@@ -92,7 +96,7 @@ export default function SignUp() {
             <Button
               bgColor="black"
               rounded={7}
-              className="w-[105px]"
+              className="w-[115px]"
               height={12}
             >
               <FontAwesome5 size={24} color="white" name="apple" />
@@ -100,7 +104,7 @@ export default function SignUp() {
             <Button
               colorScheme="blue"
               rounded={7}
-              className="w-[105px]"
+              className="w-[115px]"
               height={12}
             >
               <FontAwesome5 size={24} color="white" name="facebook" />
@@ -109,7 +113,7 @@ export default function SignUp() {
               background="#F5F3F3"
               rounded={7}
               borderWidth={0.2}
-              className="w-[100px]"
+              className="w-[115px]"
               height={12}
             >
               <Image
@@ -121,13 +125,17 @@ export default function SignUp() {
             </Button>
           </HStack>
           <View className="flex flex-row items-center text-center justify-center">
-            <View className="w-[155px] border-[1px] h-0.5 border-gray-300"></View>
+            <View className="w-[170px] border-[1px] h-0.5 border-gray-300"></View>
             <Text className="text-textmuted mx-2 text-center">o</Text>
-            <View className="w-[153px] border-[1px] h-0.5 border-gray-300"></View>
+            <View className="w-[170px] border-[1px] h-0.5 border-gray-300"></View>
           </View>
           <HStack space={3}>
             <FormControl
-              maxW={160}
+              w={{
+                base: "83%",
+                md: "25%",
+              }}
+              maxW={180}
               isRequired
               isInvalid={!!errors.nombres && !!errors.nombres.message}
             >
@@ -167,7 +175,11 @@ export default function SignUp() {
             </FormControl>
 
             <FormControl
-              maxW={160}
+              w={{
+                base: "83%",
+                md: "25%",
+              }}
+              maxW={180}
               isInvalid={!!errors.apellidos && !!errors.apellidos.message}
             >
               <Controller
@@ -206,7 +218,7 @@ export default function SignUp() {
             </FormControl>
           </HStack>
           <FormControl
-            width={370}
+            width={415}
             isInvalid={!!errors.email && !!errors.email.message}
           >
             <Controller
@@ -246,7 +258,7 @@ export default function SignUp() {
           </FormControl>
 
           <FormControl
-            width={370}
+            width={415}
             isInvalid={!!errors.password && !!errors.password.message}
           >
             <Controller

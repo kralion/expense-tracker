@@ -22,9 +22,8 @@ export default function Index() {
 
   const [session, setSession] = React.useState<Session | null>(null);
   async function fetchUserName(userId: string) {
-    //TODO Cambiar el nombre de la tabla
     const { data, error } = await supabase
-      .from("app_users")
+      .from("usuarios_expense")
       .select("nombres")
       .eq("id", userId)
       .single();

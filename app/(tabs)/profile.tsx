@@ -20,7 +20,7 @@ export default function App() {
   }
   async function fetchUserName(userId: string) {
     const { data, error } = await supabase
-      .from("app_users")
+      .from("usuarios_expense")
       .select("nombres")
       .eq("id", userId)
       .single();
@@ -89,9 +89,7 @@ export default function App() {
           alignItems="flex-start"
           marginTop={200}
         >
-
           <Link asChild href="/(modals)/personal-info">
-
             <Pressable className="flex flex-row gap-3 p-2 items-center active:opacity-30">
               <Icon
                 color="gray.500"
