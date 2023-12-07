@@ -14,7 +14,7 @@ Expense-tracker is a mobile app development project, for daily financial expense
 
 * [Changelog](#changelog)
 
-* [App Mobile](#image-gallery)
+* [App Mobile](#app-mobile)
 
 ## Stack
 

@@ -126,7 +126,7 @@ export default function App() {
               </Text>
             </Pressable>
           </Link>
-          <Link asChild href="/(modals)/export-data">
+          <Link asChild href="/(modals)/buy-premium">
             <Pressable className="flex gap-3 flex-row p-2 items-center active:opacity-30">
               <Icon
                 color="gray.500"
@@ -136,7 +136,7 @@ export default function App() {
               />
 
               <Text className="text-xl font-bold text-gray-500">
-                Configuración
+                Membresía
               </Text>
             </Pressable>
           </Link>

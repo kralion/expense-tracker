@@ -98,8 +98,8 @@ export default function AddExpense() {
                 minWidth={300}
                 color="gray.800"
                 marginY={3}
-                accessibilityLabel="Seleccineuna categoria"
-                placeholder="Seleccione"
+                accessibilityLabel="Seleccine una categoria"
+                placeholder="Tap en el icono"
                 borderRadius={7}
                 dropdownIcon={
                   <FontAwesome5
