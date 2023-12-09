@@ -4,7 +4,9 @@ export interface IGasto {
   descripcion?: string;
   categoria: string;
   cantidad: number;
-  assetIdentificador: string;
+  assetIdentificador?: string;
+  divisa: string;
+  numeroGasto: number;
 }
 
 export interface IExpensContextProvider {

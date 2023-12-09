@@ -5,8 +5,18 @@ import { Link, Stack, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Badge, Button, Divider, HStack, Slider, VStack } from "native-base";
 import { Platform, Pressable, Text, View } from "react-native";
+import * as React from "react";
 
-export default function ExpenseDetailsModal(expense: IGasto) {
+export default function ExpenseDetailsModal() {
+  const [expense, setExpenseDetails] = React.useState<IGasto>({
+    id: "1asdasasf",
+    cantidad: 100,
+    categoria: "Comida",
+    descripcion: "Cena familiar",
+    divisa: "Soles",
+    fecha: new Date("2023-11-05"),
+    numeroGasto: 1,
+  });
   const { id: expenseID } = useLocalSearchParams<{ id: string }>();
   const handleDeleteExpense = async (id: string) => {
     try {
@@ -25,7 +35,7 @@ export default function ExpenseDetailsModal(expense: IGasto) {
 
   const getSingleExpenseData = async (id: string) => {
     try {
-      const { data, error } = await supabase
+      const { data: expense, error } = await supabase
         .from("gastos")
         .select("*")
         .eq("id", id)
@@ -35,14 +45,25 @@ export default function ExpenseDetailsModal(expense: IGasto) {
         throw error;
       }
 
-      return data;
+      return expense;
     } catch (error) {
       console.error("Error getting expense:", error);
     }
   };
 
-  const monto_gastado = expense.cantidad || 70;
-  const monto_presupuestado = expense.cantidad || 100;
+  React.useEffect(() => {
+    const fetchExpense = async () => {
+      const expenseData = await getSingleExpenseData(expenseID);
+      setExpenseDetails(expenseData);
+    };
+
+    fetchExpense();
+  }, [expenseID]);
+
+  const monto_gastado = expense.cantidad;
+  // const monto_presupuestado = expense.cantidad;
+  //TODO : Cambiar este valor por el monto presupuestado del mes actual
+  const monto_presupuestado = 1000;
   const totalPercentageExpensed = (monto_gastado / monto_presupuestado) * 100;
 
   return (
@@ -113,9 +134,7 @@ export default function ExpenseDetailsModal(expense: IGasto) {
         <HStack justifyContent="space-between" alignItems="center">
           <Text>% Presupuesto</Text>
 
-          <Text className="font-bold">
-            {expense.porcentaje_presupuesto || "8%"}
-          </Text>
+          <Text className="font-bold">{expense.cantidad || "8%"}</Text>
         </HStack>
 
         <HStack justifyContent="space-between">
