@@ -26,7 +26,7 @@ export default function ModalsLayout() {
         options={{ presentation: "modal", title: "Agregar Gasto" }}
       />
       <Stack.Screen
-        name="(expenses)/edit/12"
+        name="(expenses)/edit/[id]"
         options={{
           presentation: "card",
           headerBackTitle: "Detalles",
@@ -36,8 +36,7 @@ export default function ModalsLayout() {
             </Pressable>
           ),
 
-          title: ` Detalles del Gasto
-          1 `,
+          headerTitle: "Editar Gasto",
         }}
       />
 

@@ -22,6 +22,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { v4 as uuid } from "uuid";
 
 type FormData = {
   nombres: string;
@@ -60,12 +61,12 @@ export default function SignUp() {
         .from("usuarios_expense")
         .insert([
           {
+            id: uuid() as string,
             nombres: data.nombres,
             apellidos: data.apellidos,
-            termsAndConditions: data.termsAndConditions,
+            tc: data.termsAndConditions,
           },
         ]);
-
       if (insertError) {
         Alert.alert(insertError.message);
       } else {

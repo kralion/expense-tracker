@@ -1,29 +1,19 @@
-import { StatusBar } from "expo-status-bar";
-import { Platform, Pressable, View } from "react-native";
-import {
-  Badge,
-  Button,
-  Divider,
-  HStack,
-  Slider,
-  Tag,
-  Tooltip,
-  VStack,
-} from "native-base";
-import { Text } from "react-native";
 import { IGasto } from "@/interfaces";
 import { supabase } from "@/utils/supabase";
-import { useRouter, Stack, Link } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { Link, Stack, useLocalSearchParams } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { Badge, Button, Divider, HStack, Slider, VStack } from "native-base";
+import { Platform, Pressable, Text, View } from "react-native";
 
 export default function ExpenseDetailsModal(expense: IGasto) {
-  const router = useRouter();
+  const { id: expenseID } = useLocalSearchParams<{ id: string }>();
   const handleDeleteExpense = async (id: string) => {
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("gastos")
         .delete()
-        .eq("id", expense.id);
+        .eq("id", expenseID);
 
       if (error) {
         throw error;
@@ -33,8 +23,26 @@ export default function ExpenseDetailsModal(expense: IGasto) {
     }
   };
 
-  const monto_gastado = expense.indice_gastado || 70;
-  const monto_presupuestado = expense.indice_gastado || 100;
+  const getSingleExpenseData = async (id: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("gastos")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      return data;
+    } catch (error) {
+      console.error("Error getting expense:", error);
+    }
+  };
+
+  const monto_gastado = expense.cantidad || 70;
+  const monto_presupuestado = expense.cantidad || 100;
   const totalPercentageExpensed = (monto_gastado / monto_presupuestado) * 100;
 
   return (
@@ -169,7 +177,7 @@ export default function ExpenseDetailsModal(expense: IGasto) {
       />
       <HStack justifyContent="center" p={5} space={3}>
         <Button
-          onPress={() => handleDeleteExpense(expense.id)}
+          onPress={() => handleDeleteExpense(expenseID)}
           className="w-full rounded-full"
           height={12}
           variant="solid"
