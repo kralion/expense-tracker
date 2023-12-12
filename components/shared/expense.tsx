@@ -14,16 +14,12 @@ export function Expense(expense: IGasto) {
       {({ isHovered, isPressed }) => {
         return (
           <Box
-            maxW="96"
+            marginX={2}
             borderColor="coolGray.300"
             rounded={14}
             p={2}
             bg={
-              isPressed
-                ? "coolGray.200"
-                : isHovered
-                ? "coolGray.200"
-                : "coolGray.100"
+              isPressed ? "white" : isHovered ? "coolGray.200" : "coolGray.100"
             }
           >
             <HStack alignItems="center">

@@ -8,15 +8,9 @@ import { Platform, Pressable, Text, View } from "react-native";
 import * as React from "react";
 
 export default function ExpenseDetailsModal() {
-  const [expenseDataDetails, setExpenseDataDetails] = React.useState<IGasto>({
-    id: "1asdasasf",
-    cantidad: 100,
-    categoria: "Comida",
-    descripcion: "Cena familiar",
-    divisa: "Soles",
-    fecha: new Date("2023-11-05"),
-    numeroGasto: 1,
-  });
+  const [expenseDataDetails, setExpenseDataDetails] = React.useState<IGasto>(
+    {} as IGasto
+  );
   const { id: expenseID } = useLocalSearchParams<{ id: string }>();
   const handleDeleteExpense = async (id: string) => {
     try {
@@ -117,7 +111,7 @@ export default function ExpenseDetailsModal() {
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Monto</Text>
           <Text className="font-bold">
-            S/. {expenseDataDetails.cantidad.toFixed(2)}
+            S/. {expenseDataDetails?.cantidad?.toFixed(2)}
           </Text>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
@@ -135,17 +129,15 @@ export default function ExpenseDetailsModal() {
         <HStack justifyContent="space-between" alignItems="center">
           <Text>% Presupuesto</Text>
 
-          <Text className="font-bold">
-            {expenseDataDetails.cantidad || "8 %"}
-          </Text>
+          <Text className="font-bold">{expenseDataDetails.cantidad}</Text>
         </HStack>
 
         <HStack justifyContent="flex-end" space={3}>
           <Badge size="lg" variant="outline" className="rounded-full">
-            {expenseDataDetails.fecha.toLocaleString()}
+            {expenseDataDetails?.fecha?.toLocaleString()}
           </Badge>
           <Badge size="lg" variant="solid" className="rounded-full">
-            {new Date(expenseDataDetails.fecha).toLocaleTimeString([], {
+            {new Date(expenseDataDetails?.fecha).toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
             })}
