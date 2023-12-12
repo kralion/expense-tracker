@@ -1,4 +1,4 @@
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import { Box, HStack, Pressable, Spacer, Text } from "native-base";
 import * as React from "react";
 import { Image, View } from "react-native";
@@ -8,12 +8,7 @@ export function Expense(expense: IGasto) {
   return (
     <Pressable
       onPress={() => {
-        router.push({
-          pathname: "/(expenses)/details/[id]",
-          params: {
-            id: expense.id,
-          },
-        });
+        router.push(`/(expenses)/details/${expense.id}`);
       }}
     >
       {({ isHovered, isPressed }) => {

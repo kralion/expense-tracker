@@ -29,7 +29,7 @@ export function AppleAuthButton() {
       } else {
         throw new Error("No identityToken.");
       }
-    } catch (e) {
+    } catch (e: any) {
       if (e.code === "ERR_REQUEST_CANCELED") {
         Alert.alert("Debes registrar con Apple para continuar");
       } else {

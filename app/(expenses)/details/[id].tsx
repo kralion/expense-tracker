@@ -8,7 +8,7 @@ import { Platform, Pressable, Text, View } from "react-native";
 import * as React from "react";
 
 export default function ExpenseDetailsModal() {
-  const [expense, setExpenseDetails] = React.useState<IGasto>({
+  const [expenseDataDetails, setExpenseDataDetails] = React.useState<IGasto>({
     id: "1asdasasf",
     cantidad: 100,
     categoria: "Comida",
@@ -35,7 +35,7 @@ export default function ExpenseDetailsModal() {
 
   const getSingleExpenseData = async (id: string) => {
     try {
-      const { data: expense, error } = await supabase
+      const { data, error } = await supabase
         .from("gastos")
         .select("*")
         .eq("id", id)
@@ -45,22 +45,23 @@ export default function ExpenseDetailsModal() {
         throw error;
       }
 
-      return expense;
+      return data;
     } catch (error) {
       console.error("Error getting expense:", error);
     }
+    console.log("getSingleExpenseData", id);
   };
 
   React.useEffect(() => {
     const fetchExpense = async () => {
       const expenseData = await getSingleExpenseData(expenseID);
-      setExpenseDetails(expenseData);
+      setExpenseDataDetails(expenseData);
     };
 
     fetchExpense();
   }, [expenseID]);
 
-  const monto_gastado = expense.cantidad;
+  const monto_gastado = expenseDataDetails.cantidad;
   // const monto_presupuestado = expense.cantidad;
   //TODO : Cambiar este valor por el monto presupuestado del mes actual
   const monto_presupuestado = 1000;
@@ -81,7 +82,7 @@ export default function ExpenseDetailsModal() {
           ),
 
           title: ` Detalles del Gasto
-          ${expense.id}  `,
+          ${expenseDataDetails.numeroGasto}  `,
         }}
       />
       {totalPercentageExpensed >= 80 && (
@@ -106,7 +107,7 @@ export default function ExpenseDetailsModal() {
             className="rounded-full"
             colorScheme="green"
           >
-            {expense.categoria || "Comida"}
+            {expenseDataDetails.categoria || "Comida"}
           </Badge>
         </HStack>
         {/* //! FEATURE : Cambiar este icono dependiendo al tipo de gasto */}
@@ -115,34 +116,39 @@ export default function ExpenseDetailsModal() {
       <VStack p={5} space={4}>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Monto</Text>
-          <Text className="font-bold">S/. {expense.cantidad || 100.99}</Text>
+          <Text className="font-bold">
+            S/. {expenseDataDetails.cantidad.toFixed(2)}
+          </Text>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Divisa</Text>
-          <Text className="font-bold">{expense.divisa || "Soles"}</Text>
+          <Text className="font-bold">{expenseDataDetails.divisa}</Text>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Categoría</Text>
-          <Text className="font-bold">{expense.categoria || "Comida"}</Text>
+          <Text className="font-bold">{expenseDataDetails.categoria}</Text>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Descripción</Text>
-          <Text className="font-bold">
-            {expense.descripcion || "Cena familiar"}
-          </Text>
+          <Text className="font-bold">{expenseDataDetails.descripcion}</Text>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>% Presupuesto</Text>
 
-          <Text className="font-bold">{expense.cantidad || "8%"}</Text>
+          <Text className="font-bold">
+            {expenseDataDetails.cantidad || "8 %"}
+          </Text>
         </HStack>
 
-        <HStack justifyContent="space-between">
+        <HStack justifyContent="flex-end" space={3}>
           <Badge size="lg" variant="outline" className="rounded-full">
-            {expense.fecha || "05 de Noviembre del 2023"}
+            {expenseDataDetails.fecha.toLocaleString()}
           </Badge>
           <Badge size="lg" variant="solid" className="rounded-full">
-            {expense.fecha || "16:53 PM"}
+            {new Date(expenseDataDetails.fecha).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </Badge>
         </HStack>
       </VStack>

@@ -64,7 +64,9 @@ function RootLayoutNav() {
     },
   });
   return (
-    <StripeProvider publishableKey={process.env.STRIPE_PUBLISHABLE_KEY || ""}>
+    <StripeProvider
+      publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""}
+    >
       <NativeBaseProvider theme={theme}>
         <ThemeProvider
           value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
