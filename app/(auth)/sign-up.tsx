@@ -22,7 +22,6 @@ import {
   Text,
   View,
 } from "react-native";
-import { v4 as uuid } from "uuid";
 
 type FormData = {
   nombres: string;
@@ -44,34 +43,38 @@ export default function SignUp() {
 
   async function signUpWithEmail(data: FormData) {
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email: data.email,
-      password: data.password,
-      options: {
-        emailRedirectTo: "https://expense-tracker-web-nine.vercel.app",
-      },
-    });
-    if (error) {
-      Alert.alert(error.message);
-    } else {
-      Alert.alert(
-        `${data.nombres}, Por favor revisa tu correo para verificar tu cuenta`
-      );
-      const { error: insertError } = await supabase
-        .from("usuarios_expense")
-        .insert([
-          {
-            id: uuid() as string,
-            nombres: data.nombres,
-            apellidos: data.apellidos,
-            tc: data.termsAndConditions,
-          },
-        ]);
-      if (insertError) {
-        Alert.alert(insertError.message);
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          emailRedirectTo: "https://expense-tracker-web-nine.vercel.app",
+        },
+      });
+      if (error) {
+        Alert.alert(`Sign-up error: ${error.message}`);
       } else {
-        Alert.alert("Revisa tu correo para verificar tu cuenta");
+        const { error: insertError } = await supabase
+          .from("usuarios_expense")
+          .insert([
+            {
+              nombres: data.nombres,
+              apellidos: data.apellidos,
+              tc: data.termsAndConditions,
+            },
+          ]);
+
+        if (insertError) {
+          Alert.alert(`Error de registro : ${insertError.message}`);
+        } else {
+          Alert.alert(
+            `${data.nombres}, revisa tu correo para confirmar tu cuenta`
+          );
+        }
       }
+    } catch (e: any) {
+      Alert.alert(`Unexpected error: ${e.message}`);
+    } finally {
       setLoading(false);
       reset();
       router.push("/(auth)/sign-in");

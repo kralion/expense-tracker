@@ -1,14 +1,10 @@
-import * as Google from "expo-auth-session/providers/google";
-import { useForm, Controller, set } from "react-hook-form";
+import { AppleAuthButton } from "@/components/auth/Apple.native.auth";
+import { supabase } from "@/utils/supabase";
 import { MaterialIcons } from "@expo/vector-icons";
-import {
-  AppleAuthenticationScope,
-  signInAsync,
-} from "expo-apple-authentication";
+import * as Google from "expo-auth-session/providers/google";
 import { Link, router } from "expo-router";
 import {
   Button,
-  Center,
   FormControl,
   HStack,
   Icon,
@@ -17,8 +13,8 @@ import {
   WarningOutlineIcon,
 } from "native-base";
 import * as React from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Image, Pressable, SafeAreaView, Text, View } from "react-native";
-import { supabase } from "@/utils/supabase";
 
 type FormData = {
   email: string;
@@ -36,10 +32,8 @@ export default function SignIn() {
   const [invalidCredentials, setInvalidCredentials] = React.useState(false);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    iosClientId:
-      "422618280931-fc0s3ktar0vcgoc80n128589e5ahhk1e.apps.googleusercontent.com",
-    androidClientId:
-      "422618280931-50inl7uig7t4p5k6o89521jejcic2llj.apps.googleusercontent.com",
+    iosClientId: process.env.EXPO_PUBLIC_IOS_GOOGLE_CLIENT_ID ?? "",
+    androidClientId: process.env.EXPO_PUBLIC_ANDROID_GOOGLE_CLIENT_ID ?? "",
     scopes: ["profile", "email"],
   });
 
@@ -201,62 +195,7 @@ export default function SignIn() {
               </HStack>
             </Pressable>
           </Button>
-          <Button
-            height={12}
-            variant="outline"
-            colorScheme="gray"
-            className="rounded-full  "
-          >
-            <Pressable
-              onPress={async () => {
-                try {
-                  const credential = await signInAsync({
-                    requestedScopes: [
-                      AppleAuthenticationScope.FULL_NAME,
-                      AppleAuthenticationScope.EMAIL,
-                    ],
-                  });
-                  // signed in
-                } catch (e: any) {
-                  if (e.code === "ERR_REQUEST_CANCELED") {
-                    <HStack space={1} alignContent="center">
-                      <MaterialIcons
-                        color="#ef4444"
-                        name="dangerous"
-                        size={16}
-                      />
-                      <Text className="text-red-500">
-                        Debes iniciar sesión con Apple para continuar
-                      </Text>
-                    </HStack>;
-                  } else {
-                    <HStack space={1} alignContent="center">
-                      <MaterialIcons
-                        color="#ef4444"
-                        name="dangerous"
-                        size={16}
-                      />
-                      <Text className="text-red-500">
-                        Ocurrió un error al iniciar sesión con Apple
-                      </Text>
-                    </HStack>;
-                  }
-                }
-              }}
-            >
-              <HStack alignItems="center" space={2}>
-                <Image
-                  className="w-5 h-5"
-                  source={{
-                    uri: "https://img.icons8.com/?size=60&id=95294&format=png",
-                  }}
-                />
-                <Text className="  font-semibold">
-                  Iniciar Sesión con Apple
-                </Text>
-              </HStack>
-            </Pressable>
-          </Button>
+          <AppleAuthButton />
           <Button
             height={12}
             variant="outline"
