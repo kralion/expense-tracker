@@ -39,11 +39,13 @@ export default function AddExpense() {
   const { showNotification } = useNotificationContext();
   async function onSubmit(data: FormData) {
     data.cantidad = parseFloat(data.cantidad).toString();
-    const storageData = alert(JSON.stringify(data));
     try {
-      //TODO: Agregar el id del usuario, y corroborar el nombre de la tabla
-      await supabase.from("gastos").insert(data);
-
+      const userId = (await supabase.auth.getUser()).data.user?.id;
+      const newData = {
+        ...data,
+        user_id: userId,
+      };
+      await supabase.from("gastos_expense").insert(newData);
       showNotification({
         alertStatus: "success",
         title: "Gasto registrado",
@@ -56,7 +58,6 @@ export default function AddExpense() {
       });
     }
   }
-
   return (
     <SafeAreaView>
       <HStack justifyContent="space-between" className="px-7">

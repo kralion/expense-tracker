@@ -27,6 +27,7 @@ export default function TabLayout() {
             tabBarStyle: {
               height: 100,
             },
+            title: "",
             tabBarHideOnKeyboard: true,
           }}
         >
