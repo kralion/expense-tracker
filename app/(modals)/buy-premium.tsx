@@ -151,13 +151,11 @@ export default function BuyPremiumModal() {
               className="p-2 pr-14 text-center"
               onPress={handleCardPayment}
             >
-              <Text>Tarjeta Bancaria</Text>
+              <Text className="font-semibold">Tarjeta Bancaria</Text>
             </Pressable>
             <Pressable className=" p-2 pr-14" onPress={handleYapePayment}>
               <Text
-                style={{
-                  fontFamily: "Miniver",
-                }}
+               className="font-semibold"
               >
                 Yape
               </Text>
@@ -170,4 +168,9 @@ export default function BuyPremiumModal() {
       </VStack>
     </SafeAreaView>
   );
+
+
+
+
+  
 }
