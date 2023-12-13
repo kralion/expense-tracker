@@ -18,10 +18,10 @@ import {
   Alert,
   Image,
   Pressable,
-  SafeAreaView,
   Text,
   View,
 } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type FormData = {
   nombres: string;

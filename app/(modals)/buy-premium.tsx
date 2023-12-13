@@ -5,7 +5,6 @@ import {
   StyleSheet,
   View,
   Text,
-  SafeAreaView,
   Pressable,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
@@ -23,6 +22,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import Yape from "@/components/payment/yape";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function BuyPremiumModal() {
   const [loaded, error] = useFonts({
