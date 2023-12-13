@@ -82,5 +82,11 @@
     <string>Automatic</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
+    <!-- <key>NSPhotoLibraryUsageDescription</key>
+    <string>Necesitamos acceso a tu galería para seleccionar una foto.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Necesitamos acceso a tu cámara para tomar una foto.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Necesitamos acceso a tu micrófono para grabar un video.</string> -->
   </dict>
 </plist>
