@@ -9,7 +9,8 @@ import {
   VStack,
 } from "native-base";
 import React from "react";
-import { Image, ImageBackground, SafeAreaView } from "react-native";
+import { Image, ImageBackground } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AddExpenseSuccesModal() {
   return (

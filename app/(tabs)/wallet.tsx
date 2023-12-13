@@ -1,6 +1,7 @@
 import { Button, HStack, Input, VStack } from "native-base";
 import * as React from "react";
-import { Image, SafeAreaView, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Wallet() {
   return (

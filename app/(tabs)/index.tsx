@@ -10,7 +10,8 @@ import { Session } from "@supabase/supabase-js";
 import { Link } from "expo-router";
 import { Button, HStack, Heading, Text, VStack } from "native-base";
 import * as React from "react";
-import { SafeAreaView, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Index() {
   const { expenses } = useExpenseContext();
