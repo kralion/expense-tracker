@@ -48,7 +48,7 @@ export default function App() {
     <View>
       <View className="bg-accent relative h-20">
         <VStack
-          className=" absolute -top-4 left-28"
+          className=" absolute left-36"
           space={2}
           alignItems="center"
           marginTop={5}
@@ -56,12 +56,12 @@ export default function App() {
           <Image
             source={{
               uri:
-                "https://img.icons8.com/?size=160&id=492ILERveW8G&format=png" ||
+                "https://cdn-icons-png.flaticon.com/128/6542/6542999.png" ||
                 session?.user?.user_metadata?.avatar_url,
             }}
             alt="profile-pic"
-            width={150}
-            height={150}
+            width={120}
+            height={120}
             className="rounded-full "
           />
           {/* //TODO: Cambiar el nombre por el nombre del usuario */}
@@ -133,9 +133,7 @@ export default function App() {
                 name="ios-settings-sharp"
               />
 
-              <Text className="text-xl font-bold text-gray-500">
-                Membresía
-              </Text>
+              <Text className="text-xl font-bold text-gray-500">Membresía</Text>
             </Pressable>
           </Link>
           <Pressable
