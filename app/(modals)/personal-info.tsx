@@ -10,14 +10,13 @@ import {
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Image, Text, View } from "react-native";
-import DocumentPicker from "react-native-document-picker";
 import * as ImagePicker from "expo-image-picker";
 
+const DEFAULT_IMAGE_URI =
+  "https://cdn-icons-png.flaticon.com/128/6542/6542999.png";
+
 export default function PersonalInfo() {
-  const [show, setShow] = React.useState(false);
-  const [imageUri, setImageUri] = React.useState(
-    "https://userstock.io/data/wp-content/uploads/2017/09/bewakoof-com-official-219589-300x300.jpg"
-  );
+  const [imageUri, setImageUri] = React.useState(DEFAULT_IMAGE_URI);
   const {
     control,
     handleSubmit,
@@ -38,21 +37,20 @@ export default function PersonalInfo() {
         throw new Error(error.message);
       }
       alert("Datos actualizados correctamente");
-    } catch (e) {
+    } catch (e: any) {
       alert(e.message);
     }
   }
+  const deleteImage = () => {
+    setImageUri(DEFAULT_IMAGE_URI);
+  };
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       quality: 1,
     });
-
-    //todo Here should be placed the new image uri
-    setImageUri(result.assets[0].uri);
-
-    if (!result.canceled) {
-      console.log(result);
+    if (!result.canceled && result.assets && result.assets[0]) {
+      setValue("image", result.assets[0].uri);
     } else {
       alert("You did not select any image.");
     }
@@ -68,9 +66,9 @@ export default function PersonalInfo() {
     })();
   }, []);
   return (
-    <View className="flex flex-col space-y-3 justify-between mx-auto">
+    <VStack marginX={7} space={5}>
       <HStack>
-        <View className="bg-accent w-2 h-8 rounded-full my-3 " />
+        <View className="bg-accent w-1 h-8 rounded-full my-3 " />
         <Text className="text-[#464444] p-3 font-bold text-lg">
           Datos personales
         </Text>
@@ -79,34 +77,39 @@ export default function PersonalInfo() {
         space={12}
         marginBottom={5}
         alignItems="center"
+        justifyContent="space-between"
         className="bg-background"
       >
-        <Image
-          source={{
-            uri: imageUri,
-          }}
-          alt="profile-pic"
-          width={70}
-          height={70}
-          className="rounded-full "
-        />
+        <HStack space={2} alignItems="center">
+          <Image
+            source={{ uri: imageUri }}
+            className="w-14 h-14 rounded-full"
+          />
+          <Text className="text-textmuted text-sm">Foto de perfil</Text>
+        </HStack>
         <HStack space={2}>
           <Button
             rounded={7}
-            colorScheme="gray"
+            colorScheme="primary"
             height={10}
             px={4}
             onPress={pickImageAsync}
           >
             <Text className="text-white font-semibold">Reemplazar</Text>
           </Button>
-          <Button rounded={7} height={10} colorScheme="red" variant="subtle">
-            <Text className="text-red-500 font-semibold">Eliminar</Text>
+          <Button
+            onPress={deleteImage}
+            rounded={7}
+            height={10}
+            colorScheme="error"
+            variant="outline"
+          >
+            Quitar
           </Button>
         </HStack>
       </HStack>
 
-      <View className="border-[1px] my-5 h-0.5 border-gray-300"></View>
+      <View className="border-0.5  border-gray-300"></View>
       <VStack space={5}>
         <FormControl isInvalid={!!errors.name}>
           <FormControl.Label>Nombres</FormControl.Label>
@@ -114,8 +117,10 @@ export default function PersonalInfo() {
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
-                size={"lg"}
+                size="lg"
+                rounded={7}
                 onBlur={onBlur}
+                py={3}
                 onChangeText={onChange}
                 //TODO : El valor debe ser el nombre del usuario y no un placeholder
                 value={value}
@@ -137,7 +142,9 @@ export default function PersonalInfo() {
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
-                size={"lg"}
+                size="lg"
+                rounded={7}
+                py={3}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 //TODO : El valor debe ser el apellido del usuario y no un placeholder
@@ -161,7 +168,9 @@ export default function PersonalInfo() {
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
                 onBlur={onBlur}
-                size={"lg"}
+                size="lg"
+                rounded={7}
+                py={3}
                 onChangeText={onChange}
                 value={value}
                 placeholder="Correo electrónico"
@@ -185,6 +194,6 @@ export default function PersonalInfo() {
           Actualizar datos
         </Button>
       </VStack>
-    </View>
+    </VStack>
   );
 }
