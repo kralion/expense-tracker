@@ -19,7 +19,7 @@ export default function Index() {
     React.useState(false);
   const [nombres, setNombres] = React.useState("");
   const { showNotification } = useNotificationContext();
-
+  const [isPremiumUser, setIsPremiumUser] = React.useState(false);
   const [session, setSession] = React.useState<Session | null>(null);
   async function fetchUserName(userId: string) {
     const { data, error } = await supabase
@@ -86,7 +86,7 @@ export default function Index() {
         </View>
       </HStack>
       <View className="z-10 h-20">
-        <Card />
+        <Card isPremiumUser={isPremiumUser} />
       </View>
       <VStack space={5} className="bg-background ">
         <ScrollView>

@@ -72,7 +72,7 @@ export const ExpenseContextProvider = ({
   };
   const deleteExpense = async (id: string) => {
     try {
-      await supabase.from("gastos_expense").delete().eq("id", id);
+      await supabase.from("gastos").delete().eq("id", id);
     } catch (error) {
       showNotification({
         title: "Error al eliminar gasto",

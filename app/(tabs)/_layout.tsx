@@ -9,7 +9,7 @@ function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
-  return <FontAwesome size={30} style={{ marginBottom: -7 }} {...props} />;
+  return <FontAwesome size={25} style={{ marginBottom: -7 }} {...props} />;
 }
 
 export default function TabLayout() {
@@ -21,20 +21,17 @@ export default function TabLayout() {
         <Tabs
           screenOptions={{
             tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-            headerStyle: {
-              backgroundColor: "#F5F3F3",
-            },
             tabBarStyle: {
-              height: 100,
+              height: 90,
             },
-            title: "",
             tabBarHideOnKeyboard: true,
+            headerShown: false,
           }}
         >
           <Tabs.Screen
             name="index"
             options={{
-              title: "",
+              title: "Inicio",
               headerShown: false,
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="tachometer-alt" color={color} />
@@ -45,7 +42,7 @@ export default function TabLayout() {
           <Tabs.Screen
             name="statistics"
             options={{
-              title: "",
+              title: "Historial",
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="chart-bar" color={color} />
               ),
@@ -59,9 +56,9 @@ export default function TabLayout() {
               headerShown: false,
               tabBarIcon: ({ color }) => (
                 <TabBarIcon
-                  className="rotate-45"
+                  className="rotate-45 text-accent"
                   size={55}
-                  style={{ marginBottom: -15 }}
+                  style={{ marginBottom: -25 }}
                   name="times-circle"
                   color={color}
                 />
@@ -72,7 +69,7 @@ export default function TabLayout() {
           <Tabs.Screen
             name="wallet"
             options={{
-              title: "",
+              title: "Saldo",
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="wallet" color={color} />
               ),
@@ -85,7 +82,7 @@ export default function TabLayout() {
               headerBackground: () => (
                 <View className="bg-accent" style={{ flex: 1 }} />
               ),
-              title: "",
+              title: "Perfil",
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="user-alt" color={color} />
               ),

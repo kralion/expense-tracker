@@ -71,8 +71,7 @@ export default function ExpenseDetailsModal() {
             </Link>
           ),
 
-          title: ` Detalles del Gasto
-          ${expenseDataDetails.numeroGasto}  `,
+          title: "Detalles",
         }}
       />
       {totalPercentageExpensed >= 80 && (
@@ -89,7 +88,9 @@ export default function ExpenseDetailsModal() {
 
       <HStack p={5} justifyContent="space-between">
         <HStack space={2}>
-          <Text className="text-black font-bold mb-1  text-[18px]">#781</Text>
+          <Text className="text-black font-bold mb-1  text-[18px]">
+            #{expenseDataDetails.numeroGasto}
+          </Text>
           <Badge
             size="lg"
             borderWidth="0"
