@@ -48,7 +48,7 @@ export function Expense(expense: IGasto) {
               </View>
               <Spacer />
               <Text className=" text-xl text-red-500   font-bold">
-                S/. {expense.cantidad.toFixed(2)}
+                S/. {expense.monto}
               </Text>
             </HStack>
           </Box>

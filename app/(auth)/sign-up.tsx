@@ -4,6 +4,7 @@ import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
 import { Link, router } from "expo-router";
 import {
   Button,
+  Center,
   Checkbox,
   FormControl,
   HStack,
@@ -14,14 +15,8 @@ import {
 } from "native-base";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
-import {
-  Alert,
-  Image,
-  Pressable,
-  Text,
-  View,
-} from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Alert, Image, Pressable, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type FormData = {
   nombres: string;
@@ -374,18 +369,18 @@ export default function SignUp() {
         <Text className="text-mute text-[12px] mt-3  ">
           Al continuar aceptas el como seran tratados tus datos, si lo deseas
           puedes revisar los
-          <Link asChild href={"/modal"}>
+          <Link asChild href={"/modal"} className="active:underline">
             <Text className="text-[12px] text-primary">
               {" "}
               Términos y Condiciones
             </Text>
           </Link>
         </Text>
-        <View>
+        <Center mt={20}>
           <Text className="text-mute text-[12px] mt-16">
-            Copyright © UNCP Association Inc. Derechos Reservados
+            Copyright © SoloPrenuer | FIS Inc. Derechos Reservados
           </Text>
-        </View>
+        </Center>
       </View>
     </SafeAreaView>
   );

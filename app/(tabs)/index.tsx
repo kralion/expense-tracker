@@ -11,7 +11,7 @@ import { Link } from "expo-router";
 import { Button, HStack, Heading, Text, VStack } from "native-base";
 import * as React from "react";
 import { ScrollView, View } from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const { expenses } = useExpenseContext();
@@ -89,36 +89,36 @@ export default function Index() {
         <Card />
       </View>
       <VStack space={5} className="bg-background ">
-        <BudgetLimitExceededModal
-          setShowNotification={setShowBudgetLimitNotification}
-          showNotification={showBudgetLimitNotification}
-        />
-        <HStack
-          marginTop={100}
-          className="items-center"
-          mx={3}
-          justifyContent="space-between"
-        >
-          <Heading size="md">Historial de Gastos</Heading>
-
-          <Button
-            onPress={() =>
-              // {setShowBudgetLimitNotification(true)
-              {
-                showNotification({
-                  title: "Premium acquired",
-                  alertStatus: "success",
-                });
-              }
-            }
-            variant="ghost"
-            className="rounded-lg"
-            colorScheme="gray"
-          >
-            Ver Todo
-          </Button>
-        </HStack>
         <ScrollView>
+          <BudgetLimitExceededModal
+            setShowNotification={setShowBudgetLimitNotification}
+            showNotification={showBudgetLimitNotification}
+          />
+          <HStack
+            marginTop={100}
+            className="items-center"
+            mx={3}
+            justifyContent="space-between"
+          >
+            <Heading size="md">Historial de Gastos</Heading>
+
+            <Button
+              onPress={() =>
+                // {setShowBudgetLimitNotification(true)
+                {
+                  showNotification({
+                    title: "Premium acquired",
+                    alertStatus: "success",
+                  });
+                }
+              }
+              variant="ghost"
+              className="rounded-lg"
+              colorScheme="gray"
+            >
+              Ver Todo
+            </Button>
+          </HStack>
           <VStack space={4} className="mx-2">
             {expenses?.map((expense) => (
               <React.Suspense fallback={<ExpenseSkeleton />}>
@@ -132,7 +132,7 @@ export default function Index() {
                     "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png"
                   }
                   categoria={expense.categoria}
-                  cantidad={expense.cantidad}
+                  monto={expense.monto}
                   fecha={expense.fecha}
                 />
               </React.Suspense>
