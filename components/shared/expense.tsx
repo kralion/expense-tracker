@@ -3,8 +3,18 @@ import { Box, HStack, Pressable, Spacer, Text } from "native-base";
 import * as React from "react";
 import { Image, View } from "react-native";
 import { IGasto } from "../../interfaces";
+import { expensesIdentifiers } from "@/constants/ExpensesIdentifiers";
+import { formatDate } from "@/helpers/dateFormatter";
+export function Expense({ expense }: { expense: IGasto }) {
+  const { categoria, monto, fecha } = expense;
+  const formattedDate = fecha
+    ? formatDate(new Date(fecha))
+    : "No date provided";
+  const assetIndentificador =
+    expensesIdentifiers.find((icon) => icon.label === expense.categoria)
+      ?.iconHref ||
+    "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png";
 
-export function Expense(expense: IGasto) {
   return (
     <Pressable
       onPress={() => {
@@ -14,7 +24,7 @@ export function Expense(expense: IGasto) {
       {({ isHovered, isPressed }) => {
         return (
           <Box
-            marginX={2}
+            margin={2}
             borderColor="coolGray.300"
             rounded={14}
             p={2}
@@ -29,26 +39,22 @@ export function Expense(expense: IGasto) {
                     width={40}
                     height={40}
                     source={{
-                      uri: expense.assetIdentificador,
+                      uri: assetIndentificador,
                     }}
                   />
                 </Box>
                 <View className="space-y-1">
                   <Text className=" text-[18px]  text-black font-bold">
-                    {expense.categoria}
+                    {categoria}
                   </Text>
                   <Text className="text-muted text-[14px] ">
-                    {expense.fecha?.toLocaleString("es-PE", {
-                      weekday: "long",
-                      month: "long",
-                      day: "numeric",
-                    })}
+                    {formattedDate}
                   </Text>
                 </View>
               </View>
               <Spacer />
               <Text className=" text-xl text-red-500   font-bold">
-                S/. {expense.cantidad.toFixed(2)}
+                S/. {monto}
               </Text>
             </HStack>
           </Box>

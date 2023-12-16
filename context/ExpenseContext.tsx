@@ -21,72 +21,72 @@ export const ExpenseContextProvider = ({
 
   const fetchData = async () => {
     try {
-      const { data } = await supabase.from("gastos").select("*");
+      const { data } = await supabase
+        .from("gastos")
+        .select("*")
+        .order("fecha", { ascending: false });
       setExpenses(JSON.parse(JSON.stringify(data)));
     } catch (error) {
       showNotification({
         title: "Error al obtener gastos",
         alertStatus: "error",
       });
-      console.error(error);
+      return;
     }
   };
   React.useEffect(() => {
     fetchData();
   }, []);
+
   const addExpense = async (expense: IGasto) => {
     try {
-      const { id, fecha, ...expenseParsed } = expense;
-      await supabase.from("expenses").insert([expenseParsed]);
-      fetchData();
-      showNotification({
-        title: "Gasto agregado",
-        alertStatus: "success",
-      });
+      const userId = (await supabase.auth.getUser()).data.user?.id;
+      const newData = {
+        ...expense,
+        user_id: userId,
+      };
+      await supabase.from("gastos_expense").insert(newData);
     } catch (error) {
       showNotification({
         title: "Error al agregar gasto",
         alertStatus: "error",
       });
-
-      console.error("Error adding expense:", error);
+      return;
     }
   };
   const updateExpense = async (expense: IGasto) => {
     try {
       const { id, fecha, ...expenseParsedForUpdate } = expense;
       await supabase
-        .from("expenses")
+        .from("gastos_expense")
         .update(expenseParsedForUpdate)
         .eq("id", id);
-      fetchData();
-      showNotification({
-        title: "Gasto actualizado",
-        alertStatus: "success",
-      });
     } catch (error) {
       showNotification({
         title: "Error al actualizar gasto",
         alertStatus: "error",
       });
-      console.error("Error updating expense:", error);
+      return;
     }
+    showNotification({
+      title: "Gasto actualizado",
+      alertStatus: "success",
+    });
   };
-  const deleteExpense = async ({ id }: IGasto) => {
+  const deleteExpense = async (id: string) => {
     try {
-      await supabase.from("expenses").delete().eq("id", id);
-      fetchData();
-      showNotification({
-        title: "Gasto eliminado",
-        alertStatus: "success",
-      });
+      await supabase.from("gastos").delete().eq("id", id);
     } catch (error) {
       showNotification({
         title: "Error al eliminar gasto",
         alertStatus: "error",
       });
-      console.error("Error deleting expense:", error);
+      return;
     }
+    showNotification({
+      title: "Gasto eliminado",
+      alertStatus: "success",
+    });
   };
   return (
     <ExpenseContext.Provider

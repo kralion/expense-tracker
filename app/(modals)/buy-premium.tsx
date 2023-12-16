@@ -1,45 +1,28 @@
-import { StatusBar } from "expo-status-bar";
-import * as React from "react";
-import {
-  Platform,
-  StyleSheet,
-  View,
-  Text,
-  Pressable,
-} from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
 import Stripe from "@/components/payment/stripe";
-import { HStack, VStack, Button } from "native-base";
-import { Image } from "react-native";
+import Yape from "@/components/payment/yape";
 import { supabase } from "@/utils/supabase";
 import { Session } from "@supabase/supabase-js";
-import { Link, router } from "expo-router";
-import { useFonts } from "expo-font";
+import { Link } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { Button, HStack, VStack } from "native-base";
+import * as React from "react";
+import { Image, Platform, Pressable, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
-  withTiming,
   useSharedValue,
-  withSpring,
+  withTiming,
 } from "react-native-reanimated";
-import Yape from "@/components/payment/yape";
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function BuyPremiumModal() {
-  const [loaded, error] = useFonts({
-    Miniver: require("@/assets/fonts/Miniver-Regular.ttf"),
-    ...FontAwesome.font,
-  });
   const [session, setSession] = React.useState<Session | null>(null);
-  const [name, setName] = React.useState("");
   const [yapePaymentMethod, setYapePaymentMethod] = React.useState(false);
+  const [name, setName] = React.useState("");
   const [cardPaymentMethod, setCardPaymentMethod] = React.useState(true);
-  async function signOut() {
-    await supabase.auth.signOut();
-    router.push("/(auth)/sign-in");
-  }
+
   const animation = useSharedValue(0);
-  const handlePress = (index) => {
-    animation.value = withTiming(index * 170, { duration: 300 });
+  const handlePress = (index: number) => {
+    animation.value = withTiming(index * 207, { duration: 300 });
   };
 
   async function fetchUserName(userId: string) {
@@ -148,17 +131,13 @@ export default function BuyPremiumModal() {
               ]}
             />
             <Pressable
-              className="p-2 pr-14 text-center"
+              className="p-2 pr-20 text-center"
               onPress={handleCardPayment}
             >
               <Text className="font-semibold">Tarjeta Bancaria</Text>
             </Pressable>
             <Pressable className=" p-2 pr-14" onPress={handleYapePayment}>
-              <Text
-               className="font-semibold"
-              >
-                Yape
-              </Text>
+              <Text className="font-semibold">Yape</Text>
             </Pressable>
           </HStack>
 
@@ -168,9 +147,4 @@ export default function BuyPremiumModal() {
       </VStack>
     </SafeAreaView>
   );
-
-
-
-
-  
 }

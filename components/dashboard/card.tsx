@@ -1,13 +1,23 @@
 import { Feather } from "@expo/vector-icons";
-
+import { LinearGradient } from "expo-linear-gradient";
 import { Icon, IconButton } from "native-base";
-import { ImageBackground, Pressable, Text, View } from "react-native";
+import * as React from "react";
+import { Pressable, Text, View, StyleSheet } from "react-native";
 
-export default function Card() {
+export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
   return (
-    <ImageBackground
-      className="flex z-10 absolute  p-10 space-y-12 ml-0.5 w-96 shadow-lg flex-col  "
-      source={require("../../assets/cover.png")}
+    <LinearGradient
+      className={`flex flex-col justify-between border-2 rounded-3xl p-5 shadow-2xl space-y-10 ${
+        isPremiumUser ? " border-yellow-500 " : "border-indigo-500"
+      } `}
+      colors={
+        isPremiumUser
+          ? ["#D4AF37", "#FFD700", "#A79647"]
+          : ["#6366F1", "#6D28D9"]
+      }
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.cardStyle}
     >
       <View className="flex flex-row items-start justify-between">
         <View>
@@ -47,6 +57,16 @@ export default function Card() {
           </Text>
         </View>
       </Pressable>
-    </ImageBackground>
+    </LinearGradient>
   );
 }
+
+const styles = StyleSheet.create({
+  cardStyle: {
+    width: "90%",
+    height: 200,
+    left: 21,
+    position: "absolute",
+    zIndex: 1,
+  },
+});

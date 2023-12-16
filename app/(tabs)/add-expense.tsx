@@ -1,5 +1,5 @@
-import { useNotificationContext } from "@/context";
-import { supabase } from "@/utils/supabase";
+import { useExpenseContext } from "@/context";
+import { IGasto } from "@/interfaces";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   Button,
@@ -18,12 +18,7 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-interface FormData {
-  cantidad: string;
-  divisa: string;
-  categoria: string;
-  descripcion: string;
-}
+
 export default function AddExpense() {
   const {
     control,
@@ -31,33 +26,22 @@ export default function AddExpense() {
     formState: { errors },
     reset,
     setValue,
-  } = useForm<FormData>({
+  } = useForm<IGasto>({
     defaultValues: {
       divisa: "pen",
     },
   });
-  const { showNotification } = useNotificationContext();
-  async function onSubmit(data: FormData) {
-    data.cantidad = parseFloat(data.cantidad).toString();
-    try {
-      const userId = (await supabase.auth.getUser()).data.user?.id;
-      const newData = {
-        ...data,
-        user_id: userId,
-      };
-      await supabase.from("gastos_expense").insert(newData);
-      showNotification({
-        alertStatus: "success",
-        title: "Gasto registrado",
-      });
-      reset();
-    } catch (error) {
-      showNotification({
-        alertStatus: "error",
-        title: "Error al registrar el gasto",
-      });
-    }
+  const { addExpense } = useExpenseContext();
+  const [isLoading, setIsLoading] = React.useState(false);
+  async function onSubmit(data: IGasto) {
+    setIsLoading(true);
+    data.monto = parseFloat(data.monto).toString();
+    addExpense(data);
+    reset();
+    setValue("categoria", "");
+    setIsLoading(false);
   }
+
   return (
     <SafeAreaView>
       <HStack justifyContent="space-between" className="px-7">
@@ -76,12 +60,7 @@ export default function AddExpense() {
         </Button>
       </HStack>
       <VStack px={7} space={4} py={3}>
-        <FormControl
-          isInvalid={!!errors.categoria}
-          isRequired
-          w="90%"
-          width={335}
-        >
+        <FormControl isInvalid={!!errors.categoria} isRequired>
           <VStack space={1}>
             <FormControl.Label>
               <Text className="font-semibold text-[18px]">Categoría</Text>
@@ -133,12 +112,7 @@ export default function AddExpense() {
           </FormControl.ErrorMessage>
         </FormControl>
 
-        <FormControl
-          isInvalid={!!errors.cantidad}
-          isRequired
-          w="90%"
-          width={335}
-        >
+        <FormControl isInvalid={!!errors.monto} isRequired>
           <VStack space={1}>
             <FormControl.Label>
               <Text className="font-semibold text-[18px]">Monto</Text>
@@ -168,7 +142,7 @@ export default function AddExpense() {
                 borderRadius={7}
               />
             )}
-            name="cantidad"
+            name="monto"
             rules={{
               required: { value: true, message: "Ingrese el monto" },
               pattern: {
@@ -181,10 +155,10 @@ export default function AddExpense() {
             marginTop={-1}
             leftIcon={<WarningOutlineIcon size="xs" />}
           >
-            {errors.cantidad && errors.cantidad.message}
+            {errors.monto && errors.monto.message}
           </FormControl.ErrorMessage>
         </FormControl>
-        <FormControl marginY={3} w="90%" width={335}>
+        <FormControl>
           <Controller
             name="divisa"
             control={control}
@@ -195,7 +169,7 @@ export default function AddExpense() {
                 onChange={(value) => onChange(value)}
                 accessibilityLabel="Divisa de Gasto"
               >
-                <HStack space={4}>
+                <HStack space={5}>
                   <Radio value="pen">Soles</Radio>
                   <Radio value="usd">Dólares</Radio>
                   <Radio value="eur">Euros</Radio>
@@ -218,11 +192,11 @@ export default function AddExpense() {
           render={({ field: { onChange, value } }) => (
             <TextArea
               autoCompleteType
-              placeholder="Breve descripcion ..."
+              placeholder="Descripcion ..."
               minH={35}
               value={value}
               onChangeText={(value) => onChange(value)}
-              borderRadius={5}
+              borderRadius={7}
               size="lg"
             />
           )}
@@ -258,11 +232,12 @@ export default function AddExpense() {
       </VStack>
       <Button
         onPress={handleSubmit(onSubmit)}
+        isLoading={isLoading}
         className="rounded-full m-7"
         marginTop={16}
         height={12}
       >
-        Registrar
+        <Text className="font-semibold text-white ">Registrar</Text>
       </Button>
       {/* //! Probar esto solo el los dispositivos, en los emuladores no funciona
       <PushNotification /> */}

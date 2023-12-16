@@ -1,30 +1,26 @@
 import { IGasto } from "@/interfaces";
 import { supabase } from "@/utils/supabase";
 import { Ionicons } from "@expo/vector-icons";
-import { Link, Stack, useLocalSearchParams } from "expo-router";
+import { Link, Stack, router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Badge, Button, Divider, HStack, Slider, VStack } from "native-base";
 import { Platform, Pressable, Text, View } from "react-native";
 import * as React from "react";
+import { useExpenseContext } from "@/context";
 
 export default function ExpenseDetailsModal() {
   const [expenseDataDetails, setExpenseDataDetails] = React.useState<IGasto>(
     {} as IGasto
   );
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const { deleteExpense } = useExpenseContext();
   const { id: expenseID } = useLocalSearchParams<{ id: string }>();
   const handleDeleteExpense = async (id: string) => {
-    try {
-      const { error } = await supabase
-        .from("gastos")
-        .delete()
-        .eq("id", expenseID);
-
-      if (error) {
-        throw error;
-      }
-    } catch (error) {
-      console.error("Error deleting expense:", error);
-    }
+    setIsLoading(true);
+    deleteExpense(id);
+    setIsLoading(false);
+    router.push("/(tabs)/");
   };
 
   const getSingleExpenseData = async (id: string) => {
@@ -55,7 +51,7 @@ export default function ExpenseDetailsModal() {
     fetchExpense();
   }, [expenseID]);
 
-  const monto_gastado = expenseDataDetails.cantidad;
+  const monto_gastado = parseInt(expenseDataDetails.monto || "100");
   // const monto_presupuestado = expense.cantidad;
   //TODO : Cambiar este valor por el monto presupuestado del mes actual
   const monto_presupuestado = 1000;
@@ -75,8 +71,7 @@ export default function ExpenseDetailsModal() {
             </Link>
           ),
 
-          title: ` Detalles del Gasto
-          ${expenseDataDetails.numeroGasto}  `,
+          title: "Detalles",
         }}
       />
       {totalPercentageExpensed >= 80 && (
@@ -93,7 +88,9 @@ export default function ExpenseDetailsModal() {
 
       <HStack p={5} justifyContent="space-between">
         <HStack space={2}>
-          <Text className="text-black font-bold mb-1  text-[18px]">#781</Text>
+          <Text className="text-black font-bold mb-1  text-[18px]">
+            #{expenseDataDetails.numeroGasto}
+          </Text>
           <Badge
             size="lg"
             borderWidth="0"
@@ -110,9 +107,7 @@ export default function ExpenseDetailsModal() {
       <VStack p={5} space={4}>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Monto</Text>
-          <Text className="font-bold">
-            S/. {expenseDataDetails?.cantidad?.toFixed(2)}
-          </Text>
+          <Text className="font-bold">S/. {expenseDataDetails.monto}</Text>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Divisa</Text>
@@ -129,7 +124,7 @@ export default function ExpenseDetailsModal() {
         <HStack justifyContent="space-between" alignItems="center">
           <Text>% Presupuesto</Text>
 
-          <Text className="font-bold">{expenseDataDetails.cantidad}</Text>
+          <Text className="font-bold">{expenseDataDetails.monto || "100"}</Text>
         </HStack>
 
         <HStack justifyContent="flex-end" space={3}>
@@ -137,10 +132,12 @@ export default function ExpenseDetailsModal() {
             {expenseDataDetails?.fecha?.toLocaleString()}
           </Badge>
           <Badge size="lg" variant="solid" className="rounded-full">
-            {new Date(expenseDataDetails?.fecha).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+            {expenseDataDetails?.fecha
+              ? new Date(expenseDataDetails.fecha).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+              : "Sin fecha proveída"}
           </Badge>
         </HStack>
       </VStack>
@@ -198,9 +195,10 @@ export default function ExpenseDetailsModal() {
           className="w-full rounded-full"
           height={12}
           variant="solid"
+          isLoading={isLoading}
           colorScheme="rose"
         >
-          Eliminar
+          <Text className="font-semibold text-white ">Eliminar Gasto</Text>
         </Button>
       </HStack>
       {/* Use a light status bar on iOS to account for the black space above the modal */}

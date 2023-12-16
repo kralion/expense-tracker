@@ -15,8 +15,7 @@ import {
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Image, Pressable, Text, View } from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type FormData = {
   email: string;
@@ -60,7 +59,7 @@ export default function SignIn() {
   return (
     <SafeAreaView>
       <View className="flex flex-col space-y-7 justify-between">
-        <VStack space={5} className="flex items-start mx-7">
+        <VStack space={5} className="flex items-start " mx={7}>
           <VStack space={2}>
             <Text className=" text-3xl font-bold tracking-tight mt-10">
               Inicio de Sesión

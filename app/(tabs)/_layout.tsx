@@ -1,15 +1,20 @@
-import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
-import { View, useColorScheme } from "react-native";
+import { ExpenseContextProvider, NotificationContextProvider } from "@/context";
+import { Entypo, FontAwesome5 as FontAwesome } from "@expo/vector-icons";
+import { Tabs, router } from "expo-router";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  useColorScheme,
+} from "react-native";
 import Colors from "../../constants/Colors";
-import { ExpenseContextProvider } from "@/context";
-import { NotificationContextProvider } from "@/context";
+import * as React from "react";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
-  return <FontAwesome size={30} style={{ marginBottom: -7 }} {...props} />;
+  return <FontAwesome size={25} style={{ marginBottom: -7 }} {...props} />;
 }
 
 export default function TabLayout() {
@@ -21,20 +26,17 @@ export default function TabLayout() {
         <Tabs
           screenOptions={{
             tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-            headerStyle: {
-              backgroundColor: "#F5F3F3",
-            },
             tabBarStyle: {
-              height: 100,
+              height: 90,
             },
-            title: "",
             tabBarHideOnKeyboard: true,
+            headerShown: false,
           }}
         >
           <Tabs.Screen
             name="index"
             options={{
-              title: "",
+              title: "Inicio",
               headerShown: false,
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="tachometer-alt" color={color} />
@@ -45,7 +47,7 @@ export default function TabLayout() {
           <Tabs.Screen
             name="statistics"
             options={{
-              title: "",
+              title: "Reportes",
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="chart-bar" color={color} />
               ),
@@ -57,14 +59,16 @@ export default function TabLayout() {
             options={{
               title: "",
               headerShown: false,
-              tabBarIcon: ({ color }) => (
-                <TabBarIcon
-                  className="rotate-45"
-                  size={55}
-                  style={{ marginBottom: -15 }}
-                  name="times-circle"
-                  color={color}
-                />
+              tabBarIcon: () => (
+                <View>
+                  <TouchableOpacity
+                    style={styles.customTabStyle}
+                    onPress={() => router.push("/(tabs)/add-expense")}
+                    activeOpacity={0.6}
+                  >
+                    <Entypo name="plus" size={50} color="white" />
+                  </TouchableOpacity>
+                </View>
               ),
             }}
           />
@@ -72,7 +76,7 @@ export default function TabLayout() {
           <Tabs.Screen
             name="wallet"
             options={{
-              title: "",
+              title: "Saldo",
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="wallet" color={color} />
               ),
@@ -85,7 +89,7 @@ export default function TabLayout() {
               headerBackground: () => (
                 <View className="bg-accent" style={{ flex: 1 }} />
               ),
-              title: "",
+              title: "Perfil",
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="user-alt" color={color} />
               ),
@@ -96,3 +100,24 @@ export default function TabLayout() {
     </ExpenseContextProvider>
   );
 }
+const styles = StyleSheet.create({
+  customTabStyle: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    position: "absolute",
+    marginBottom: -25,
+    left: -40,
+    bottom: 10,
+    borderRadius: 50,
+    padding: 10,
+    backgroundColor: "#6366F1",
+    shadowOpacity: 0.3,
+    borderWidth: 1.5,
+    borderColor: "#979AEE",
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+});
