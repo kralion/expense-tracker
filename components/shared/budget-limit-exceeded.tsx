@@ -34,7 +34,7 @@ export function BudgetLimitExceededModal({
       size="xl"
       onClose={() => setShowNotification(false)}
     >
-      <Modal.Content rounded={30} className="p-5">
+      <Modal.Content rounded={30} className="p-5 bg-white">
         <Modal.CloseButton rounded={15} />
         <Modal.Body className="space-y-10">
           <VStack space={7} alignItems="center">
@@ -77,9 +77,11 @@ export function BudgetLimitExceededModal({
                 Ver Estadísticas
               </Text>
             </Button>
-            <Text className="text-textmuted text-xs">
+            <Text className="text-red-500 text-xs">
               Por ahora no podrás agregar mas gastos a tu{" "}
-              <Text className="underline text-xs">historial</Text>
+              <Text className="underline text-xs text-red-500">
+                historial de gastos
+              </Text>
             </Text>
           </VStack>
         </Modal.Body>

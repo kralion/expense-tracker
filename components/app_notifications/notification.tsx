@@ -4,7 +4,7 @@ import { Text, Image } from "react-native";
 
 export default function SingleNotification() {
   return (
-    <Pressable className="mx-2.5">
+    <Pressable className="mx-3">
       {({ isHovered, isPressed }) => {
         return (
           <Box
@@ -22,7 +22,7 @@ export default function SingleNotification() {
                   uri: "https://img.icons8.com/?size=96&id=j0S9ltkvGe8K&format=gif",
                 }}
               />
-              <VStack space={2} maxWidth={350}>
+              <VStack space={2} flex={1}>
                 <HStack justifyContent="space-between">
                   <Text className="font-bold ">Premium</Text>
                   <Text className="text-mute   text-xs">6:30 AM</Text>

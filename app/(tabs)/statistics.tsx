@@ -1,7 +1,14 @@
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { Button, HStack, Select, VStack, FlatList } from "native-base";
 import { useState } from "react";
-import { Pressable, ScrollView, Text, View, SectionList } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+  SectionList,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Chart from "../../components/estadisticas/chart";
 import { useExpenseContext } from "@/context";
@@ -94,14 +101,9 @@ export default function Statistics() {
       </HStack>
       <View className=" flex-row m-4 items-center  justify-between ">
         <Text className="text-xl text-muted font-semibold">Top Gastos</Text>
-        <Pressable>
-          <MaterialCommunityIcons
-            className="rotate-90"
-            name="arrow-expand"
-            size={24}
-            color="black"
-          />
-        </Pressable>
+        <TouchableOpacity>
+          <MaterialCommunityIcons name="arrow-expand" size={24} color="black" />
+        </TouchableOpacity>
       </View>
       <FlatList
         mx={2}
