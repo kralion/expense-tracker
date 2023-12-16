@@ -1,9 +1,14 @@
-import { FontAwesome5 as FontAwesome } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
-import { View, useColorScheme } from "react-native";
+import { ExpenseContextProvider, NotificationContextProvider } from "@/context";
+import { Entypo, FontAwesome5 as FontAwesome } from "@expo/vector-icons";
+import { Tabs, router } from "expo-router";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  useColorScheme,
+} from "react-native";
 import Colors from "../../constants/Colors";
-import { ExpenseContextProvider } from "@/context";
-import { NotificationContextProvider } from "@/context";
+import * as React from "react";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -54,14 +59,16 @@ export default function TabLayout() {
             options={{
               title: "",
               headerShown: false,
-              tabBarIcon: ({ color }) => (
-                <TabBarIcon
-                  className="rotate-45 text-accent"
-                  size={55}
-                  style={{ marginBottom: -25 }}
-                  name="times-circle"
-                  color={color}
-                />
+              tabBarIcon: () => (
+                <View>
+                  <TouchableOpacity
+                    style={styles.customTabStyle}
+                    onPress={() => router.push("/(tabs)/add-expense")}
+                    activeOpacity={0.6}
+                  >
+                    <Entypo name="plus" size={50} color="white" />
+                  </TouchableOpacity>
+                </View>
               ),
             }}
           />
@@ -93,3 +100,24 @@ export default function TabLayout() {
     </ExpenseContextProvider>
   );
 }
+const styles = StyleSheet.create({
+  customTabStyle: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    position: "absolute",
+    marginBottom: -25,
+    left: -40,
+    bottom: 10,
+    borderRadius: 50,
+    padding: 10,
+    backgroundColor: "#6366F1",
+    shadowOpacity: 0.3,
+    borderWidth: 1.5,
+    borderColor: "#979AEE",
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+});
