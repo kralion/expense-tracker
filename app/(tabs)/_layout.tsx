@@ -27,7 +27,7 @@ export default function TabLayout() {
           screenOptions={{
             tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
             tabBarStyle: {
-              height: 90,
+              height: 80,
             },
             tabBarHideOnKeyboard: true,
             headerShown: false,
@@ -64,9 +64,9 @@ export default function TabLayout() {
                   <TouchableOpacity
                     style={styles.customTabStyle}
                     onPress={() => router.push("/(tabs)/add-expense")}
-                    activeOpacity={0.6}
+                    activeOpacity={0.8}
                   >
-                    <Entypo name="plus" size={50} color="white" />
+                    <Entypo name="plus" size={40} color="white" />
                   </TouchableOpacity>
                 </View>
               ),
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     },
     position: "absolute",
     marginBottom: -25,
-    left: -40,
+    left: -35,
     bottom: 10,
     borderRadius: 50,
     padding: 10,

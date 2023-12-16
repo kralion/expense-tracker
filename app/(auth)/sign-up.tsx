@@ -6,6 +6,7 @@ import {
   Button,
   Center,
   Checkbox,
+  Divider,
   FormControl,
   HStack,
   Icon,
@@ -114,11 +115,11 @@ export default function SignUp() {
             />
           </Button>
         </HStack>
-        <View className="flex flex-row items-center text-center justify-center">
-          <View className="w-1/2 border-[1px] h-0.5 border-gray-300"></View>
-          <Text className="text-textmuted mx-2 text-center">o</Text>
-          <View className="w-1/2 border-[1px] h-0.5 border-gray-300"></View>
-        </View>
+        <HStack space={3} alignItems="center">
+          <Divider flex={1} orientation="horizontal" />
+          <Text>o</Text>
+          <Divider flex={1} orientation="horizontal" />
+        </HStack>
         <HStack space={3}>
           <FormControl
             flex={1}
