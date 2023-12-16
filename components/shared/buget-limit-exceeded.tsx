@@ -1,6 +1,9 @@
-import { Badge, FlatList, Modal, Text, VStack } from "native-base";
+import { Badge, Button, HStack, Modal, Text, VStack } from "native-base";
 import * as React from "react";
-import { Image, View } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Image } from "expo-image";
+import { router } from "expo-router";
+import { FontAwesome } from "@expo/vector-icons";
 const advices = [
   {
     id: "1",
@@ -24,49 +27,58 @@ export function BudgetLimitExceededModal({
   return (
     <Modal
       isOpen={showNotification}
-      onClose={() => setShowNotification(false)}
+      _backdropFade={{
+        backgroundColor: "rgba(0, 0, 0, 0.4)",
+      }}
+      animationPreset="slide"
       backdropVisible={true}
+      size="xl"
+      onClose={() => setShowNotification(false)}
     >
-      <Modal.Content>
+      <Modal.Content className="p-5">
         <Modal.CloseButton />
-        <Modal.Header className="bg-red-200 ">
-          <Text className="text-red-600 font-bold text-[16px]">
-            Presupuesto Excedido
-          </Text>
-        </Modal.Header>
-        <Modal.Body className="space-y-20 bg-red-200 ">
-          <View className="flex flex-col  items-center">
+        <Modal.Body className="space-y-10">
+          <VStack space={7} alignItems="center">
             <Image
-              className="w-28 h-28"
-              source={require("../../assets/images/danger.png")}
+              style={{
+                width: 200,
+                height: 300,
+              }}
+              source={require("../../assets/images/budget-limit.png")}
               alt="BudgetLimit"
             />
-            <Text>
+            <Text className=" font-bold text-2xl ">Presupuesto Excedido</Text>
+            <Text className="text-[16px] text-center">
               Parece que ya has gastado todo el monto presupuesto para este mes.
             </Text>
-            <View>
-              <VStack space={2} my={3} alignItems="start">
-                <Badge colorScheme="red" variant="solid">
-                  S/. 1,010.00 registrados
-                </Badge>
-                <Badge variant="solid">S/. 1,000.00 presupuestados</Badge>
-              </VStack>
-              <Text>Te recomendamos lo siguiente :</Text>
-
-              {advices.map((advice) => (
-                <View
-                  key={advice.id}
-                  className="flex mt-2 flex-row items-center"
-                >
-                  <View className="w-2 h-2 bg-teal-500 rounded-full mr-2"></View>
-                  <Text>{advice.description}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
+          </VStack>
+          <VStack space={3}>
+            <Text className="font-semibold">
+              Te recomendamos lo siguiente :
+            </Text>
+            <VStack space={2}>
+              <HStack space={2} alignItems="center">
+                <FontAwesome color="#10828D" name="lightbulb-o" size={15} />
+                <Text>Revisar tus gastos frecuentes</Text>
+              </HStack>
+              <HStack space={2} alignItems="center">
+                <FontAwesome color="#10828D" name="lightbulb-o" size={15} />
+                <Text>Actualizar tu presupuesto a uno nuevo</Text>
+              </HStack>
+            </VStack>
+            <Button
+              className="w-full mt-10 rounded-full"
+              height={12}
+              variant="solid"
+              onPress={() => {
+                setShowNotification(false), router.push("/(tabs)/statistics");
+              }}
+            >
+              <Text className="font-semibold text-white ">Ver Historial</Text>
+            </Button>
+          </VStack>
         </Modal.Body>
       </Modal.Content>
-      <Modal.Footer></Modal.Footer>
     </Modal>
   );
 }

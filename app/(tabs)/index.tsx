@@ -47,21 +47,23 @@ export default function Index() {
       fetchUserName(session.user.id);
     }
   }, [session?.user?.id]);
+  function capitalizeFirstLetter(string: string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  }
+
   return (
     <SafeAreaView className="bg-primary space-y-7 ">
       <HStack justifyContent="space-between" mx={4}>
         <VStack>
           <Text className="text-mutedwhite text-[12px] ">
-            {
-              new Date()
-                .toLocaleDateString("es-ES", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })
-                .split(",")[1]
-            }
+            {capitalizeFirstLetter(
+              new Date().toLocaleDateString("es-ES", {
+                weekday: "long",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
+            )}
           </Text>
           <Text className="font-bold text-[16px] text-white  tracking-tight">
             Hola, {nombres} 👋
@@ -103,15 +105,14 @@ export default function Index() {
             <Heading size="md">Historial de Gastos</Heading>
 
             <Button
-              onPress={() =>
-                // {setShowBudgetLimitNotification(true)
-                {
-                  showNotification({
-                    title: "Premium acquired",
-                    alertStatus: "success",
-                  });
-                }
-              }
+              onPress={() => {
+                setShowBudgetLimitNotification(true);
+                // {
+                //   showNotification({
+                //     title: "Premium acquired",
+                //     alertStatus: "success",
+                //   });
+              }}
               variant="ghost"
               className="rounded-lg"
               colorScheme="gray"
