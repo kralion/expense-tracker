@@ -51,7 +51,7 @@ export default function ExpenseDetailsModal() {
     fetchExpense();
   }, [expenseID]);
 
-  const monto_gastado = parseInt(expenseDataDetails.monto);
+  const monto_gastado = parseInt(expenseDataDetails.monto || "100");
   // const monto_presupuestado = expense.cantidad;
   //TODO : Cambiar este valor por el monto presupuestado del mes actual
   const monto_presupuestado = 1000;
@@ -124,7 +124,7 @@ export default function ExpenseDetailsModal() {
         <HStack justifyContent="space-between" alignItems="center">
           <Text>% Presupuesto</Text>
 
-          <Text className="font-bold">{expenseDataDetails.monto}</Text>
+          <Text className="font-bold">{expenseDataDetails.monto || "100"}</Text>
         </HStack>
 
         <HStack justifyContent="flex-end" space={3}>
@@ -132,10 +132,12 @@ export default function ExpenseDetailsModal() {
             {expenseDataDetails?.fecha?.toLocaleString()}
           </Badge>
           <Badge size="lg" variant="solid" className="rounded-full">
-            {new Date(expenseDataDetails.fecha).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+            {expenseDataDetails?.fecha
+              ? new Date(expenseDataDetails.fecha).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+              : "Sin fecha proveída"}
           </Badge>
         </HStack>
       </VStack>

@@ -4,13 +4,14 @@ import { BudgetLimitExceededModal, Expense } from "@/components/shared";
 import { ExpenseSkeleton } from "@/components/skeletons/expense";
 import { expensesIdentifiers } from "@/constants/ExpensesIdentifiers";
 import { useExpenseContext, useNotificationContext } from "@/context";
+import { IGasto } from "@/interfaces";
 import { supabase } from "@/utils/supabase";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Session } from "@supabase/supabase-js";
 import { Link } from "expo-router";
 import { Button, HStack, Heading, Text, VStack } from "native-base";
 import * as React from "react";
-import { ScrollView, View } from "react-native";
+import { FlatList, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
@@ -91,55 +92,39 @@ export default function Index() {
         <Card isPremiumUser={isPremiumUser} />
       </View>
       <VStack space={5} className="bg-background ">
-        <ScrollView>
-          <BudgetLimitExceededModal
-            setShowNotification={setShowBudgetLimitNotification}
-            showNotification={showBudgetLimitNotification}
-          />
-          <HStack
-            marginTop={100}
-            className="items-center"
-            mx={3}
-            justifyContent="space-between"
-          >
-            <Heading size="md">Historial de Gastos</Heading>
+        <BudgetLimitExceededModal
+          setShowNotification={setShowBudgetLimitNotification}
+          showNotification={showBudgetLimitNotification}
+        />
+        <HStack
+          px={4}
+          marginTop={100}
+          className="items-center"
+          justifyContent="space-between"
+        >
+          <Heading size="md">Historial de Gastos</Heading>
 
-            <Button
-              onPress={() => {
-                setShowBudgetLimitNotification(true);
-                // {
-                //   showNotification({
-                //     title: "Premium acquired",
-                //     alertStatus: "success",
-                //   });
-              }}
-              variant="ghost"
-              className="rounded-lg"
-              colorScheme="gray"
-            >
-              Ver Todo
-            </Button>
-          </HStack>
-          <VStack space={4} className="mx-2">
-            {expenses?.map((expense) => (
-              <React.Suspense fallback={<ExpenseSkeleton />}>
-                <Expense
-                  key={expense.id}
-                  id={expense.id}
-                  assetIdentificador={
-                    expensesIdentifiers.find(
-                      (icon) => icon.label === expense.categoria
-                    )?.iconHref ||
-                    "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png"
-                  }
-                  categoria={expense.categoria}
-                  monto={expense.monto}
-                  fecha={expense.fecha}
-                />
-              </React.Suspense>
-            ))}
-          </VStack>
-        </ScrollView>
+          <Button
+            onPress={() => {
+              setShowBudgetLimitNotification(true);
+              // {
+              //   showNotification({
+              //     title: "Premium acquired",
+              //     alertStatus: "success",
+              //   });
+            }}
+            variant="ghost"
+            className="rounded-lg"
+            colorScheme="gray"
+          >
+            Ver Todo
+          </Button>
+        </HStack>
+        <FlatList
+          data={expenses}
+          keyExtractor={(expense) => String(expense.id)}
+          renderItem={({ item: expense }) => <Expense expense={expense} />}
+        />
       </VStack>
     </SafeAreaView>
   );

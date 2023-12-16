@@ -1,9 +1,8 @@
-import { Badge, Button, HStack, Modal, Text, VStack } from "native-base";
-import * as React from "react";
-import { View, StyleSheet } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
-import { FontAwesome } from "@expo/vector-icons";
+import { Button, HStack, Modal, Text, VStack } from "native-base";
+import * as React from "react";
 const advices = [
   {
     id: "1",
@@ -28,15 +27,15 @@ export function BudgetLimitExceededModal({
     <Modal
       isOpen={showNotification}
       _backdropFade={{
-        backgroundColor: "rgba(0, 0, 0, 0.4)",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
       }}
       animationPreset="slide"
       backdropVisible={true}
       size="xl"
       onClose={() => setShowNotification(false)}
     >
-      <Modal.Content className="p-5">
-        <Modal.CloseButton />
+      <Modal.Content rounded={30} className="p-5">
+        <Modal.CloseButton rounded={15} />
         <Modal.Body className="space-y-10">
           <VStack space={7} alignItems="center">
             <Image
@@ -74,8 +73,14 @@ export function BudgetLimitExceededModal({
                 setShowNotification(false), router.push("/(tabs)/statistics");
               }}
             >
-              <Text className="font-semibold text-white ">Ver Historial</Text>
+              <Text className="font-semibold text-white ">
+                Ver Estadísticas
+              </Text>
             </Button>
+            <Text className="text-textmuted text-xs">
+              Por ahora no podrás agregar mas gastos a tu{" "}
+              <Text className="underline text-xs">historial</Text>
+            </Text>
           </VStack>
         </Modal.Body>
       </Modal.Content>

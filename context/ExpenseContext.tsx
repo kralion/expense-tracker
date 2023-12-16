@@ -21,7 +21,10 @@ export const ExpenseContextProvider = ({
 
   const fetchData = async () => {
     try {
-      const { data } = await supabase.from("gastos").select("*");
+      const { data } = await supabase
+        .from("gastos")
+        .select("*")
+        .order("fecha", { ascending: false });
       setExpenses(JSON.parse(JSON.stringify(data)));
     } catch (error) {
       showNotification({
