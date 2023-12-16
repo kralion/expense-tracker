@@ -6,6 +6,7 @@ import {
   Button,
   Center,
   Checkbox,
+  Divider,
   FormControl,
   HStack,
   Icon,
@@ -77,173 +78,73 @@ export default function SignUp() {
   }
 
   return (
-    <SafeAreaView className="mx-7">
-      <View className="bg-background ">
-        <View className="flex items-start">
+    <SafeAreaView>
+      <VStack space={5} className="flex items-start " mx={7}>
+        <VStack space={2}>
           <Text className="mt-10 text-3xl font-bold ">Crea una cuenta</Text>
-          <View className="items-center gap-1 flex   flex-row">
+          <HStack space={1} alignItems="center">
             <Text className=" ">Si ya tienes una cuenta ?</Text>
             <Link asChild href="/(auth)/sign-in">
-              <Button className="px-0" variant="link">
+              <Button className="p-0" variant="link">
                 Inicia Sesión
               </Button>
             </Link>
-          </View>
-        </View>
-        <VStack justifyContent="center" space={5}>
-          <HStack mt={4} space={3}>
-            <Button
-              bgColor="black"
-              rounded={7}
-              className="w-[115px]"
-              height={12}
-            >
-              <FontAwesome5 size={24} color="white" name="apple" />
-            </Button>
-            <Button
-              colorScheme="blue"
-              rounded={7}
-              className="w-[115px]"
-              height={12}
-            >
-              <FontAwesome5 size={24} color="white" name="facebook" />
-            </Button>
-            <Button
-              background="#F5F3F3"
-              rounded={7}
-              borderWidth={0.2}
-              className="w-[115px]"
-              height={12}
-            >
-              <Image
-                className="w-5 h-5 mr-2"
-                source={{
-                  uri: "https://img.icons8.com/?size=96&id=17949&format=png",
-                }}
-              />
-            </Button>
           </HStack>
-          <View className="flex flex-row items-center text-center justify-center">
-            <View className="w-[170px] border-[1px] h-0.5 border-gray-300"></View>
-            <Text className="text-textmuted mx-2 text-center">o</Text>
-            <View className="w-[170px] border-[1px] h-0.5 border-gray-300"></View>
-          </View>
-          <HStack space={3}>
-            <FormControl
-              w={{
-                base: "83%",
-                md: "25%",
+        </VStack>
+      </VStack>
+      <VStack justifyContent="center" space={5} mx={7}>
+        <HStack mt={4} space={3}>
+          <Button bgColor="black" flex={1} rounded={7} height={12}>
+            <FontAwesome5 size={24} color="white" name="apple" />
+          </Button>
+          <Button colorScheme="blue" flex={1} rounded={7} height={12}>
+            <FontAwesome5 size={24} color="white" name="facebook" />
+          </Button>
+          <Button
+            background="#F5F3F3"
+            flex={1}
+            rounded={7}
+            borderWidth={0.2}
+            height={12}
+          >
+            <Image
+              className="w-5 h-5 mr-2"
+              source={{
+                uri: "https://img.icons8.com/?size=96&id=17949&format=png",
               }}
-              maxW={180}
-              isRequired
-              isInvalid={!!errors.nombres && !!errors.nombres.message}
-            >
-              <Controller
-                name="nombres"
-                control={control}
-                rules={{
-                  required: {
-                    value: true,
-                    message: "Requerido",
-                  },
-                  pattern: {
-                    value: /^[a-zA-Z\s]*$/,
-                    message: "Solo puede contener letras",
-                  },
-                }}
-                render={({ field: { onChange, value } }) => (
-                  <Input
-                    size="lg"
-                    borderRadius={7}
-                    py={3}
-                    w={{
-                      base: "100%",
-                      md: "25%",
-                    }}
-                    placeholder="Nombres"
-                    value={value}
-                    onChangeText={(value) => onChange(value)}
-                  />
-                )}
-              />
-              <FormControl.ErrorMessage
-                leftIcon={<WarningOutlineIcon size="xs" />}
-              >
-                {errors.nombres && errors.nombres.message}
-              </FormControl.ErrorMessage>
-            </FormControl>
-
-            <FormControl
-              w={{
-                base: "83%",
-                md: "25%",
-              }}
-              maxW={180}
-              isInvalid={!!errors.apellidos && !!errors.apellidos.message}
-            >
-              <Controller
-                name="apellidos"
-                control={control}
-                rules={{
-                  required: {
-                    value: true,
-                    message: "Requerido",
-                  },
-                  pattern: {
-                    value: /^[a-zA-Z\s]*$/,
-                    message: "Solo puede contener letras",
-                  },
-                }}
-                render={({ field: { onChange, value } }) => (
-                  <Input
-                    size="lg"
-                    borderRadius={7}
-                    py={3}
-                    w={{
-                      base: "100%",
-                      md: "25%",
-                    }}
-                    placeholder="Apellidos"
-                    value={value}
-                    onChangeText={(value) => onChange(value)}
-                  />
-                )}
-              />
-              <FormControl.ErrorMessage
-                leftIcon={<WarningOutlineIcon size="xs" />}
-              >
-                {errors.apellidos && errors.apellidos.message}
-              </FormControl.ErrorMessage>
-            </FormControl>
-          </HStack>
+            />
+          </Button>
+        </HStack>
+        <HStack space={3} alignItems="center">
+          <Divider flex={1} orientation="horizontal" />
+          <Text>o</Text>
+          <Divider flex={1} orientation="horizontal" />
+        </HStack>
+        <HStack space={3}>
           <FormControl
-            width={415}
-            isInvalid={!!errors.email && !!errors.email.message}
+            flex={1}
+            isRequired
+            isInvalid={!!errors.nombres && !!errors.nombres.message}
           >
             <Controller
-              name="email"
+              name="nombres"
               control={control}
               rules={{
                 required: {
                   value: true,
-                  message: "Email es requerido",
+                  message: "Requerido",
                 },
                 pattern: {
-                  value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-                  message: "Email no es válido",
+                  value: /^[a-zA-Z\s]*$/,
+                  message: "Solo puede contener letras",
                 },
               }}
               render={({ field: { onChange, value } }) => (
                 <Input
                   size="lg"
-                  autoCapitalize="none"
                   borderRadius={7}
                   py={3}
-                  w={{
-                    base: "90%",
-                    md: "25%",
-                  }}
-                  placeholder="Email"
+                  placeholder="Nombres"
                   value={value}
                   onChangeText={(value) => onChange(value)}
                 />
@@ -252,25 +153,26 @@ export default function SignUp() {
             <FormControl.ErrorMessage
               leftIcon={<WarningOutlineIcon size="xs" />}
             >
-              {errors.email && errors.email.message}
+              {errors.nombres && errors.nombres.message}
             </FormControl.ErrorMessage>
           </FormControl>
 
           <FormControl
-            width={415}
-            isInvalid={!!errors.password && !!errors.password.message}
+            flex={1}
+            maxW={180}
+            isInvalid={!!errors.apellidos && !!errors.apellidos.message}
           >
             <Controller
-              name="password"
+              name="apellidos"
               control={control}
               rules={{
                 required: {
                   value: true,
-                  message: "Contraseña es requerida",
+                  message: "Requerido",
                 },
-                minLength: {
-                  value: 8,
-                  message: "Contraseña debe tener al menos 8 caracteres",
+                pattern: {
+                  value: /^[a-zA-Z\s]*$/,
+                  message: "Solo puede contener letras",
                 },
               }}
               render={({ field: { onChange, value } }) => (
@@ -278,43 +180,100 @@ export default function SignUp() {
                   size="lg"
                   borderRadius={7}
                   py={3}
-                  w={{
-                    base: "90%",
-                    md: "25%",
-                  }}
-                  placeholder="Contraseña"
+                  placeholder="Apellidos"
                   value={value}
                   onChangeText={(value) => onChange(value)}
-                  type={show ? "text" : "password"}
-                  passwordRules={
-                    "minlength: 8; required: lower; required: upper; required: digit; required: [-];"
-                  }
-                  InputRightElement={
-                    <Pressable onPress={() => setShow(!show)}>
-                      <Icon
-                        as={
-                          <MaterialIcons
-                            name={show ? "visibility" : "visibility-off"}
-                          />
-                        }
-                        size={5}
-                        mr="3"
-                        color="muted.400"
-                      />
-                    </Pressable>
-                  }
                 />
               )}
             />
             <FormControl.ErrorMessage
               leftIcon={<WarningOutlineIcon size="xs" />}
             >
-              {errors.password && errors.password.message}
+              {errors.apellidos && errors.apellidos.message}
             </FormControl.ErrorMessage>
           </FormControl>
-        </VStack>
+        </HStack>
+        <FormControl isInvalid={!!errors.email && !!errors.email.message}>
+          <Controller
+            name="email"
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: "Email es requerido",
+              },
+              pattern: {
+                value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                message: "Email no es válido",
+              },
+            }}
+            render={({ field: { onChange, value } }) => (
+              <Input
+                size="lg"
+                autoCapitalize="none"
+                borderRadius={7}
+                py={3}
+                placeholder="Email"
+                value={value}
+                onChangeText={(value) => onChange(value)}
+              />
+            )}
+          />
+          <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+            {errors.email && errors.email.message}
+          </FormControl.ErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.password && !!errors.password.message}>
+          <Controller
+            name="password"
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: "Contraseña es requerida",
+              },
+              minLength: {
+                value: 8,
+                message: "Contraseña debe tener al menos 8 caracteres",
+              },
+            }}
+            render={({ field: { onChange, value } }) => (
+              <Input
+                size="lg"
+                borderRadius={7}
+                py={3}
+                placeholder="Contraseña"
+                value={value}
+                onChangeText={(value) => onChange(value)}
+                type={show ? "text" : "password"}
+                passwordRules={
+                  "minlength: 8; required: lower; required: upper; required: digit; required: [-];"
+                }
+                InputRightElement={
+                  <Pressable onPress={() => setShow(!show)}>
+                    <Icon
+                      as={
+                        <MaterialIcons
+                          name={show ? "visibility" : "visibility-off"}
+                        />
+                      }
+                      size={5}
+                      mr="3"
+                      color="muted.400"
+                    />
+                  </Pressable>
+                }
+              />
+            )}
+          />
+          <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+            {errors.password && errors.password.message}
+          </FormControl.ErrorMessage>
+        </FormControl>
+      </VStack>
+      <VStack space={5} px={7}>
         <FormControl
-          width={370}
           isInvalid={
             !!errors.termsAndConditions && !!errors.termsAndConditions.message
           }
@@ -355,11 +314,7 @@ export default function SignUp() {
           onPress={handleSubmit((data: FormData) => {
             signUpWithEmail(data);
           })}
-          w={{
-            md: "25%",
-          }}
           py={5}
-          width={333}
           rounded={10}
           isLoading={loading}
         >
@@ -376,12 +331,12 @@ export default function SignUp() {
             </Text>
           </Link>
         </Text>
-        <Center mt={20}>
-          <Text className="text-mute text-[12px] mt-16">
-            Copyright © SoloPrenuer | FIS Inc. Derechos Reservados
-          </Text>
-        </Center>
-      </View>
+      </VStack>
+      <Center mt={20}>
+        <Text className="text-mute text-[12px] mt-16">
+          Copyright © SoloPrenuer | FIS Inc. Derechos Reservados
+        </Text>
+      </Center>
     </SafeAreaView>
   );
 }

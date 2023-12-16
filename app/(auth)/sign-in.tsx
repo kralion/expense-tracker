@@ -73,7 +73,7 @@ export default function SignIn() {
             </Text>
           </VStack>
         </VStack>
-        <VStack space={5} paddingX={7}>
+        <VStack space={5} px={7}>
           <FormControl isInvalid={!!errors.email}>
             <Controller
               control={control}

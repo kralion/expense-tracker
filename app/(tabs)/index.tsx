@@ -19,8 +19,7 @@ export default function Index() {
   const [showBudgetLimitNotification, setShowBudgetLimitNotification] =
     React.useState(false);
   const [nombres, setNombres] = React.useState("");
-  const { showNotification } = useNotificationContext();
-  const [isPremiumUser, setIsPremiumUser] = React.useState(false);
+  const [isPremiumUser, setIsPremiumUser] = React.useState(true);
   const [session, setSession] = React.useState<Session | null>(null);
   async function fetchUserName(userId: string) {
     const { data, error } = await supabase
