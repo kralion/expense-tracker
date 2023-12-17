@@ -4,77 +4,102 @@ import { Button, HStack, Input, VStack } from "native-base";
 import * as React from "react";
 import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ProgressBar} from "react-native-paper";
 
 export default function Wallet() {
   const [showSavingGoalModal, setShowSavingGoalModal] = React.useState(false);
+  const [ahorro, setAhorro] = React.useState(0);
+  const [meta, setMeta] = React.useState(0);
+  const [inputMeta, setInputMeta] = React.useState<number |null>(null);
+  const [inputAhorro, setInputAhorro] = React.useState<number |null>(null);
+  
+  const handleButtonClick = () => {
+    setMeta(inputMeta !== null ? inputMeta : 0);
+    setAhorro(inputAhorro !== null ? inputAhorro : 0);
+    setInputMeta(null);
+    setInputAhorro(null);
+  };
+  
+
   return (
-    <SafeAreaView className=" space-y-6  ">
-      <Text className="font-bold text-center text-2xl">Billetera</Text>
-      <View className="bg-[#ffff] mx-5 rounded-lg">
-        <HStack>
-          <View className="bg-accent w-[3%] rounded-full my-3 ml-3">
-            <Text></Text>
-          </View>
-          <SavingGoalModal
+    <SafeAreaView className=" space-y-6 px-5">
+      <Text className="font-bold text-left text-2xl">Metas de ahorro</Text>
+      <Text>Gestiona y visualiza tus metas de ahorro en la aplicación móvil de gestión de gastos.</Text>
+      <VStack space={7}>
+        <HStack space={1} alignItems="center">
+          <Image 
+            source={{uri: "https://img.icons8.com/?size=50&id=6x8oEfs1nn_K&format=png"}} 
+            alt="Meta de Ahorro"
+            width={30}
+            height={30}
+          />
+          <Text className="font-semibold mr-4">Meta de Ahorro</Text>
+          <Input
+            placeholder="Ingresa tu meta de ahorro"
+            size={"sm"}
+            w="190"
+            keyboardType="numeric"
+            onChangeText={(value) => setInputMeta(Number(value))}
+            value={inputMeta !== null ? inputMeta.toString() : undefined}
+          />
+        </HStack>
+        <HStack space={1} alignItems="center">
+          <Image 
+            source={{uri: "https://img.icons8.com/?size=50&id=423&format=png"}} 
+            alt="Meta de Ahorro"
+            width={30}
+            height={30}
+          />
+          <Text className="font-semibold mr-1.5">Ahorros Actuales</Text>
+          <Input
+            placeholder="Ingresa tus ahorros actuales"
+            size={"sm"}
+            w="190"
+            keyboardType="numeric"
+            onChangeText={(value) => setInputAhorro(Number(value))}
+            value={inputAhorro !== null ? inputAhorro.toString() : undefined}
+          />
+        </HStack>
+        <Button
+          className="rounded-full"
+          height={10}
+          w={40}
+          onPress={() => {
+            setShowSavingGoalModal(true);
+            handleButtonClick();
+          }}
+          maxW="100px"
+        >
+          Registrar meta de ahorro
+        </Button>
+        
+        <Text className="font-bold text-left text-2xl">Metas guardadas</Text>
+        <Text>Aquí puedes visualizar todas tus metas de ahorro guardadas.</Text>
+
+        <View className="space-y-3 bg-white py-4 px-3 rounded-xl">
+          <HStack space={2} alignItems="center">
+            <Image 
+              source={{uri: "https://img.icons8.com/?size=50&id=6x8oEfs1nn_K&format=png"}} 
+              alt="Meta de Ahorro"
+              width={30}
+              height={30}
+            />
+            <Text className="font-semibold mr-4">Meta 1: ${meta}</Text>
+            <Text>Faltan - ${meta-ahorro}</Text>
+          </HStack>
+          <Text className="text-lg font-bold">Progreso</Text>
+          <ProgressBar 
+            progress={meta !== 0 ? ahorro / meta : 0} 
+            color={"#5cb85c"} 
+            style={{height: 7, borderRadius: 5}} 
+          />
+          <Text>Has completado el {meta !== 0 ? (ahorro / meta * 100).toFixed(2) : 0}% de tu meta.</Text>
+        </View>
+        <SavingGoalModal
             openModal={showSavingGoalModal}
             setOpenModal={setShowSavingGoalModal}
-          />
-          <Text className="text-[#464444] p-3 font-bold text-lg">
-            Ingresar los detalles
-          </Text>
-        </HStack>
-        <View className="w-72 mx-auto border-b border-[#AEACAC] mt-3"></View>
-        <VStack>
-          <View className="mt-4 ml-3">
-            <Text className=" text-[#464444]">Metas a corto plazo</Text>
-          </View>
-          <View className="flex flex-row items-center p-4 border m-4 border-[#368983] rounded-xl">
-            <Image
-              className="w-7 h-7 mr-2"
-              source={{
-                uri: "https://img.icons8.com/?size=48&id=13013&format=png",
-              }}
-            />
-            <Input
-              size="sm"
-              borderRadius={7}
-              w={{
-                base: "90%",
-                md: "25%",
-              }}
-              placeholder="Ingresa el monto de meta de ahorro"
-            />
-          </View>
-          <View className="flex flex-row items-center p-4 border m-4 border-[#368983] rounded-xl">
-            <Image
-              className="w-7 h-7 mr-2"
-              source={{
-                uri: "https://img.icons8.com/?size=80&id=TVHK3ohcpSmp&format=gif",
-              }}
-            />
-            <Input
-              size="sm"
-              borderRadius={7}
-              w={{
-                base: "90%",
-                md: "25%",
-              }}
-              placeholder="Ingresa la fecha limite de ahorro"
-            />
-          </View>
-          <Button
-            className="rounded-full mb-4 ml-48"
-            height={10}
-            w={40}
-            onPress={() => {
-              setShowSavingGoalModal(true);
-            }}
-            maxW="100px"
-          >
-            <Text className="font-semibold text-white ">Registrar</Text>
-          </Button>
-        </VStack>
-      </View>
+        />
+      </VStack>
     </SafeAreaView>
   );
 }
