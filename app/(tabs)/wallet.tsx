@@ -1,9 +1,12 @@
+import { SavingGoalModal } from "@/components/app_notifications/save-goals";
+import { router } from "expo-router";
 import { Button, HStack, Input, VStack } from "native-base";
 import * as React from "react";
 import { Image, Text, View } from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Wallet() {
+  const [showSavingGoalModal, setShowSavingGoalModal] = React.useState(false);
   return (
     <SafeAreaView className=" space-y-6  ">
       <Text className="font-bold text-center text-2xl">Billetera</Text>
@@ -12,6 +15,10 @@ export default function Wallet() {
           <View className="bg-accent w-[3%] rounded-full my-3 ml-3">
             <Text></Text>
           </View>
+          <SavingGoalModal
+            openModal={showSavingGoalModal}
+            setOpenModal={setShowSavingGoalModal}
+          />
           <Text className="text-[#464444] p-3 font-bold text-lg">
             Ingresar los detalles
           </Text>
@@ -59,6 +66,9 @@ export default function Wallet() {
             className="rounded-full mb-4 ml-48"
             height={10}
             w={40}
+            onPress={() => {
+              setShowSavingGoalModal(true);
+            }}
             maxW="100px"
           >
             <Text className="font-semibold text-white ">Registrar</Text>

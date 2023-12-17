@@ -1,3 +1,4 @@
+import { TermsPolicyModal } from "@/components/app_notifications/terms&policy";
 import { supabase } from "@/utils/supabase";
 import { FontAwesome5 } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
@@ -36,6 +37,7 @@ export default function SignUp() {
   } = useForm<FormData>();
   const [show, setShow] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [showTCModal, setShowTCModal] = React.useState(false);
 
   async function signUpWithEmail(data: FormData) {
     setLoading(true);
@@ -120,6 +122,10 @@ export default function SignUp() {
           <Text>o</Text>
           <Divider flex={1} orientation="horizontal" />
         </HStack>
+        <TermsPolicyModal
+          openModal={showTCModal}
+          setOpenModal={setShowTCModal}
+        />
         <HStack space={3}>
           <FormControl
             flex={1}
@@ -322,19 +328,20 @@ export default function SignUp() {
         </Button>
 
         <Text className="text-mute text-[12px] mt-3  ">
-          Al continuar aceptas el como seran tratados tus datos, si lo deseas
-          puedes revisar los
-          <Link asChild href={"/modal"} className="active:underline">
-            <Text className="text-[12px] text-primary">
-              {" "}
-              Términos y Condiciones
-            </Text>
-          </Link>
+          Al continuar aceptas los{" "}
+          <Text
+            onPress={() => setShowTCModal(true)}
+            className="text-[12px] underline text-primary"
+          >
+            Términos y Condiciones
+          </Text>{" "}
+          , estos describen como usamos tus datos y como protegemos tu
+          privacidad.
         </Text>
       </VStack>
       <Center mt={20}>
-        <Text className="text-mute text-[12px] mt-16">
-          Copyright © SoloPrenuer | FIS Inc. Derechos Reservados
+        <Text className="text-mute text-[12px]">
+          Copyright © SoloPrenuer - FIS Corp. Derechos Reservados
         </Text>
       </Center>
     </SafeAreaView>

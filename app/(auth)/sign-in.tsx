@@ -65,12 +65,7 @@ export default function SignIn() {
               Inicio de Sesión
             </Text>
 
-            <Text>
-              Disfruta las bondades de la{" "}
-              <Text className="font-semibold text-primary">
-                Expense Tracker
-              </Text>
-            </Text>
+            <Text>Disfruta las bondades de la Expense Tracker</Text>
           </VStack>
         </VStack>
         <VStack space={5} px={7}>
