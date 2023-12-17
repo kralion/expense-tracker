@@ -1,17 +1,14 @@
+import { BudgetLimitExceededModal } from "@/components/app_notifications/budget-limit-exceeded";
 import Card from "@/components/dashboard/card";
-import { BudgetLimitExceededModal, Expense } from "@/components/shared";
-
-import { ExpenseSkeleton } from "@/components/skeletons/expense";
-import { expensesIdentifiers } from "@/constants/ExpensesIdentifiers";
-import { useExpenseContext, useNotificationContext } from "@/context";
-import { IGasto } from "@/interfaces";
+import { Expense } from "@/components/shared";
+import { useExpenseContext } from "@/context";
 import { supabase } from "@/utils/supabase";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Session } from "@supabase/supabase-js";
 import { Link } from "expo-router";
 import { Button, HStack, Heading, Text, VStack } from "native-base";
 import * as React from "react";
-import { FlatList, ScrollView, View } from "react-native";
+import { FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
@@ -19,7 +16,7 @@ export default function Index() {
   const [showBudgetLimitNotification, setShowBudgetLimitNotification] =
     React.useState(false);
   const [nombres, setNombres] = React.useState("");
-  const [isPremiumUser, setIsPremiumUser] = React.useState(true);
+  const [isPremiumUser, setIsPremiumUser] = React.useState(false);
   const [session, setSession] = React.useState<Session | null>(null);
   async function fetchUserName(userId: string) {
     const { data, error } = await supabase

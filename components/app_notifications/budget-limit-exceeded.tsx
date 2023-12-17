@@ -3,16 +3,6 @@ import { Image } from "expo-image";
 import { router } from "expo-router";
 import { Button, HStack, Modal, Text, VStack } from "native-base";
 import * as React from "react";
-const advices = [
-  {
-    id: "1",
-    description: "Revisar tus gastos",
-  },
-  {
-    id: "2",
-    description: "Actualizar tu presupuesto",
-  },
-];
 
 type TNotification = {
   setShowNotification: React.Dispatch<React.SetStateAction<boolean>>;
