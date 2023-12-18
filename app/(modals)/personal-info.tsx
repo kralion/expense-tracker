@@ -9,14 +9,13 @@ import {
 } from "native-base";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Image, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-
-const DEFAULT_IMAGE_URI =
-  "https://cdn-icons-png.flaticon.com/128/6542/6542999.png";
+import { Image } from "expo-image";
+import DefaultAvatar from "@/assets/svgs/avatar.svg";
+import { Session } from "@supabase/supabase-js";
 
 export default function PersonalInfo() {
-  const [imageUri, setImageUri] = React.useState(DEFAULT_IMAGE_URI);
   const {
     control,
     handleSubmit,
@@ -24,6 +23,36 @@ export default function PersonalInfo() {
     formState: { errors },
   } = useForm();
 
+  const [session, setSession] = React.useState<Session | null>(null);
+  const [name, setName] = React.useState("");
+
+  async function fetchUserName(userId: string) {
+    const { data, error } = await supabase
+      .from("usuarios_expense")
+      .select("nombres")
+      .eq("id", userId)
+      .single();
+
+    if (error) {
+      console.error(error);
+    } else if (data) {
+      setName(data.nombres);
+    }
+  }
+
+  React.useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    if (session?.user?.id) {
+      fetchUserName(session.user.id);
+    }
+  }, [session?.user?.id]);
   async function onSubmit(data: any) {
     try {
       const { error } = await supabase
@@ -41,9 +70,7 @@ export default function PersonalInfo() {
       alert(e.message);
     }
   }
-  const deleteImage = () => {
-    setImageUri(DEFAULT_IMAGE_URI);
-  };
+
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
@@ -70,7 +97,7 @@ export default function PersonalInfo() {
       <HStack>
         <View className="bg-accent w-1 h-8 rounded-full my-3 " />
         <Text className="text-[#464444] p-3 font-bold text-lg">
-          Datos personales
+          Foto de Perfil
         </Text>
       </HStack>
       <HStack
@@ -81,35 +108,41 @@ export default function PersonalInfo() {
         className="bg-background"
       >
         <HStack space={2} alignItems="center">
-          <Image
-            source={{ uri: imageUri }}
-            className="w-14 h-14 rounded-full"
-          />
-          <Text className="text-textmuted text-sm">Foto de perfil</Text>
+          {session?.user?.user_metadata?.avatar_url ? (
+            <Image
+              source={{
+                uri: session?.user?.user_metadata?.avatar_url,
+              }}
+              alt="profile-pic"
+              style={{ width: 80, height: 80 }}
+              className="rounded-full "
+            />
+          ) : (
+            <DefaultAvatar width={80} height={80} />
+          )}
         </HStack>
         <HStack space={2}>
           <Button
             rounded={7}
-            colorScheme="primary"
+            variant="outline"
             height={10}
             px={4}
             onPress={pickImageAsync}
           >
-            <Text className="text-white font-semibold">Reemplazar</Text>
+            <Text className="text-primary">Cambiar</Text>
           </Button>
-          <Button
-            onPress={deleteImage}
-            rounded={7}
-            height={10}
-            colorScheme="error"
-            variant="outline"
-          >
-            Quitar
+          <Button rounded={7} px={6} height={10} colorScheme="rose">
+            <Text className="text-white ">Quitar</Text>
           </Button>
         </HStack>
       </HStack>
 
-      <View className="border-0.5  border-gray-300"></View>
+      <HStack>
+        <View className="bg-accent w-1 h-8 rounded-full my-3 " />
+        <Text className="text-[#464444] p-3 font-bold text-lg">
+          Datos personales
+        </Text>
+      </HStack>
       <VStack space={5}>
         <FormControl isInvalid={!!errors.name}>
           <FormControl.Label>Nombres</FormControl.Label>
@@ -189,6 +222,7 @@ export default function PersonalInfo() {
           onPress={handleSubmit(onSubmit)}
           colorScheme="primary"
           rounded={10}
+          mt={4}
           py={4}
         >
           Actualizar datos

@@ -17,7 +17,7 @@ import {
 } from "native-base";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Text } from "react-native";
+import { Text, KeyboardAvoidingView, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AddExpense() {

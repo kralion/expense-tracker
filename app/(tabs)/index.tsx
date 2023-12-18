@@ -1,7 +1,7 @@
 import { BudgetLimitExceededModal } from "@/components/app_notifications/budget-limit-exceeded";
 import Card from "@/components/dashboard/card";
 import { Expense } from "@/components/shared";
-import { useExpenseContext } from "@/context";
+import { useExpenseContext, useNotificationContext } from "@/context";
 import { supabase } from "@/utils/supabase";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Session } from "@supabase/supabase-js";
@@ -17,18 +17,25 @@ export default function Index() {
     React.useState(false);
   const [nombres, setNombres] = React.useState("");
   const [isPremiumUser, setIsPremiumUser] = React.useState(false);
+  const { showNotification } = useNotificationContext();
   const [session, setSession] = React.useState<Session | null>(null);
   async function fetchUserName(userId: string) {
-    const { data, error } = await supabase
-      .from("usuarios_expense")
-      .select("nombres")
-      .eq("id", userId)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from("usuarios_expense")
+        .select("nombres")
+        .eq("id", userId)
+        .single();
 
-    if (error) {
-      console.error(error.code);
-    } else if (data) {
+      if (error) {
+        throw error;
+      }
       setNombres(data.nombres);
+    } catch (error) {
+      showNotification({
+        title: "Error al obtener datos del usuario",
+        alertStatus: "error",
+      });
     }
   }
   React.useEffect(() => {
@@ -49,7 +56,7 @@ export default function Index() {
   }
 
   return (
-    <SafeAreaView className="bg-primary space-y-7 ">
+    <SafeAreaView className="bg-primary space-y-7  ">
       <HStack justifyContent="space-between" mx={4}>
         <VStack>
           <Text className="text-mutedwhite text-[12px] ">
@@ -87,7 +94,7 @@ export default function Index() {
       <View className="z-10 h-20">
         <Card isPremiumUser={isPremiumUser} />
       </View>
-      <VStack space={5} className="bg-background ">
+      <VStack space={5} className="bg-background rounded-t-3xl ">
         <BudgetLimitExceededModal
           setShowNotification={setShowBudgetLimitNotification}
           showNotification={showBudgetLimitNotification}
