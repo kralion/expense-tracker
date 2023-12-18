@@ -9,26 +9,36 @@ import { Session } from "@supabase/supabase-js";
 import { Link, router } from "expo-router";
 import { Center, HStack, Heading, Icon, VStack } from "native-base";
 import React from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
+import DefaultAvatar from "@/assets/svgs/avatar.svg";
+import { Image } from "expo-image";
+import { useNotificationContext } from "@/context";
 
 export default function App() {
   const [session, setSession] = React.useState<Session | null>(null);
-  const [name, setName] = React.useState("");
+  const [names, setNames] = React.useState("");
+  const { showNotification } = useNotificationContext();
   async function signOut() {
     await supabase.auth.signOut();
     router.push("/(auth)/sign-in");
   }
   async function fetchUserName(userId: string) {
-    const { data, error } = await supabase
-      .from("usuarios_expense")
-      .select("nombres")
-      .eq("id", userId)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from("usuarios_expense")
+        .select("nombres")
+        .eq("id", userId)
+        .single();
 
-    if (error) {
-      console.error(error);
-    } else if (data) {
-      setName(data.nombres);
+      if (error) {
+        throw error;
+      }
+      setNames(data.nombres);
+    } catch (error) {
+      showNotification({
+        title: "Error al obtener datos del usuario",
+        alertStatus: "error",
+      });
     }
   }
   React.useEffect(() => {
@@ -44,42 +54,28 @@ export default function App() {
       fetchUserName(session.user.id);
     }
   }, [session?.user?.id]);
+
   return (
     <View>
-      <View className="bg-accent relative h-20">
+      <View className="bg-accent relative h-40">
         <VStack
-          className=" absolute left-36"
           space={2}
+          className=" absolute left-36 right-36 top-24"
           alignItems="center"
-          marginTop={5}
         >
-          <Image
-            source={{
-              uri:
-                "https://cdn-icons-png.flaticon.com/128/6542/6542999.png" ||
-                session?.user?.user_metadata?.avatar_url,
-            }}
-            alt="profile-pic"
-            width={120}
-            height={120}
-            className="rounded-full "
-          />
-          {/* //TODO: Cambiar el nombre por el nombre del usuario */}
-          <Heading size="md"> {name} </Heading>
-          <HStack space={2} alignItems="center">
-            <Heading size="xm" color="gray.400">
-              28 años,
-            </Heading>
+          {session?.user?.user_metadata?.avatar_url ? (
             <Image
               source={{
-                uri: "https://img.icons8.com/?size=96&id=eofZXRmqHHir&format=png",
+                uri: session?.user?.user_metadata?.avatar_url,
               }}
-              className="rounded-md"
-              alt="country"
-              width={20}
-              height={20}
+              className="rounded-full"
+              alt="profile"
+              style={{ width: 120, height: 120 }}
             />
-          </HStack>
+          ) : (
+            <DefaultAvatar width={120} height={120} />
+          )}
+          <Heading size="md"> {names} </Heading>
         </VStack>
       </View>
       <HStack>

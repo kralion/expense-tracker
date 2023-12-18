@@ -37,13 +37,13 @@ export default function Statistics() {
         <Button
           variant="ghost"
           className="py-2.5 w-[90px]  rounded-lg"
+          isPressed
           onPress={() => alert("Diario")}
         >
           Diario
         </Button>
         <Button
           variant="ghost"
-          isPressed
           className="py-2.5 w-[90px]  rounded-lg"
           onPress={() => alert("Semanal")}
         >
@@ -57,6 +57,7 @@ export default function Statistics() {
           Mensual
         </Button>
         <Button
+          disabled
           variant="ghost"
           className="py-2.5 w-[90px]  rounded-lg"
           onPress={() => alert("Anual")}
@@ -69,18 +70,18 @@ export default function Statistics() {
       <HStack alignItems="center" justifyContent="space-between" paddingX={4}>
         <Link asChild href="/(modals)/export-data">
           <Button
-            size="sm"
             startIcon={
               <FontAwesome name="file-pdf-o" color="white" marginRight={3} />
             }
             borderRadius={7}
           >
-            Exportar Historial
+            Exportar
           </Button>
         </Link>
         <Select
           selectedValue={service}
           minWidth="150"
+          size="lg"
           borderRadius={7}
           dropdownIcon={
             <FontAwesome5
@@ -99,12 +100,12 @@ export default function Statistics() {
           <Select.Item label="Ingresos" value="ingresos" />
         </Select>
       </HStack>
-      <View className=" flex-row m-4 items-center  justify-between ">
+      <HStack space={4} justifyContent="space-between" px={4} my={7}>
         <Text className="text-xl text-muted font-semibold">Top Gastos</Text>
         <TouchableOpacity>
           <MaterialCommunityIcons name="arrow-expand" size={24} color="black" />
         </TouchableOpacity>
-      </View>
+      </HStack>
       <FlatList
         mx={2}
         data={expenses}

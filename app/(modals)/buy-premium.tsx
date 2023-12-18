@@ -75,7 +75,7 @@ export default function BuyPremiumModal() {
   return (
     <SafeAreaView>
       <ScrollView>
-        <VStack space={5} className="p-7 h-screen bg-primary">
+        <VStack space={5} className="p-7  bg-primary">
           <Text className=" text-xl font-bold text-white ">
             Confirma tus datos de pago
           </Text>
