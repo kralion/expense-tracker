@@ -1,14 +1,15 @@
 import { ExpenseContextProvider, NotificationContextProvider } from "@/context";
 import { Entypo, FontAwesome5 as FontAwesome } from "@expo/vector-icons";
 import { Tabs, router } from "expo-router";
+import * as React from "react";
 import {
   StyleSheet,
   TouchableOpacity,
   View,
   useColorScheme,
 } from "react-native";
-import Colors from "../../constants/Colors";
-import * as React from "react";
+import Colors from "@/constants/Colors";
+import NotAllowed from "@/components/app_notifications/not-allowed";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -19,7 +20,6 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-
   return (
     <ExpenseContextProvider>
       <NotificationContextProvider>
@@ -83,6 +83,7 @@ export default function TabLayout() {
               headerShown: false,
             }}
           />
+
           <Tabs.Screen
             name="profile"
             options={{

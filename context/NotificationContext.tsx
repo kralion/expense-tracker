@@ -43,13 +43,13 @@ export const NotificationContextProvider = ({
     <NotificationContext.Provider value={{ showNotification, notification }}>
       {notification.title && (
         <Alert
-          variant="subtle"
+          variant="solid"
           shadow="3"
           rounded={7}
           position="absolute"
-          top={16}
+          top={10}
           left={2}
-          right={0}
+          right={2}
           px={3}
           zIndex={1}
           status={notification.alertStatus}
@@ -59,7 +59,7 @@ export const NotificationContextProvider = ({
             <HStack flexShrink={1} space={2} justifyContent="space-between">
               <HStack space={2} flexShrink={1}>
                 <Alert.Icon mt="1" />
-                <Text fontSize="md" color="coolGray.800">
+                <Text fontSize="md" color="white">
                   {notification.title}
                 </Text>
               </HStack>

@@ -1,97 +1,291 @@
+import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
-  BillingDetails,
-  CardField,
-  useConfirmPayment,
-} from "@stripe/stripe-react-native";
-import { Center, Button, VStack } from "native-base";
+  Button,
+  Center,
+  FormControl,
+  HStack,
+  Input,
+  Radio,
+  TextArea,
+  VStack,
+  WarningOutlineIcon,
+} from "native-base";
 import React from "react";
-import { View, Text } from "react-native";
+import { Controller, useForm } from "react-hook-form";
+import { Text } from "react-native";
+
+interface ICard {
+  cardNumber: string;
+  cvc: string;
+  monto: string;
+  expiracion: Date;
+  divisa: string;
+  mensaje: string;
+}
 
 export default function Stripe() {
-  const [card, setCard] = React.useState<any>(null);
-  const { confirmPayment, loading } = useConfirmPayment();
-  const API_URL = "http://localhost:3000";
-  const clientSecret = "sk_test_4eC39HqLyjWDarjtT1zdp7dc";
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+  } = useForm<ICard>({
+    defaultValues: {
+      divisa: "pen",
+    },
+  });
 
-  const fetchPaymentIntentClientSecret = async () => {
-    const response = await fetch(`${API_URL}/create-payment-intent`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        currency: "usd",
-      }),
-    });
-    const { clientSecret } = await response.json();
-
-    return clientSecret;
-  };
-
-  const handlePayPress = async () => {
-    if (!card) {
-      const clientSecret = await fetchPaymentIntentClientSecret();
-      return;
-    }
-    const billingDetails: BillingDetails = {
-      email: "jenny.rosen@example.com",
-    };
-    const { paymentIntent, error } = await confirmPayment(clientSecret, {
-      paymentMethodType: "Card",
-      paymentMethodData: {
-        billingDetails,
-      },
-    });
-    if (error) {
-      console.log("Payment confirmation error", error.message);
-    } else if (paymentIntent) {
-      alert("Payment successful " + paymentIntent);
-    }
+  const onSubmit = (data: ICard) => {
+    console.log(data);
+    reset();
   };
 
   return (
-    <View>
-      <VStack space={1}>
-        <Text className=" font-semibold text-white ">
-          Detalles de la tarjeta
-        </Text>
-        <CardField
-          postalCodeEnabled={true}
-          autofocus
-          placeholders={{
-            number: "4242 4242 4242 4242",
-          }}
-          cardStyle={{
-            backgroundColor: "#FFFFFF",
-            textColor: "#000000",
-            borderRadius: 7,
-          }}
-          style={{
-            width: "100%",
-            height: 40,
-            marginVertical: 10,
-          }}
-          onCardChange={(cardDetails) => {
-            console.log("cardDetails", cardDetails);
-            setCard(cardDetails);
-          }}
-          onFocus={(focusedField) => {
-            console.log("focusField", focusedField);
-          }}
+    <VStack space={3}>
+      <VStack space={2} p={5} className="bg-white rounded-lg">
+        <FormControl isInvalid={!!errors.monto} isRequired>
+          <VStack space={1}>
+            <Text className="text-textmuted">Número de Tarjeta</Text>
+          </VStack>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Input
+                size="lg"
+                keyboardType="numeric"
+                marginY={3}
+                value={value}
+                onChangeText={(value) => onChange(value)}
+                rightElement={
+                  <FontAwesome5
+                    name="credit-card"
+                    color="#6D6868"
+                    marginRight={10}
+                    size={15}
+                  />
+                }
+                placeholder="1234 1234 1234 1234"
+                borderRadius={7}
+              />
+            )}
+            name="cardNumber"
+            rules={{
+              required: {
+                value: true,
+                message: "Ingrese el número de tarjeta",
+              },
+              pattern: {
+                value: /^\d+(\.\d*)?$/,
+                message: "Solo caracteres válidos",
+              },
+            }}
+          />
+          <FormControl.ErrorMessage
+            marginTop={-1}
+            leftIcon={<WarningOutlineIcon size="xs" />}
+          >
+            {errors.cardNumber && errors.cardNumber.message}
+          </FormControl.ErrorMessage>
+        </FormControl>
+        <FormControl isInvalid={!!errors.cvc} isRequired>
+          <VStack space={1}>
+            <Text className="text-textmuted">CVC / CVV</Text>
+          </VStack>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Input
+                size="lg"
+                keyboardType="numeric"
+                marginY={3}
+                value={value}
+                onChangeText={(value) => onChange(value)}
+                rightElement={
+                  <MaterialCommunityIcons
+                    name="identifier"
+                    color="#6D6868"
+                    marginRight={10}
+                    size={20}
+                  />
+                }
+                placeholder="123"
+                borderRadius={7}
+              />
+            )}
+            name="cvc"
+            rules={{
+              required: {
+                value: true,
+                message: "Ingrese el CVC/CVV de la tarjeta",
+              },
+              pattern: {
+                value: /^\d+(\.\d*)?$/,
+                message: "Solo caracteres válidos",
+              },
+            }}
+          />
+          <FormControl.ErrorMessage
+            marginTop={-1}
+            leftIcon={<WarningOutlineIcon size="xs" />}
+          >
+            {errors.cvc && errors.cvc.message}
+          </FormControl.ErrorMessage>
+        </FormControl>
+        <FormControl isInvalid={!!errors.expiracion} isRequired>
+          <VStack space={1}>
+            <Text className="text-textmuted">Fecha Expiración</Text>
+          </VStack>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Input
+                size="lg"
+                keyboardType="numeric"
+                marginY={3}
+                value={
+                  value instanceof Date
+                    ? `${value.getMonth() + 1}/${value
+                        .getFullYear()
+                        .toString()
+                        .substr(-2)}`
+                    : ""
+                }
+                onChangeText={(value) => {
+                  // Remove non-numeric characters
+                  let newValue = value.replace(/[^0-9]/g, "");
+
+                  // Automatically add a slash after the month
+                  if (newValue.length >= 2) {
+                    newValue =
+                      newValue.substring(0, 2) + "/" + newValue.substring(2, 4);
+                  }
+
+                  // Update the state with the new formatted value
+                  onChange(newValue);
+                }}
+                rightElement={
+                  <MaterialCommunityIcons
+                    name="calendar-month"
+                    color="#6D6868"
+                    marginRight={10}
+                    size={20}
+                  />
+                }
+                placeholder="MM/YY"
+                borderRadius={7}
+              />
+            )}
+            name="expiracion"
+            rules={{
+              required: {
+                value: true,
+                message: "Ingrese la fecha de expiración",
+              },
+              pattern: {
+                value: /^\d+(\.\d*)?$/,
+                message: "Solo caracteres válidos",
+              },
+            }}
+          />
+          <FormControl.ErrorMessage
+            marginTop={-1}
+            leftIcon={<WarningOutlineIcon size="xs" />}
+          >
+            {errors.cardNumber && errors.cardNumber.message}
+          </FormControl.ErrorMessage>
+        </FormControl>
+        <FormControl isInvalid={!!errors.monto} isRequired>
+          <VStack space={1}>
+            <Text className="text-textmuted">Monto</Text>
+          </VStack>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Input
+                size="lg"
+                keyboardType="numeric"
+                marginY={3}
+                value={value}
+                onChangeText={(value) => onChange(value)}
+                rightElement={
+                  <FontAwesome5
+                    name="dollar-sign"
+                    color="#6D6868"
+                    marginRight={10}
+                    size={10}
+                  />
+                }
+                placeholder="65.00"
+                borderRadius={7}
+              />
+            )}
+            name="monto"
+            rules={{
+              required: { value: true, message: "Ingrese el monto" },
+              pattern: {
+                value: /^\d+(\.\d*)?$/,
+                message: "Solo se permiten números válidos",
+              },
+            }}
+          />
+          <FormControl.ErrorMessage
+            marginTop={-1}
+            leftIcon={<WarningOutlineIcon size="xs" />}
+          >
+            {errors.monto && errors.monto.message}
+          </FormControl.ErrorMessage>
+        </FormControl>
+        <FormControl>
+          <Controller
+            name="divisa"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Radio.Group
+                value={value}
+                name="currency"
+                onChange={(value) => onChange(value)}
+                accessibilityLabel="Divisa de Gasto"
+              >
+                <HStack space={5}>
+                  <Radio value="pen">Soles</Radio>
+                  <Radio value="usd">Dólares</Radio>
+                  <Radio value="eur">Euros</Radio>
+                </HStack>
+              </Radio.Group>
+            )}
+          />
+        </FormControl>
+
+        <Controller
+          control={control}
+          name="mensaje"
+          render={({ field: { onChange, value } }) => (
+            <TextArea
+              marginTop={5}
+              autoCompleteType
+              placeholder="Mensaje..."
+              minH={35}
+              value={value}
+              onChangeText={(value) => onChange(value)}
+              borderRadius={7}
+              size="lg"
+            />
+          )}
+          defaultValue=""
         />
       </VStack>
 
       <Center>
         <Button
-          disabled={loading}
-          onPress={handlePayPress}
           colorScheme="accent"
+          onPress={handleSubmit(onSubmit)}
           marginTop={16}
           rounded={7}
         >
           <Text className="font-semibold px-5 py-1">Realizar Compra</Text>
         </Button>
       </Center>
-    </View>
+    </VStack>
   );
 }
