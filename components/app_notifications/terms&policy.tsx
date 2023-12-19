@@ -1,4 +1,4 @@
-import { FlatList, Modal, ScrollView, Text, VStack } from "native-base";
+import { FlatList, Modal, Text, VStack } from "native-base";
 import * as React from "react";
 import Section from "./section-t-c";
 

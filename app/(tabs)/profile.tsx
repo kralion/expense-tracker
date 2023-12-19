@@ -57,10 +57,10 @@ export default function App() {
 
   return (
     <View>
-      <View className="bg-accent relative h-20">
+      <View className="bg-accent relative h-40">
         <VStack
           space={2}
-          className=" absolute left-36 right-36 top-5"
+          className=" absolute left-36 right-36 top-24"
           alignItems="center"
         >
           {session?.user?.user_metadata?.avatar_url ? (

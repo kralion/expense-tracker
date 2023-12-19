@@ -1,16 +1,11 @@
+import { supabase } from "@/utils/supabase";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
-import { StripeProvider } from "@stripe/stripe-react-native";
+import { Session } from "@supabase/supabase-js";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { NativeBaseProvider, extendTheme } from "native-base";
 import * as React from "react";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
 export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
@@ -42,7 +37,17 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  const [session, setSession] = React.useState<Session | null>(null);
+
+  React.useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
 
   const theme = extendTheme({
     colors: {
@@ -63,19 +68,21 @@ function RootLayoutNav() {
       initialColorMode: "light",
     },
   });
+
   return (
-    <StripeProvider
-      publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""}
-    >
-      <NativeBaseProvider theme={theme}>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <Stack>
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          </Stack>
-        </ThemeProvider>
-      </NativeBaseProvider>
-    </StripeProvider>
+    <NativeBaseProvider theme={theme}>
+      <Stack>
+        {session ? (
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        ) : (
+          <Stack.Screen
+            name="(auth)"
+            options={{
+              headerShown: false,
+            }}
+          />
+        )}
+      </Stack>
+    </NativeBaseProvider>
   );
 }
