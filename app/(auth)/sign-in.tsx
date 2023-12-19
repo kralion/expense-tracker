@@ -1,7 +1,7 @@
 import { AppleAuthButton } from "@/components/auth/Apple.native.auth";
+import GoogleSignInButton from "@/components/auth/Google.native.auth";
 import { supabase } from "@/utils/supabase";
 import { MaterialIcons } from "@expo/vector-icons";
-import * as Google from "expo-auth-session/providers/google";
 import { Link, router } from "expo-router";
 import {
   Button,
@@ -31,12 +31,6 @@ export default function SignIn() {
   const [show, setShow] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [invalidCredentials, setInvalidCredentials] = React.useState(false);
-
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    iosClientId: process.env.EXPO_PUBLIC_IOS_GOOGLE_CLIENT_ID ?? "",
-    androidClientId: process.env.EXPO_PUBLIC_ANDROID_GOOGLE_CLIENT_ID ?? "",
-    scopes: ["profile", "email"],
-  });
 
   async function signInWithEmail(data: FormData) {
     setLoading(true);
@@ -171,26 +165,7 @@ export default function SignIn() {
             <Text className="text-textmuted mx-2 text-center">o</Text>
             <View className=" w-1/2 border-[1px] h-0.5 border-gray-300"></View>
           </View>
-          <Button
-            variant="outline"
-            colorScheme="gray"
-            className="rounded-full  "
-            height={12}
-          >
-            <Pressable onPress={() => promptAsync()}>
-              <HStack alignItems="center" space={2}>
-                <Image
-                  className="w-5 h-5"
-                  source={{
-                    uri: "https://img.icons8.com/?size=96&id=17949&format=png",
-                  }}
-                />
-                <Text className="  font-semibold">
-                  Iniciar Sesión con Google
-                </Text>
-              </HStack>
-            </Pressable>
-          </Button>
+          <GoogleSignInButton />
           <AppleAuthButton />
           <Button
             height={12}

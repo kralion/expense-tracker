@@ -2,7 +2,7 @@ import { supabase } from "@/utils/supabase";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Session } from "@supabase/supabase-js";
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack } from "expo-router";
+import { SplashScreen, Stack, router } from "expo-router";
 import { NativeBaseProvider, extendTheme } from "native-base";
 import * as React from "react";
 import { useEffect } from "react";
@@ -49,6 +49,12 @@ function RootLayoutNav() {
     });
   }, []);
 
+  React.useEffect(() => {
+    if (!session) {
+      router.push("/(auth)/");
+    }
+  }, [session]);
+
   const theme = extendTheme({
     colors: {
       primary: {
@@ -72,16 +78,16 @@ function RootLayoutNav() {
   return (
     <NativeBaseProvider theme={theme}>
       <Stack>
-        {session ? (
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        ) : (
-          <Stack.Screen
-            name="(auth)"
-            options={{
-              headerShown: false,
-            }}
-          />
-        )}
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(modals)/buy-premium.tsx)"
+          options={{
+            presentation: "transparentModal",
+            animation: "fade",
+            title: "",
+            headerShown: false,
+          }}
+        />
       </Stack>
     </NativeBaseProvider>
   );

@@ -5,15 +5,6 @@ import { Pressable, Text } from "react-native";
 export default function ModalsLayout() {
   return (
     <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="(modals)/buy-premium"
-        options={{
-          presentation: "modal",
-          title: "",
-          headerShown: false,
-        }}
-      />
       <Stack.Screen
         name="(modals)/edit-payment-info
                 "
