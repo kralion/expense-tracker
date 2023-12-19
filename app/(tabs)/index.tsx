@@ -1,10 +1,9 @@
-import { BudgetLimitExceededModal } from "@/components/app_notifications/budget-limit-exceeded";
+import { BudgetLimitExceededModal } from "@/components/popups";
 import Card from "@/components/dashboard/card";
 import { Expense } from "@/components/shared";
-import { useExpenseContext, useNotificationContext } from "@/context";
-import { supabase } from "@/utils/supabase";
+import { useExpenseContext } from "@/context";
+import useAuth from "@/context/AuthContext";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Session } from "@supabase/supabase-js";
 import { Link } from "expo-router";
 import { Button, HStack, Heading, Text, VStack } from "native-base";
 import * as React from "react";
@@ -15,42 +14,10 @@ export default function Index() {
   const { expenses } = useExpenseContext();
   const [showBudgetLimitNotification, setShowBudgetLimitNotification] =
     React.useState(false);
-  const [nombres, setNombres] = React.useState("");
   const [isPremiumUser, setIsPremiumUser] = React.useState(false);
-  const { showNotification } = useNotificationContext();
-  const [session, setSession] = React.useState<Session | null>(null);
-  async function fetchUserName(userId: string) {
-    try {
-      const { data, error } = await supabase
-        .from("usuarios_expense")
-        .select("nombres")
-        .eq("id", userId)
-        .single();
+  const { userData } = useAuth();
+  const { nombres, rol } = userData || {};
 
-      if (error) {
-        throw error;
-      }
-      setNombres(data.nombres);
-    } catch (error) {
-      showNotification({
-        title: "Error al obtener datos del usuario",
-        alertStatus: "error",
-      });
-    }
-  }
-  React.useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    if (session?.user?.id) {
-      fetchUserName(session.user.id);
-    }
-  }, [session?.user?.id]);
   function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   }
@@ -84,7 +51,7 @@ export default function Index() {
             >
               <FontAwesome
                 color="#A3E062"
-                name={session?.user.role === "premium" ? "unlock" : "lock"}
+                name={rol === "premium" ? "unlock" : "lock"}
                 size={20}
               />
             </Button>

@@ -165,7 +165,7 @@ export default function SignIn() {
             <Text className="text-textmuted mx-2 text-center">o</Text>
             <View className=" w-1/2 border-[1px] h-0.5 border-gray-300"></View>
           </View>
-          <GoogleSignInButton />
+          {/* <GoogleSignInButton /> */}
           <AppleAuthButton />
           <Button
             height={12}

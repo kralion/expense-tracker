@@ -9,7 +9,7 @@ import {
   useColorScheme,
 } from "react-native";
 import Colors from "@/constants/Colors";
-import NotAllowed from "@/components/app_notifications/not-allowed";
+import NotAllowed from "@/components/popups/not-allowed";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];

@@ -1,15 +1,14 @@
-import { supabase } from "@/utils/supabase";
+import useAuth, { AuthProvider } from "@/context/AuthContext";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Session } from "@supabase/supabase-js";
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack, router } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import { NativeBaseProvider, extendTheme } from "native-base";
 import * as React from "react";
 import { useEffect } from "react";
 export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
-  initialRouteName: "(tabs)",
+  initialRouteName: "(auth)",
 };
 SplashScreen.preventAutoHideAsync();
 
@@ -18,43 +17,6 @@ export default function RootLayout() {
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
   });
-
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
-  return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
-  const [session, setSession] = React.useState<Session | null>(null);
-
-  React.useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-  }, []);
-
-  React.useEffect(() => {
-    if (!session) {
-      router.push("/(auth)/");
-    }
-  }, [session]);
-
   const theme = extendTheme({
     colors: {
       primary: {
@@ -75,20 +37,43 @@ function RootLayoutNav() {
     },
   });
 
+  useEffect(() => {
+    if (error) throw error;
+  }, [error]);
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
-    <NativeBaseProvider theme={theme}>
+    <AuthProvider>
+      <NativeBaseProvider theme={theme}>
+        <RootLayoutNav />
+      </NativeBaseProvider>
+    </AuthProvider>
+  );
+}
+
+function RootLayoutNav() {
+  const { session } = useAuth();
+
+  if (!session) {
+    return (
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="(modals)/buy-premium.tsx)"
-          options={{
-            presentation: "transparentModal",
-            animation: "fade",
-            title: "",
-            headerShown: false,
-          }}
-        />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       </Stack>
-    </NativeBaseProvider>
+    );
+  }
+
+  return (
+    <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+    </Stack>
   );
 }

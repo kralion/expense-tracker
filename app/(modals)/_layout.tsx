@@ -6,8 +6,7 @@ export default function ModalsLayout() {
   return (
     <Stack>
       <Stack.Screen
-        name="(modals)/edit-payment-info
-                "
+        name="(modals)/edit-payment-info"
         options={{ presentation: "modal", title: "Editar" }}
       />
 
@@ -32,9 +31,9 @@ export default function ModalsLayout() {
       />
 
       <Stack.Screen
-        name="(modals)/export-data"
+        name="/(modals)/export-data"
         options={{
-          headerBackTitle: "Perfil",
+          headerBackTitle: "Estadisticas",
           presentation: "card",
 
           title: "Exportar",

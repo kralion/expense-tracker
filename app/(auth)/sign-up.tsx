@@ -1,4 +1,4 @@
-import { TermsPolicyModal } from "@/components/app_notifications/terms&policy";
+import { TermsPolicyModal } from "@/components/popups/terms&policy";
 import { supabase } from "@/utils/supabase";
 import { FontAwesome5 } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";

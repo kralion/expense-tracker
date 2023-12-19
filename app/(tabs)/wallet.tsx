@@ -1,4 +1,4 @@
-import { SavingGoalModal } from "@/components/app_notifications/save-goals";
+import { SavingGoalModal } from "@/components/popups/save-goals";
 import { router } from "expo-router";
 import { Button, HStack, Input, VStack } from "native-base";
 import * as React from "react";
