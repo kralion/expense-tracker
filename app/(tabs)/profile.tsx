@@ -107,7 +107,7 @@ export default function App() {
                 name="database-export"
               />
               <Text className="text-xl font-bold text-gray-500">
-                Exportar Gastos
+                Presupuestos
               </Text>
             </Pressable>
           </Link>

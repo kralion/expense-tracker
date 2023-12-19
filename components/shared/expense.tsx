@@ -11,8 +11,9 @@ export function Expense({ expense }: { expense: IGasto }) {
     ? formatDate(new Date(fecha))
     : "No date provided";
   const assetIndentificador =
-    expensesIdentifiers.find((icon) => icon.label === expense.categoria)
-      ?.iconHref ||
+    expensesIdentifiers.find(
+      (icon) => icon.label.toLowerCase() === expense.categoria.toLowerCase()
+    )?.iconHref ||
     "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png";
 
   return (

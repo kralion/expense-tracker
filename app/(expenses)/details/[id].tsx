@@ -51,7 +51,7 @@ export default function ExpenseDetailsModal() {
     fetchExpense();
   }, [expenseID]);
 
-  const monto_gastado = parseInt(expenseDataDetails.monto || "100");
+  const monto_gastado = parseInt(expenseDataDetails?.monto);
   // const monto_presupuestado = expense.cantidad;
   //TODO : Cambiar este valor por el monto presupuestado del mes actual
   const monto_presupuestado = 1000;
@@ -89,7 +89,7 @@ export default function ExpenseDetailsModal() {
       <HStack p={5} justifyContent="space-between">
         <HStack space={2}>
           <Text className="text-black font-bold mb-1  text-[18px]">
-            #{expenseDataDetails.numeroGasto}
+            #{expenseDataDetails?.numeroGasto}
           </Text>
           <Badge
             size="lg"
@@ -98,7 +98,7 @@ export default function ExpenseDetailsModal() {
             className="rounded-full"
             colorScheme="green"
           >
-            {expenseDataDetails.categoria || "Comida"}
+            {expenseDataDetails?.categoria || "Comida"}
           </Badge>
         </HStack>
         {/* //! FEATURE : Cambiar este icono dependiendo al tipo de gasto */}
@@ -107,24 +107,26 @@ export default function ExpenseDetailsModal() {
       <VStack p={5} space={4}>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Monto</Text>
-          <Text className="font-bold">S/. {expenseDataDetails.monto}</Text>
+          <Text className="font-bold">S/. {expenseDataDetails?.monto}</Text>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Divisa</Text>
-          <Text className="font-bold">{expenseDataDetails.divisa}</Text>
+          <Text className="font-bold">{expenseDataDetails?.divisa}</Text>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Categoría</Text>
-          <Text className="font-bold">{expenseDataDetails.categoria}</Text>
+          <Text className="font-bold">{expenseDataDetails?.categoria}</Text>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Descripción</Text>
-          <Text className="font-bold">{expenseDataDetails.descripcion}</Text>
+          <Text className="font-bold">{expenseDataDetails?.descripcion}</Text>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>% Presupuesto</Text>
 
-          <Text className="font-bold">{expenseDataDetails.monto || "100"}</Text>
+          <Text className="font-bold">
+            {expenseDataDetails?.monto || "100"}
+          </Text>
         </HStack>
 
         <HStack justifyContent="flex-end" space={3}>

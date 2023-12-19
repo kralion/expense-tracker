@@ -22,7 +22,7 @@ export const ExpenseContextProvider = ({
   const fetchData = async () => {
     try {
       const { data } = await supabase
-        .from("gastos")
+        .from("gastos_expense")
         .select("*")
         .order("fecha", { ascending: false });
       setExpenses(JSON.parse(JSON.stringify(data)));
