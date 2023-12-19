@@ -9,29 +9,19 @@ import { Image, Pressable, Text } from "react-native";
 import * as Google from "expo-auth-session/providers/google";
 
 const GoogleSignInButton = () => {
-  // GoogleSignin.configure({
-  //   scopes: ["https://www.googleapis.com/auth/drive.readonly"],
-  //   webClientId:
-  //     "422618280931-ilphj6o0mr8th7dvf37iq09kk1b7bjia.apps.googleusercontent.com",
-  // });
+  GoogleSignin.configure();
   const [accessToken, setAccessToken] = React.useState<string | undefined>();
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId:
-      "422618280931-ilphj6o0mr8th7dvf37iq09kk1b7bjia.apps.googleusercontent.com",
-    iosClientId:
-      "422618280931-fc0s3ktar0vcgoc80n128589e5ahhk1e.apps.googleusercontent.com",
-    androidClientId:
-      "422618280931-50inl7uig7t4p5k6o89521jejcic2llj.apps.googleusercontent.com",
-    scopes: ["profile", "email"],
-  });
+  // const [request, response, promptAsync] = Google.useAuthRequest({
+  //   expoClientId:
+  //     "422618280931-ilphj6o0mr8th7dvf37iq09kk1b7bjia.apps.googleusercontent.com",
+  //   iosClientId:
+  //     "422618280931-fc0s3ktar0vcgoc80n128589e5ahhk1e.apps.googleusercontent.com",
+  //   androidClientId:
+  //     "422618280931-50inl7uig7t4p5k6o89521jejcic2llj.apps.googleusercontent.com",
+  //   scopes: ["profile", "email"],
+  // });
 
-  React.useEffect(() => {
-    if (response?.type === "success") {
-      setAccessToken(response.authentication?.accessToken);
-    }
-  }, [response]);
-
-  const signInWithGoogleAsync = async () => {
+  async function signInWithGoogleAsync() {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
@@ -55,7 +45,7 @@ const GoogleSignInButton = () => {
         // some other error happened
       }
     }
-  };
+  }
   return (
     <Button
       variant="outline"
