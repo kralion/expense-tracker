@@ -3,6 +3,7 @@ import { IExpensContextProvider, IGasto } from "../interfaces";
 import { supabase } from "@/utils/supabase";
 import * as React from "react";
 import { NotificationContext } from "./NotificationContext";
+import useAuth from "./AuthContext";
 
 export const ExpenseContext = createContext<IExpensContextProvider>({
   addExpense: () => {},
@@ -18,13 +19,10 @@ export const ExpenseContextProvider = ({
 }) => {
   const [expenses, setExpenses] = React.useState([]);
   const { showNotification } = useContext(NotificationContext);
-
-  const fetchData = async () => {
+  const { session } = useAuth();
+  async function fetchData() {
     try {
-      const { data } = await supabase
-        .from("gastos_expense")
-        .select("*")
-        .order("fecha", { ascending: false });
+      const { data } = await supabase.from("expenses").select("*");
       setExpenses(JSON.parse(JSON.stringify(data)));
     } catch (error) {
       showNotification({
@@ -33,7 +31,7 @@ export const ExpenseContextProvider = ({
       });
       return;
     }
-  };
+  }
   React.useEffect(() => {
     fetchData();
   }, []);
