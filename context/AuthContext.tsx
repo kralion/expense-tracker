@@ -18,7 +18,7 @@ type TUserData = {
 export const AuthContext = React.createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = React.useState<Session | null>(null);
-  const [userData, setUserData] = React.useState<TUserData>(); // Add this line
+  const [userData, setUserData] = React.useState<TUserData>();
 
   React.useEffect(() => {
     supabase.auth
@@ -35,6 +35,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (session) {
         // Fetch user data when session changes
         await fetchUserData(session.user.id);
+        console.log("Sesión activa:", session.user.id);
       } else {
         try {
           await router.push("/(auth)/sign-in");
@@ -47,11 +48,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchUserData = async (userId: string) => {
     try {
       const { data, error } = await supabase
-        .from("usuarios_expense")
+        .from("usuarios")
         .select("*")
-        .eq("id", userId)
+        .eq("session_id", userId)
         .single();
-
       if (error) {
         throw error;
       }
