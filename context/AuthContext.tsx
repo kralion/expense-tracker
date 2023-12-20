@@ -2,6 +2,7 @@ import React from "react";
 import { supabase } from "@/utils/supabase";
 import { Session } from "@supabase/supabase-js";
 import { router } from "expo-router";
+import { useNotificationContext } from "./NotificationContext";
 
 interface AuthContextType {
   session: Session | null;
@@ -19,6 +20,7 @@ export const AuthContext = React.createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = React.useState<Session | null>(null);
   const [userData, setUserData] = React.useState<TUserData>();
+  const { showNotification } = useNotificationContext();
 
   React.useEffect(() => {
     supabase.auth
@@ -33,7 +35,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
       if (session) {
-        // Fetch user data when session changes
         await fetchUserData(session.user.id);
         console.log("Sesión activa:", session.user.id);
       } else {
@@ -45,19 +46,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     });
   }, []);
-  const fetchUserData = async (userId: string) => {
+  const fetchUserData = async (usuario_id: string) => {
     try {
       const { data, error } = await supabase
         .from("usuarios")
         .select("*")
-        .eq("id", userId)
+        .eq("id", usuario_id)
         .single();
       if (error) {
         throw error;
       }
       setUserData(data);
     } catch (error) {
-      console.error("Error al obtener datos del usuario:", error);
+      showNotification({
+        title: "Error al obtener datos del usuario",
+        alertStatus: "error",
+      });
     }
   };
 

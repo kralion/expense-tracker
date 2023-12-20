@@ -14,9 +14,8 @@ export default function Index() {
   const { expenses } = useExpenseContext();
   const [showBudgetLimitNotification, setShowBudgetLimitNotification] =
     React.useState(false);
-  const [isPremiumUser, setIsPremiumUser] = React.useState(true);
+  const [isPremiumUser, setIsPremiumUser] = React.useState(false);
   const { userData } = useAuth();
-  console.log(userData);
   const { nombres, rol } = userData || {};
 
   function capitalizeFirstLetter(string: string) {

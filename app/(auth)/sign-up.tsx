@@ -59,7 +59,7 @@ export default function SignUp() {
         },
       });
       if (error) {
-        Alert.alert(`Sign-up error: ${error.message}`);
+        Alert.alert(`Error de Registro: ${error.message}`);
       } else if (authData) {
         const { error: insertError, data: authDataForm } = await supabase
           .from("usuarios")
@@ -79,7 +79,7 @@ export default function SignUp() {
         }
       }
     } catch (e: any) {
-      Alert.alert(`Unexpected error: ${e.message}`);
+      Alert.alert(`Error inesperado: ${e.message}`);
     } finally {
       setLoading(false);
       reset();
