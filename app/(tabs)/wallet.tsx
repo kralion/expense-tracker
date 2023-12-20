@@ -66,8 +66,17 @@ export default function Wallet() {
             value={inputAhorro !== null ? inputAhorro.toString() : undefined}
           />
         </HStack>
-        <Button className="rounded-full" marginTop={16} height={12}>
-          <Text className="font-semibold text-white ">Registrar</Text>
+        <Button
+          className="rounded-full"
+          height={10}
+          w={40}
+          onPress={() => {
+            setShowSavingGoalModal(true);
+            handleButtonClick();
+          }}
+          maxW="100px"
+        >
+          Registrar meta de ahorro
         </Button>
 
         <Text className="font-bold text-left text-2xl">Metas guardadas</Text>
