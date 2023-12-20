@@ -41,11 +41,11 @@ export default function SignIn() {
 
   async function signInWithEmail(data: FormData) {
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error, data: AuthData } = await supabase.auth.signInWithPassword({
       email: data.email,
       password: data.password,
     });
-
+    console.log(AuthData.user?.id);
     if (error) {
       setLoading(false);
       setInvalidCredentials(true);
