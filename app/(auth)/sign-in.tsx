@@ -1,4 +1,5 @@
-import { AppleAuthButton } from "@/components/auth/Apple.native.auth";
+import { AppleAuthButton } from "@/components/auth/Apple.auth";
+import FacebookSignInButton from "@/components/auth/Facebook.auth";
 import GoogleSignInButton from "@/components/auth/Google.native.auth";
 import { supabase } from "@/utils/supabase";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -15,7 +16,6 @@ import {
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-  Image,
   Keyboard,
   Pressable,
   Text,
@@ -41,11 +41,10 @@ export default function SignIn() {
 
   async function signInWithEmail(data: FormData) {
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error, data: AuthData } = await supabase.auth.signInWithPassword({
       email: data.email,
       password: data.password,
     });
-
     if (error) {
       setLoading(false);
       setInvalidCredentials(true);
@@ -173,24 +172,9 @@ export default function SignIn() {
               <Text className="text-textmuted mx-2 text-center">o</Text>
               <View className=" w-1/2 border-[1px] h-0.5 border-gray-300"></View>
             </View>
-            {/* <GoogleSignInButton /> */}
+            <GoogleSignInButton />
             <AppleAuthButton />
-            <Button
-              height={12}
-              variant="outline"
-              colorScheme="gray"
-              className="rounded-full  "
-            >
-              <HStack alignItems="center" space={2}>
-                <Image
-                  className="w-5 h-5"
-                  source={{
-                    uri: "https://img.icons8.com/?size=96&id=uLWV5A9vXIPu&format=png",
-                  }}
-                />
-                <Text className="  font-semibold">Iniciar Sesión con Meta</Text>
-              </HStack>
-            </Button>
+            <FacebookSignInButton />
           </VStack>
         </View>
         <HStack alignItems="center" marginTop={20} justifyContent="center">

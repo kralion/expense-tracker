@@ -2,7 +2,8 @@ import { supabase } from "@/utils/supabase";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { router } from "expo-router";
 import { Button, HStack, Text } from "native-base";
-import { Alert, Image, Platform, Pressable } from "react-native";
+import { Alert, Platform, Pressable } from "react-native";
+import { Image } from "expo-image";
 
 export function AppleAuthButton() {
   const onAppleButtonPress = async () => {
@@ -54,7 +55,7 @@ export function AppleAuthButton() {
         >
           <HStack alignItems="center" space={2}>
             <Image
-              className="w-5 h-5"
+              style={{ width: 24, height: 24 }}
               source={{
                 uri: "https://img.icons8.com/?size=60&id=95294&format=png",
               }}

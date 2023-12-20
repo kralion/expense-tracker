@@ -2,6 +2,7 @@ import { TermsPolicyModal } from "@/components/popups/terms&policy";
 import { supabase } from "@/utils/supabase";
 import { FontAwesome5 } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
+import { v4 as uuid } from "uuid";
 import { Link, router } from "expo-router";
 import {
   Button,
@@ -50,7 +51,7 @@ export default function SignUp() {
   async function signUpWithEmail(data: FormData) {
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
+      const { error, data: authData } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
         options: {
@@ -59,22 +60,22 @@ export default function SignUp() {
       });
       if (error) {
         Alert.alert(`Sign-up error: ${error.message}`);
-      } else {
-        const { error: insertError } = await supabase.from("usuarios").insert([
-          {
-            nombres: data.nombres,
-            apellidos: data.apellidos,
-            terms: true,
-            rol: "free",
-          },
-        ]);
-
+      } else if (authData) {
+        const { error: insertError, data: authDataForm } = await supabase
+          .from("usuarios")
+          .insert([
+            {
+              id: uuid(),
+              nombres: data.nombres,
+              apellidos: data.apellidos,
+              session_id: authData.user?.id,
+              rol: "free",
+              terms: true,
+            },
+          ]);
+        console.log(authDataForm);
         if (insertError) {
-          Alert.alert(`Error de registro : ${insertError.details}`);
-        } else {
-          Alert.alert(
-            `${data.nombres}, revisa tu correo para confirmar tu cuenta`
-          );
+          console.error("Insert error:", insertError.message);
         }
       }
     } catch (e: any) {

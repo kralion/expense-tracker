@@ -19,8 +19,15 @@ export default function App() {
   const [names, setNames] = React.useState("");
   const { showNotification } = useNotificationContext();
   async function signOut() {
-    await supabase.auth.signOut();
-    router.push("/(auth)/sign-in");
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      showNotification({
+        title: "Error al cerrar sesión",
+        alertStatus: "error",
+      });
+    } else {
+      router.push("/(auth)/sign-in");
+    }
   }
   async function fetchUserName(userId: string) {
     try {
