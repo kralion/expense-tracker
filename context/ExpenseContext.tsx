@@ -20,9 +20,13 @@ export const ExpenseContextProvider = ({
   const [expenses, setExpenses] = React.useState([]);
   const { showNotification } = useContext(NotificationContext);
   const { session } = useAuth();
-  async function fetchData() {
+  const fetchData = async (usuario_id: string | undefined) => {
     try {
-      const { data } = await supabase.from("expenses").select("*");
+      const { data } = await supabase
+        .from("expenses")
+        .select("*")
+        .eq("usuario_id", usuario_id)
+        .order("fecha", { ascending: false });
       setExpenses(JSON.parse(JSON.stringify(data)));
     } catch (error) {
       showNotification({
@@ -31,9 +35,9 @@ export const ExpenseContextProvider = ({
       });
       return;
     }
-  }
+  };
   React.useEffect(() => {
-    fetchData();
+    fetchData(session?.user?.id);
   }, []);
 
   const addExpense = async (expense: IGasto) => {
@@ -43,7 +47,7 @@ export const ExpenseContextProvider = ({
         ...expense,
         user_id: userId,
       };
-      await supabase.from("gastos_expense").insert(newData);
+      await supabase.from("expenses").insert(newData);
     } catch (error) {
       showNotification({
         title: "Error al agregar gasto",
@@ -56,7 +60,7 @@ export const ExpenseContextProvider = ({
     try {
       const { id, fecha, ...expenseParsedForUpdate } = expense;
       await supabase
-        .from("gastos_expense")
+        .from("expenses")
         .update(expenseParsedForUpdate)
         .eq("id", id);
     } catch (error) {
@@ -73,7 +77,7 @@ export const ExpenseContextProvider = ({
   };
   const deleteExpense = async (id: string) => {
     try {
-      await supabase.from("gastos").delete().eq("id", id);
+      await supabase.from("expenses").delete().eq("id", id);
     } catch (error) {
       showNotification({
         title: "Error al eliminar gasto",

@@ -32,8 +32,8 @@ export default function App() {
   async function fetchUserName(userId: string) {
     try {
       const { data, error } = await supabase
-        .from("usuarios_expense")
-        .select("nombres")
+        .from("usuarios")
+        .select("*")
         .eq("id", userId)
         .single();
 
