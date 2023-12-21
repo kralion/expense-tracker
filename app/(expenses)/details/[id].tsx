@@ -1,57 +1,49 @@
+import { useExpenseContext, useNotificationContext } from "@/context";
 import { IGasto } from "@/interfaces";
-import { supabase } from "@/utils/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack, router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Badge, Button, Divider, HStack, Slider, VStack } from "native-base";
-import { Platform, Pressable, Text, View } from "react-native";
 import * as React from "react";
-import { useExpenseContext } from "@/context";
+import { Platform, Pressable, Text, View } from "react-native";
 
 export default function ExpenseDetailsModal() {
   const [expenseDataDetails, setExpenseDataDetails] = React.useState<IGasto>(
     {} as IGasto
   );
+  const { showNotification } = useNotificationContext();
   const [isLoading, setIsLoading] = React.useState(false);
-
-  const { deleteExpense } = useExpenseContext();
-  const { id: expenseID } = useLocalSearchParams<{ id: string }>();
+  const { deleteExpenseById, getSingleExpense } = useExpenseContext();
+  const params = useLocalSearchParams<{ id: string }>();
   const handleDeleteExpense = async (id: string) => {
     setIsLoading(true);
-    deleteExpense(id);
+    deleteExpenseById(id);
     setIsLoading(false);
     router.push("/(tabs)/");
   };
 
-  const getSingleExpenseData = async (id: string) => {
-    try {
-      const { data, error } = await supabase
-        .from("gastos")
-        .select("*")
-        .eq("id", id)
-        .single();
-
-      if (error) {
-        throw error;
-      }
-
-      return data;
-    } catch (error) {
-      console.error("Error getting expense:", error);
-    }
-    console.log("getSingleExpenseData", id);
-  };
-
   React.useEffect(() => {
-    const fetchExpense = async () => {
-      const expenseData = await getSingleExpenseData(expenseID);
-      setExpenseDataDetails(expenseData);
+    const fetchExpenseDetails = async () => {
+      if (params.id) {
+        try {
+          const expenseDetails = await getSingleExpense(params.id);
+          if (expenseDetails) {
+            setExpenseDataDetails(expenseDetails);
+          }
+        } catch (error) {
+          // Manejar el error
+          showNotification({
+            title: "Error al obtener detalles del gasto",
+            alertStatus: "error",
+          });
+        }
+      }
     };
 
-    fetchExpense();
-  }, [expenseID]);
+    fetchExpenseDetails();
+  }, [params.id, getSingleExpense, showNotification]);
 
-  const monto_gastado = parseInt(expenseDataDetails?.monto);
+  const monto_gastado = parseInt(expenseDataDetails.monto);
   // const monto_presupuestado = expense.cantidad;
   //TODO : Cambiar este valor por el monto presupuestado del mes actual
   const monto_presupuestado = 1000;
@@ -98,7 +90,7 @@ export default function ExpenseDetailsModal() {
             className="rounded-full"
             colorScheme="green"
           >
-            {expenseDataDetails?.categoria || "Comida"}
+            {expenseDataDetails?.categoria}
           </Badge>
         </HStack>
         {/* //! FEATURE : Cambiar este icono dependiendo al tipo de gasto */}
@@ -124,9 +116,7 @@ export default function ExpenseDetailsModal() {
         <HStack justifyContent="space-between" alignItems="center">
           <Text>% Presupuesto</Text>
 
-          <Text className="font-bold">
-            {expenseDataDetails?.monto || "100"}
-          </Text>
+          <Text className="font-bold">{expenseDataDetails?.monto}</Text>
         </HStack>
 
         <HStack justifyContent="flex-end" space={3}>
@@ -135,11 +125,11 @@ export default function ExpenseDetailsModal() {
           </Badge>
           <Badge size="lg" variant="solid" className="rounded-full">
             {expenseDataDetails?.fecha
-              ? new Date(expenseDataDetails.fecha).toLocaleTimeString([], {
+              ? new Date(expenseDataDetails?.fecha).toLocaleTimeString([], {
                   hour: "2-digit",
                   minute: "2-digit",
                 })
-              : "Sin fecha proveída"}
+              : ""}
           </Badge>
         </HStack>
       </VStack>
@@ -173,7 +163,7 @@ export default function ExpenseDetailsModal() {
           minValue={0}
           maxValue={100}
           colorScheme={totalPercentageExpensed >= 80 ? "error" : "primary"}
-          accessibilityLabel="indice gastado"
+          accessibilityLabel="Indice gastado"
           step={1}
         >
           <Slider.Track>
@@ -193,7 +183,7 @@ export default function ExpenseDetailsModal() {
       />
       <HStack justifyContent="center" p={5} space={3}>
         <Button
-          onPress={() => handleDeleteExpense(expenseID)}
+          onPress={() => handleDeleteExpense(params.id)}
           className="w-full rounded-full"
           height={12}
           variant="solid"

@@ -15,6 +15,9 @@ type TUserData = {
   apellidos: string;
   email: string;
   rol: string;
+  perfil: {
+    uri: string;
+  };
   id: string;
 };
 export const AuthContext = React.createContext<AuthContextType | null>(null);
@@ -39,6 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         await fetchUserData(session.user.id);
         console.log("Sesión activa:", session.user.id);
       } else {
+        localStorage.removeItem("supabase.auth.token");
         try {
           await router.push("/(auth)/sign-in");
         } catch (error) {
