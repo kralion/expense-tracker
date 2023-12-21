@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const { data, error } = await supabase
         .from("usuarios")
         .select("*")
-        .eq("id", id)
+        .eq("session_id", id)
         .single();
       if (error) {
         throw error;

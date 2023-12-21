@@ -61,16 +61,13 @@ export default function SignUp() {
         Alert.alert(`Error de Registro: ${error.message}`);
       } else if (authData) {
         console.log("USER ID", authData.user?.id);
-        const { error: insertError, data: authDataForm } = await supabase
-          .from("usuarios")
-          .insert({
-            nombres: data.nombres,
-            apellidos: data.apellidos,
-            session_id: authData.user?.id,
-            rol: "free",
-            terms: data.termsAndConditions,
-          });
-        alert(authDataForm);
+        const { error: insertError } = await supabase.from("usuarios").insert({
+          nombres: data.nombres,
+          apellidos: data.apellidos,
+          session_id: authData.user?.id,
+          rol: "free",
+          terms: data.termsAndConditions,
+        });
         if (insertError) {
           console.error("Error de registro:", insertError.message);
         }

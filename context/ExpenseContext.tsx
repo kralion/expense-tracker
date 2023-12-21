@@ -20,14 +20,15 @@ export const ExpenseContextProvider = ({
   const [expenses, setExpenses] = React.useState([]);
   const { showNotification } = useContext(NotificationContext);
   const { session } = useAuth();
-  const fetchData = async (usuario_id: string | undefined) => {
+  const fetchData = async (session_id: string) => {
     try {
       const { data } = await supabase
         .from("expenses")
         .select("*")
-        .eq("usuario_id", usuario_id)
+        .eq("session_id", session_id)
         .order("fecha", { ascending: false });
       setExpenses(JSON.parse(JSON.stringify(data)));
+      console.log(data);
     } catch (error) {
       showNotification({
         title: "Error al obtener gastos",
@@ -37,17 +38,17 @@ export const ExpenseContextProvider = ({
     }
   };
   React.useEffect(() => {
-    fetchData(session?.user?.id);
-  }, []);
+    if (session) fetchData(session.user.id);
+  }, [session]);
 
   const addExpense = async (expense: IGasto) => {
     try {
-      const userId = (await supabase.auth.getUser()).data.user?.id;
-      const newData = {
+      await supabase.from("expenses").insert({
         ...expense,
-        user_id: userId,
-      };
-      await supabase.from("expenses").insert(newData);
+        session_id: session?.user.id,
+      });
+      console.log(expense);
+      console.log(session?.user.id);
     } catch (error) {
       showNotification({
         title: "Error al agregar gasto",

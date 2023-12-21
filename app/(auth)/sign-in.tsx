@@ -2,7 +2,6 @@ import { AppleAuthButton } from "@/components/auth/Apple.auth";
 import FacebookSignInButton from "@/components/auth/Facebook.auth";
 import GoogleSignInButton from "@/components/auth/Google.native.auth";
 import { useNotificationContext } from "@/context";
-import useAuth from "@/context/AuthContext";
 import { supabase } from "@/utils/supabase";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
@@ -40,47 +39,30 @@ export default function SignIn() {
   const [show, setShow] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [invalidCredentials, setInvalidCredentials] = React.useState(false);
-  const { userData } = useAuth();
   const { showNotification } = useNotificationContext();
   async function signInWithEmail(data: FormData) {
     setLoading(true);
-    const { error, data: AuthData } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
-    });
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
 
-    if (AuthData?.user?.id) {
-      const { data: relatedData, error: fetchError } = await supabase
-        .from("usuarios")
-        .select("*")
-        .eq("usuario_id", AuthData.user.id)
-        .single();
+      // Handle response here...
 
-      if (fetchError) {
-        showNotification({
-          title: "Error al obtener datos del usuario",
-          alertStatus: "error",
-        });
+      if (error) {
+        throw error;
       } else {
-        userData(
-          JSON.parse(
-            JSON.stringify({
-              ...relatedData,
-              id: relatedData?.id || AuthData.user.id,
-            })
-          )
-        );
+        router.push("/(tabs)/");
       }
-    }
-
-    if (error) {
-      setLoading(false);
+    } catch (e: any) {
+      showNotification({
+        title: "Error de Inicio de Sesión",
+        alertStatus: "error",
+      });
       setInvalidCredentials(true);
-      setTimeout(() => {
-        setInvalidCredentials(false);
-      }, 3000);
-    } else {
-      router.push("/(tabs)/");
+    } finally {
+      setLoading(false);
     }
   }
 
