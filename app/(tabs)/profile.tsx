@@ -13,10 +13,10 @@ import { Pressable, Text, View } from "react-native";
 import DefaultAvatar from "@/assets/svgs/avatar.svg";
 import { Image } from "expo-image";
 import { useNotificationContext } from "@/context";
+import useAuth from "@/context/AuthContext";
 
 export default function App() {
-  const [session, setSession] = React.useState<Session | null>(null);
-  const [names, setNames] = React.useState("");
+  const { userData } = useAuth();
   const { showNotification } = useNotificationContext();
   async function signOut() {
     const { error } = await supabase.auth.signOut();
@@ -29,51 +29,19 @@ export default function App() {
       router.push("/(auth)/sign-in");
     }
   }
-  async function fetchUserName(userId: string) {
-    try {
-      const { data, error } = await supabase
-        .from("usuarios")
-        .select("*")
-        .eq("id", userId)
-        .single();
-
-      if (error) {
-        throw error;
-      }
-      setNames(data.nombres);
-    } catch (error) {
-      showNotification({
-        title: "Error al obtener datos del usuario",
-        alertStatus: "error",
-      });
-    }
-  }
-  React.useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    if (session?.user?.id) {
-      fetchUserName(session.user.id);
-    }
-  }, [session?.user?.id]);
 
   return (
     <View>
       <View className="bg-accent relative h-40">
         <VStack
           space={2}
-          className=" absolute left-36 right-36 top-24"
+          className=" absolute left-28 right-28 top-24"
           alignItems="center"
         >
-          {session?.user?.user_metadata?.avatar_url ? (
+          {userData ? (
             <Image
               source={{
-                uri: session?.user?.user_metadata?.avatar_url,
+                uri: userData.perfil.uri,
               }}
               className="rounded-full"
               alt="profile"
@@ -82,7 +50,7 @@ export default function App() {
           ) : (
             <DefaultAvatar width={120} height={120} />
           )}
-          <Heading size="md"> {names} </Heading>
+          <Heading size="md">{`${userData.nombres} ${userData.apellidos}`}</Heading>
         </VStack>
       </View>
       <HStack>

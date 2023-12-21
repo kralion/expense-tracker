@@ -1,17 +1,49 @@
 import SingleNotification from "@/components/popups/notification";
-import { VStack } from "native-base";
+import { useNotificationContext } from "@/context";
+import useAuth from "@/context/AuthContext";
+import { INotification } from "@/interfaces/notification";
+import { supabase } from "@/utils/supabase";
+import { FlatList, VStack, View } from "native-base";
 import * as React from "react";
-import { ScrollView } from "react-native";
+import { ScrollView, Text } from "react-native";
 
-export default function PersonalInfo() {
+export default function Notifications() {
+  const { showNotification } = useNotificationContext();
+  const [notifications, setNotifications] = React.useState<INotification[]>([]);
+  const { userData } = useAuth();
+
+  const getNotifications = async () => {
+    const { data, error } = await supabase
+      .from("notificaciones")
+      .select("*")
+      .eq("session_id", userData?.id);
+
+    if (error) {
+      showNotification({
+        title: "Error al obtener las notificaciones",
+        alertStatus: "error",
+      });
+      return;
+    }
+    setNotifications(data);
+  };
+
+  React.useEffect(() => {
+    getNotifications();
+  }, [notifications]);
+
   return (
-    <ScrollView>
-      <VStack space={3} marginTop={3}>
-        <SingleNotification />
-        <SingleNotification />
-        <SingleNotification />
-        <SingleNotification />
-      </VStack>
-    </ScrollView>
+    <View>
+      <Text>Noti</Text>
+      <FlatList
+        data={notifications}
+        renderItem={({ item }) => (
+          <VStack space={3}>
+            <SingleNotification notification={item} />
+          </VStack>
+        )}
+        keyExtractor={(item) => item.id}
+      />
+    </View>
   );
 }

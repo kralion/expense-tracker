@@ -9,9 +9,10 @@ export interface IGasto {
   numeroGasto?: number;
 }
 
-export interface IExpensContextProvider {
+export interface IExpenseContextProvider {
   addExpense: (expense: IGasto) => void;
-  deleteExpense: (id: string) => void;
+  deleteExpenseById: (id: string) => void;
   updateExpense: (expense: IGasto) => void;
   expenses: IGasto[];
+  getSingleExpense: (id: string) => Promise<IGasto | null>;
 }
