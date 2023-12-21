@@ -2,6 +2,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Button, HStack, VStack } from "native-base";
 import * as React from "react";
 import { Image, Pressable, Text, View } from "react-native";
+import { Alert } from "react-native";
 
 export default function Export() {
   const [show, setShow] = React.useState(false);
@@ -22,33 +23,60 @@ export default function Export() {
         </Text>
 
         <VStack mt={10} space={4}>
-          <Button colorScheme="blue" variant="subtle" py={4}>
-            <HStack alignItems="center">
-              <Image
-                className="w-5 h-5 mr-2"
-                source={{
-                  uri: "https://img.icons8.com/?size=48&id=13674&format=png",
-                }}
-              />
-              <Text className="font-semibold text-black">
-                Documento de Word
-              </Text>
-            </HStack>
-          </Button>
+          <HStack space={4}>
+            <Button 
+              colorScheme="blue" 
+              variant="subtle" 
+              py={4} 
+              w={40} 
+              borderWidth={1} 
+              borderColor="blue.400"
+              onPress={() => Alert.alert('Exportación', 'Se exportó correctamente')}
+            >
+              <HStack alignItems="center">
+                <Image
+                  className="w-5 h-5 mr-2"
+                  source={{
+                    uri: "https://img.icons8.com/?size=48&id=13674&format=png",
+                  }}
+                />
+                <Text className="font-semibold text-black">
+                  Documento de Word
+                </Text>
 
-          <Button colorScheme="green" variant="subtle" py={4}>
-            <HStack alignItems="center">
-              <Image
-                className="w-5 h-5 mr-2"
-                source={{
-                  uri: "https://img.icons8.com/?size=48&id=13654&format=png",
-                }}
-              />
-              <Text className="font-semibold text-black">Hoja de Cálculo</Text>
-            </HStack>
-          </Button>
+              </HStack>
+            </Button>
 
-          <Button colorScheme="red" variant="subtle" py={4}>
+            <Button 
+              colorScheme="green" 
+              variant="subtle" 
+              py={4} 
+              w={40} 
+              borderWidth={1} 
+              borderColor="green.400"
+              onPress={() => Alert.alert('Exportación', 'Se exportó correctamente')}
+            >
+              <HStack alignItems="center">
+                <Image
+                  className="w-5 h-5 mr-2"
+                  source={{
+                    uri: "https://img.icons8.com/?size=48&id=13654&format=png",
+                  }}
+                />
+                <Text className="font-semibold text-black">Documento de excel</Text>
+              </HStack>
+            </Button>
+          </HStack>
+
+          <Button 
+            colorScheme="red" 
+            variant="subtle" 
+            py={4} 
+            h={20} 
+            borderWidth={1} 
+            borderColor="red.400"
+            onPress={() => Alert.alert('Exportación', 'Se exportó correctamente')}
+          >
             <HStack alignItems="center">
               <Image
                 className="w-5 h-5 mr-2"
@@ -72,7 +100,10 @@ export default function Export() {
             />
           }
         >
-          <Text className="font-semibold text-white ">
+          <Text 
+            className="font-semibold text-white"
+            onPress={() => Alert.alert('Exportación', 'Se exportó correctamente')}
+          >
             Exportar en los 3 formatos
           </Text>
         </Button>
