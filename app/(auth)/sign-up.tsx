@@ -20,13 +20,12 @@ import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   Alert,
-  Image,
   Keyboard,
   Pressable,
   Text,
   TouchableWithoutFeedback,
-  View,
 } from "react-native";
+import { Image } from "expo-image";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type FormData = {
@@ -44,7 +43,7 @@ export default function SignUp() {
     reset,
     formState: { errors },
   } = useForm<FormData>();
-  const [show, setShow] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [showTCModal, setShowTCModal] = React.useState(false);
 
@@ -61,21 +60,19 @@ export default function SignUp() {
       if (error) {
         Alert.alert(`Error de Registro: ${error.message}`);
       } else if (authData) {
+        console.log("USER ID", authData.user?.id);
         const { error: insertError, data: authDataForm } = await supabase
           .from("usuarios")
-          .insert([
-            {
-              id: uuid(),
-              nombres: data.nombres,
-              apellidos: data.apellidos,
-              session_id: authData.user?.id,
-              rol: "free",
-              terms: true,
-            },
-          ]);
-        console.log(authDataForm);
+          .insert({
+            nombres: data.nombres,
+            apellidos: data.apellidos,
+            session_id: authData.user?.id,
+            rol: "free",
+            terms: data.termsAndConditions,
+          });
+        alert(authDataForm);
         if (insertError) {
-          console.error("Insert error:", insertError.message);
+          console.error("Error de registro:", insertError.message);
         }
       }
     } catch (e: any) {
@@ -119,10 +116,11 @@ export default function SignUp() {
               height={12}
             >
               <Image
-                className="w-5 h-5 mr-2"
+                style={{ width: 24, height: 24 }}
                 source={{
                   uri: "https://img.icons8.com/?size=96&id=17949&format=png",
                 }}
+                alt="google"
               />
             </Button>
           </HStack>
@@ -265,16 +263,18 @@ export default function SignUp() {
                   placeholder="Contraseña"
                   value={value}
                   onChangeText={(value) => onChange(value)}
-                  type={show ? "text" : "password"}
+                  type={showPassword ? "text" : "password"}
                   passwordRules={
                     "minlength: 8; required: lower; required: upper; required: digit; required: [-];"
                   }
                   InputRightElement={
-                    <Pressable onPress={() => setShow(!show)}>
+                    <Pressable onPress={() => setShowPassword(!showPassword)}>
                       <Icon
                         as={
                           <MaterialIcons
-                            name={show ? "visibility" : "visibility-off"}
+                            name={
+                              showPassword ? "visibility" : "visibility-off"
+                            }
                           />
                         }
                         size={5}
@@ -334,9 +334,7 @@ export default function SignUp() {
           <Button
             className="mt-5 "
             size="lg"
-            onPress={handleSubmit((data: FormData) => {
-              signUpWithEmail(data);
-            })}
+            onPress={handleSubmit(signUpWithEmail)}
             py={5}
             rounded={10}
             isLoading={loading}

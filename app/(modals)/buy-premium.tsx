@@ -1,19 +1,11 @@
 import Stripe from "@/components/payment/stripe";
 import Yape from "@/components/payment/yape";
-import { supabase } from "@/utils/supabase";
-import { Session } from "@supabase/supabase-js";
+import useAuth from "@/context/AuthContext";
 import { Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Button, Divider, HStack, ScrollView, VStack } from "native-base";
 import * as React from "react";
-import {
-  Dimensions,
-  Image,
-  Platform,
-  Pressable,
-  Text,
-  View,
-} from "react-native";
+import { Dimensions, Image, Platform, Pressable, Text } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -22,12 +14,10 @@ import Animated, {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function BuyPremiumModal() {
-  const [session, setSession] = React.useState<Session | null>(null);
   const [yapePaymentMethod, setYapePaymentMethod] = React.useState(false);
-  const [name, setName] = React.useState("");
   const [cardPaymentMethod, setCardPaymentMethod] = React.useState(true);
   const screenWidth = Dimensions.get("window").width;
-
+  const { userData } = useAuth();
   const animation = useSharedValue(0);
   const handlePress = (index: number) => {
     animation.value = withTiming((index * screenWidth) / 2.4, {
@@ -35,19 +25,6 @@ export default function BuyPremiumModal() {
     });
   };
 
-  async function fetchUserName(userId: string) {
-    const { data, error } = await supabase
-      .from("app_users")
-      .select("nombres")
-      .eq("id", userId)
-      .single();
-
-    if (error) {
-      console.error(error);
-    } else if (data) {
-      setName(data.nombres);
-    }
-  }
   const handleYapePayment = () => {
     setYapePaymentMethod(true);
     setCardPaymentMethod(false);
@@ -58,19 +35,6 @@ export default function BuyPremiumModal() {
     setCardPaymentMethod(true);
     handlePress(0);
   };
-  React.useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    if (session?.user?.id) {
-      fetchUserName(session.user.id);
-    }
-  }, [session?.user?.id]);
 
   return (
     <SafeAreaView>
@@ -87,9 +51,7 @@ export default function BuyPremiumModal() {
             <HStack space={3} alignItems="center">
               <Image
                 source={{
-                  uri:
-                    "https://userstock.io/data/wp-content/uploads/2017/09/bewakoof-com-official-219589-300x300.jpg" ||
-                    session?.user?.user_metadata?.avatar_url,
+                  uri: "https://userstock.io/data/wp-content/uploads/2017/09/bewakoof-com-official-219589-300x300.jpg",
                 }}
                 alt="profile-pic"
                 width={50}
@@ -98,16 +60,16 @@ export default function BuyPremiumModal() {
               />
               <VStack>
                 <Text className="font-bold text-white ">
-                  {"Brayan Joan" || session?.user?.user_metadata?.full_name}
+                  {"Brayan Joan" || userData?.nombres}
                 </Text>
                 <Text className="text-white ">
-                  {"Usuario General" || session?.user?.role === "guest"
-                    ? "Usuario General"
-                    : "Usuario Premium"}
+                  {"Usuario General" || userData.rol === "premium"
+                    ? "Plan Actual Premium"
+                    : "Plan Actual Básico"}
                 </Text>
               </VStack>
             </HStack>
-            <Link href="/(modals)/edit-payment-info">
+            <Link href="/(modals)/personal-info">
               <Button size="sm" variant="solid" bg={"white"}>
                 <Text className=" ">Editar</Text>
               </Button>

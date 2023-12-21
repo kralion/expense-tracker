@@ -29,7 +29,6 @@ export default function Stripe() {
     handleSubmit,
     formState: { errors },
     reset,
-    setValue,
   } = useForm<ICard>({
     defaultValues: {
       divisa: "pen",

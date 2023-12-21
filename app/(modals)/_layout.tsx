@@ -6,11 +6,6 @@ export default function ModalsLayout() {
   return (
     <Stack>
       <Stack.Screen
-        name="(modals)/edit-payment-info"
-        options={{ presentation: "modal", title: "Editar" }}
-      />
-
-      <Stack.Screen
         name="(modals)/add-expense-success
             "
         options={{ presentation: "modal", title: "Agregar Gasto" }}

@@ -66,14 +66,17 @@ function RootLayoutNav() {
   if (!session) {
     return (
       <Stack>
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(auth)"
+          options={{ headerShown: false, title: "" }}
+        />
       </Stack>
     );
   }
 
   return (
     <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false, title: "" }} />
     </Stack>
   );
 }
