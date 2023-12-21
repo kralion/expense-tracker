@@ -1,33 +1,29 @@
-import { Fontisto } from "@expo/vector-icons";
-import { Link } from "expo-router";
-import { Button, Center, VStack, View } from "native-base";
+import { Badge, VStack } from "native-base";
 import React from "react";
-import { Image, Text } from "react-native";
+import { Text } from "react-native";
 
 export default function Yape() {
   return (
     <VStack space={5}>
+      <VStack space={2} p={5} className="bg-white rounded-lg">
+        <Text className="  text-textmuted ">Numero de Telefono</Text>
+        <Badge colorScheme="amber" className="rounded-full p-3">
+          <Text className="font-semibold  ">+51 999 999 999</Text>
+        </Badge>
+      </VStack>
       <VStack space={1}>
-        <Text className="  text-teal-200 ">Numero de Telefono</Text>
-        <Text className="font-semibold  text-white text-2xl ">
-          +51 999 999 999
+        <Text className=" text-textmuted ">Monto</Text>
+        <Badge colorScheme="amber" className="rounded-full p-3">
+          <Text className="font-semibold ">S/. 15.00</Text>
+        </Badge>
+      </VStack>
+      <Text className="text-textmuted text-[12px] mt-3  ">
+        El ultimo paso es mandarnos una captura del yapeo al telefono
+        <Text className="text-[12px] text-accent font-semibold">
+          {" "}
+          914 019 929
         </Text>
-      </VStack>
-      <VStack space={1}>
-        <Text className=" text-teal-200 ">Monto</Text>
-        <Text className="font-semibold  text-white text-2xl ">S/. 15.00</Text>
-      </VStack>
-      <VStack space={1}>
-        <Text className="text-mutedwhite text-[12px] mt-3  ">
-          El ultimo paso es mandarnos una captura del yapeo al telefono
-          <Link asChild href={"/modal"}>
-            <Text className="text-[12px] text-accent font-semibold">
-              {" "}
-              914 019 929
-            </Text>
-          </Link>
-        </Text>
-      </VStack>
+      </Text>
     </VStack>
   );
 }

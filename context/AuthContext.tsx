@@ -7,6 +7,7 @@ import { useNotificationContext } from "./NotificationContext";
 interface AuthContextType {
   session: Session | null;
   userData: any | null;
+  setUserData: React.Dispatch<React.SetStateAction<any>>;
 }
 
 type TUserData = {
@@ -46,12 +47,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     });
   }, []);
-  const fetchUserData = async (usuario_id: string) => {
+  async function fetchUserData(id: string) {
     try {
       const { data, error } = await supabase
         .from("usuarios")
         .select("*")
-        .eq("id", usuario_id)
+        .eq("id", id)
         .single();
       if (error) {
         throw error;
@@ -63,9 +64,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         alertStatus: "error",
       });
     }
-  };
+  }
 
-  const value = { session, userData };
+  const value = { session, userData, setUserData };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
