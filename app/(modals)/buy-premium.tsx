@@ -60,10 +60,10 @@ export default function BuyPremiumModal() {
               />
               <VStack>
                 <Text className="font-bold text-white ">
-                  {"Brayan Joan" || userData?.nombres}
+                  {userData?.nombres}
                 </Text>
                 <Text className="text-white ">
-                  {"Usuario General" || userData.rol === "premium"
+                  {userData.rol === "premium"
                     ? "Plan Actual Premium"
                     : "Plan Actual Básico"}
                 </Text>

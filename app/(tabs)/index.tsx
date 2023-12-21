@@ -16,49 +16,50 @@ export default function Index() {
     React.useState(false);
   const [isPremiumUser, setIsPremiumUser] = React.useState(false);
   const { userData } = useAuth();
-
+  if (!userData) {
+    return null;
+  }
   function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   }
 
   return (
     <SafeAreaView className="bg-primary space-y-7  ">
-      {userData ? (
-        <HStack justifyContent="space-between" mx={4}>
-          <VStack>
-            <Text className="text-mutedwhite text-[12px] ">
-              {capitalizeFirstLetter(
-                new Date().toLocaleDateString("es-ES", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "2-digit",
-                  day: "2-digit",
-                })
-              )}
-            </Text>
-          </VStack>
-
+      <HStack justifyContent="space-between" mx={4}>
+        <VStack>
+          <Text className="text-mutedwhite text-[12px] ">
+            {capitalizeFirstLetter(
+              new Date().toLocaleDateString("es-ES", {
+                weekday: "long",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
+            )}
+          </Text>
           <Text className="font-bold text-[16px] text-white  tracking-tight">
             Hola, {userData.nombres} 👋
           </Text>
-          <View>
-            <Link href="/(modals)/buy-premium" asChild>
-              <Button
-                isPressed={true}
-                colorScheme="A3E062"
-                className="rounded-full active:opacity-70"
-                variant="ghost"
-              >
-                <FontAwesome
-                  color="#A3E062"
-                  name={userData.rol === "premium" ? "unlock" : "lock"}
-                  size={20}
-                />
-              </Button>
-            </Link>
-          </View>
-        </HStack>
-      ) : null}
+        </VStack>
+
+        <View>
+          <Link href="/(modals)/buy-premium" asChild>
+            <Button
+              isPressed={true}
+              colorScheme="A3E062"
+              className="rounded-full active:opacity-70"
+              variant="ghost"
+            >
+              <FontAwesome
+                color="#A3E062"
+                name={userData.rol === "premium" ? "unlock" : "lock"}
+                size={20}
+              />
+            </Button>
+          </Link>
+        </View>
+      </HStack>
+
       <View className="z-10 h-20">
         <Card isPremiumUser={isPremiumUser} />
       </View>
