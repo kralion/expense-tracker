@@ -15,6 +15,7 @@ export const ExpenseContext = createContext<IExpenseContextProvider>({
   getSingleExpense: async (id: string) => null,
   sumOfAllOfExpensesMonthly: async () => 0,
   getTopExpenses: async (): Promise<IGasto[]> => [],
+  fetchData: async (session_id: string) => {},
 });
 
 export const ExpenseContextProvider = ({
@@ -185,6 +186,7 @@ export const ExpenseContextProvider = ({
   return (
     <ExpenseContext.Provider
       value={{
+        fetchData,
         addExpense,
         deleteExpenseById,
         sumOfAllOfExpensesMonthly,

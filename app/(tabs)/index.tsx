@@ -22,14 +22,14 @@ import { supabase } from "@/utils/supabase";
 
 export default function Index() {
   const fadeAnim = React.useRef(new Animated.Value(1)).current;
-  const { expenses } = useExpenseContext();
+  const { expenses, fetchData } = useExpenseContext();
   const { userData, session } = useAuth();
 
   const [showAll, setShowAll] = React.useState(false);
   const [showBuyPremiumModal, setShowBuyPremiumModal] = React.useState(false);
 
   const { showNotification } = useNotificationContext();
-  const [isPremiumUser, setIsPremiumUser] = React.useState(false);
+  const [isPremiumUser, setIsPremiumUser] = React.useState(userData.rol);
   if (!userData) {
     return null;
   }
@@ -39,7 +39,7 @@ export default function Index() {
       duration: 500,
       useNativeDriver: true,
     }).start();
-  }, [showAll]);
+  }, [showAll, isPremiumUser]);
 
   async function createNotification() {
     const notification = {
@@ -85,8 +85,9 @@ export default function Index() {
   React.useEffect(() => {
     if (session) {
       createNotification();
+      fetchData(session.user.id);
     }
-  }, [session]);
+  }, [session, isPremiumUser]);
 
   function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();

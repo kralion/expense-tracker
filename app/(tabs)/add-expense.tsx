@@ -36,7 +36,7 @@ export default function AddExpense() {
       divisa: "pen",
     },
   });
-  
+
   // const { addExpense } = useExpenseContext();
   const [isLoading, setIsLoading] = React.useState(false);
   async function onSubmit(data: IGasto) {
@@ -50,40 +50,42 @@ export default function AddExpense() {
         .order("numeroGasto", { ascending: false })
         .limit(1)
         .single();
-  
+
       if (lastExpenseError) {
         console.log("Error al obtener el último gasto", lastExpenseError);
         return;
       }
-  
+
       // Calcula el nuevo numeroGasto
       const numeroGasto = lastExpense ? lastExpense.numeroGasto + 1 : 1;
-  
+
       // Inserta el nuevo gasto
       const { error } = await supabase
         .from("expenses")
         .insert({
-          categoria: data.categoria,
+          categoria:
+            data.categoria.charAt(0).toUpperCase() + data.categoria.slice(1),
           monto: data.monto,
           divisa: data.divisa,
           descripcion: data.descripcion,
           numeroGasto,
         })
         .single();
-  
+
       if (error) {
         console.log("Error al guardar las gastos", error);
-      }else{
+      } else {
         showNotification({
           title: "Gasto registrado",
           alertStatus: "success",
-        });    
+        });
       }
     } catch (error) {
       console.log("Error al guardar las gastos", error);
-    }finally{
-    setIsLoading(false);
-    router.push("/(tabs)/");
+    } finally {
+      setValue("categoria", "");
+      reset(), setIsLoading(false);
+      router.push("/(tabs)/");
     }
   }
 
