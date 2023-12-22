@@ -10,6 +10,7 @@ export default function ModalsLayout() {
             "
         options={{ presentation: "modal", title: "Agregar Gasto" }}
       />
+
       <Stack.Screen
         name="(expenses)/edit/[id]"
         options={{
@@ -32,6 +33,30 @@ export default function ModalsLayout() {
           presentation: "card",
 
           title: "Exportar",
+          contentStyle: {
+            backgroundColor: "#368983",
+          },
+        }}
+      />
+      <Stack.Screen
+        name="(modals)/notifications"
+        options={{
+          headerBackTitle: "Perfil",
+          presentation: "card",
+
+          title: "Notificaciones",
+          contentStyle: {
+            backgroundColor: "#368983",
+          },
+        }}
+      />
+      <Stack.Screen
+        name="(modals)/membership"
+        options={{
+          headerBackTitle: "Perfil",
+          presentation: "card",
+
+          title: "Membresía",
           contentStyle: {
             backgroundColor: "#368983",
           },

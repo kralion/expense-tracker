@@ -10,13 +10,13 @@ import { ScrollView, Text } from "react-native";
 export default function Notifications() {
   const { showNotification } = useNotificationContext();
   const [notifications, setNotifications] = React.useState<INotification[]>([]);
-  const { userData } = useAuth();
+  const { session } = useAuth();
 
   const getNotifications = async () => {
     const { data, error } = await supabase
       .from("notificaciones")
       .select("*")
-      .eq("session_id", userData?.id);
+      .eq("session_id", session?.user.id);
 
     if (error) {
       showNotification({
@@ -33,17 +33,14 @@ export default function Notifications() {
   }, [notifications]);
 
   return (
-    <View>
-      <Text>Noti</Text>
-      <FlatList
-        data={notifications}
-        renderItem={({ item }) => (
-          <VStack space={3}>
-            <SingleNotification notification={item} />
-          </VStack>
-        )}
-        keyExtractor={(item) => item.id}
-      />
-    </View>
+    <FlatList
+      data={notifications}
+      renderItem={({ item }) => (
+        <VStack space={3}>
+          <SingleNotification notification={item} />
+        </VStack>
+      )}
+      keyExtractor={(item) => item.id}
+    />
   );
 }
