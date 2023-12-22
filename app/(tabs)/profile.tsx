@@ -73,7 +73,7 @@ export default function App() {
               </Text>
             </Pressable>
           </Link>
-          <Link asChild href="/(modals)/export-data">
+          <Link asChild href="/(modals)/budget">
             <Pressable className="flex gap-3 flex-row p-2 items-center active:opacity-30">
               <Icon
                 color="gray.500"
