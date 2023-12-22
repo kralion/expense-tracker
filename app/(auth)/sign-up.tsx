@@ -27,6 +27,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { SafeAreaView } from "react-native-safe-area-context";
+import useAuth from "@/context/AuthContext";
 
 type FormData = {
   nombres: string;
@@ -46,6 +47,7 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [showTCModal, setShowTCModal] = React.useState(false);
+  const { session } = useAuth();
 
   async function signUpWithEmail(data: FormData) {
     setLoading(true);
@@ -57,6 +59,7 @@ export default function SignUp() {
           emailRedirectTo: "https://expense-tracker-web-nine.vercel.app",
         },
       });
+
       if (error) {
         Alert.alert(`Error de Registro: ${error.message}`);
       } else if (authData) {
@@ -70,6 +73,11 @@ export default function SignUp() {
         if (insertError) {
           console.error("Error de registro:", insertError.message);
         }
+      } else {
+        Alert.alert(
+          "Registro Exitoso",
+          "Se ha enviado un correo de confirmación a tu email"
+        );
       }
     } catch (e: any) {
       Alert.alert(`Error inesperado: ${e.message}`);

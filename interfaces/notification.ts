@@ -6,5 +6,5 @@ export interface INotification {
     uri: string;
   };
   session_id?: string;
-  fecha: Date;
+  fecha: string;
 }

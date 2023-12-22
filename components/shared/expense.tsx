@@ -1,10 +1,10 @@
+import { expensesIdentifiers } from "@/constants/ExpensesIdentifiers";
+import { formatDate } from "@/helpers/dateFormatter";
 import { router } from "expo-router";
 import { Box, HStack, Pressable, Spacer, Text } from "native-base";
 import * as React from "react";
 import { Image, View } from "react-native";
 import { IGasto } from "../../interfaces";
-import { expensesIdentifiers } from "@/constants/ExpensesIdentifiers";
-import { formatDate } from "@/helpers/dateFormatter";
 export function Expense({ expense }: { expense: IGasto }) {
   const { categoria, monto, fecha } = expense;
   const formattedDate = fecha

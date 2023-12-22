@@ -1,5 +1,8 @@
+import useAuth from "@/context/AuthContext";
 import { usePremiumStatusContext } from "@/context/PremiumContex";
+import { supabase } from "@/utils/supabase";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import {
   Button,
   Center,
@@ -14,6 +17,7 @@ import {
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Keyboard, Text, TouchableWithoutFeedback } from "react-native";
+import ConfettiCannon from "react-native-confetti-cannon";
 
 interface ICard {
   cardNumber: string;
@@ -26,6 +30,9 @@ interface ICard {
 
 export default function Stripe() {
   const { setIsPremium } = usePremiumStatusContext();
+  const [showConfetti, setShowConfetti] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const { userData } = useAuth();
   const {
     control,
     handleSubmit,
@@ -36,15 +43,47 @@ export default function Stripe() {
       divisa: "pen",
     },
   });
-  const onSubmit = (data: ICard) => {
-    console.log(data);
+  async function updateUserRole(userId: string | undefined) {
+    const { error } = await supabase
+      .from("usuarios")
+      .update({ rol: "free" })
+      .eq("id", userId);
+
+    if (error) {
+      console.error("Error updating user role:", error);
+    }
+  }
+  async function onSubmit(data: ICard) {
+    setIsLoading(true);
+    const createdAt = new Date();
+    const expiresAt = new Date(createdAt);
+    expiresAt.setMonth(createdAt.getMonth() + 1);
+    const { error } = await supabase.from("payments").insert({
+      usuario_id: userData.id,
+      created_At: createdAt.toISOString(),
+      expires_At: expiresAt.toISOString(),
+      card_data: JSON.stringify(data),
+    });
+
+    await updateUserRole("972cf283-22e9-4224-bb76-3d5805884f1b");
+    if (error) {
+      console.error("Error inserting payment:", error);
+    }
     setIsPremium(true);
     reset();
-  };
+    setIsLoading(false);
+    setShowConfetti(true);
+    setTimeout(() => {
+      router.push("/(tabs)/");
+    }, 3000);
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <VStack space={3}>
+        {showConfetti && (
+          <ConfettiCannon autoStart count={200} origin={{ x: -10, y: 0 }} />
+        )}
         <VStack space={2} p={5} className="bg-white rounded-lg">
           <FormControl isInvalid={!!errors.monto} isRequired>
             <VStack space={1}>
@@ -270,6 +309,7 @@ export default function Stripe() {
             colorScheme="accent"
             onPress={handleSubmit(onSubmit)}
             marginTop={16}
+            isLoading={isLoading}
             rounded={7}
           >
             <Text className="font-semibold px-5 py-1">Realizar Compra</Text>

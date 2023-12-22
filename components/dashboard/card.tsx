@@ -166,7 +166,7 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
                 </Text>
               </View>
               <Text className="text-xl font-semibold text-center text-mutedwhite">
-                S/. {presupuesto}
+                S/. {presupuesto ? presupuesto : "0.00"}
               </Text>
             </View>
           </Pressable>

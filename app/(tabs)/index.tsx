@@ -18,17 +18,18 @@ import NoDataAsset from "@/assets/svgs/no-data.svg";
 import * as React from "react";
 import { Animated, FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { supabase } from "@/utils/supabase";
 
 export default function Index() {
   const fadeAnim = React.useRef(new Animated.Value(1)).current;
-  const { expenses } = useExpenseContext();
+  const { expenses, fetchData } = useExpenseContext();
+  const { userData, session } = useAuth();
 
   const [showAll, setShowAll] = React.useState(false);
   const [showBuyPremiumModal, setShowBuyPremiumModal] = React.useState(false);
 
   const { showNotification } = useNotificationContext();
-  const [isPremiumUser, setIsPremiumUser] = React.useState(false);
-  const { userData } = useAuth();
+  const [isPremiumUser, setIsPremiumUser] = React.useState(userData.rol);
   if (!userData) {
     return null;
   }
@@ -38,7 +39,55 @@ export default function Index() {
       duration: 500,
       useNativeDriver: true,
     }).start();
-  }, [showAll]);
+  }, [showAll, isPremiumUser]);
+
+  async function createNotification() {
+    const notification = {
+      titulo: "Bienvenido a Expense Tracker",
+      descripcion:
+        "Gracias por registrarte en Expense Tracker, ahora puedes comenzar a usar la aplicación.",
+      fecha: new Date().toISOString(),
+      icono: {
+        uri: "https://img.icons8.com/color/96/000000/checked--v1.png",
+      },
+      session_id: session?.user.id,
+    };
+
+    try {
+      // Check if a notification already exists for the user
+      const { data: existingNotifications, error: fetchError } = await supabase
+        .from("notificaciones")
+        .select("*")
+        .eq("session_id", session?.user.id);
+
+      if (fetchError) {
+        console.error("Error fetching notifications:", fetchError);
+        return;
+      }
+
+      // If no notification exists for the user, create a new one
+      if (existingNotifications.length === 0) {
+        const { data, error } = await supabase
+          .from("notificaciones")
+          .insert([notification]);
+
+        if (error) {
+          console.error("Error inserting notification:", error);
+        } else {
+          console.log("Notification inserted:", data);
+        }
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    }
+  }
+
+  React.useEffect(() => {
+    if (session) {
+      createNotification();
+      fetchData(session.user.id);
+    }
+  }, [session, isPremiumUser]);
 
   function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
@@ -173,4 +222,7 @@ export default function Index() {
       )}
     </>
   );
+}
+function uuid() {
+  throw new Error("Function not implemented.");
 }

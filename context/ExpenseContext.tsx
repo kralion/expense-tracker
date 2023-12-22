@@ -12,9 +12,12 @@ export const ExpenseContext = createContext<IExpenseContextProvider>({
   deleteExpenseById: () => {},
   expenses: [],
   updateExpense: () => {},
-  getSingleExpense: async (id: string) => null,
+  getSingleExpense: async (id: string): Promise<IGasto | null> => {
+    return null;
+  },
   sumOfAllOfExpensesMonthly: async () => 0,
   getTopExpenses: async (): Promise<IGasto[]> => [],
+  fetchData: async (session_id: string) => {},
 });
 
 export const ExpenseContextProvider = ({
@@ -75,26 +78,32 @@ export const ExpenseContextProvider = ({
       router.push("/(tabs)/");
     }
   };
+  async function getSingleExpense(id: string): Promise<IGasto | null> {
+    if (!session?.user?.id) {
+      throw new Error("La sesión o el ID de usuario no están definidos");
+    }
 
-  const getSingleExpense = async (id: string): Promise<IGasto | null> => {
     try {
       const { data, error } = await supabase
         .from("expenses")
         .select("*")
-        .eq("id", id)
-        .single();
+        .eq("session_id", session.user.id)
+        .eq("id", id);
 
       if (error) throw error;
+      if (data.length === 0) return null;
 
-      return data;
+      console.log("Datos del Gasto", JSON.stringify(data));
+      return data[0];
     } catch (error) {
+      console.error("Error al obtener gasto:", error);
       showNotification({
         title: "Error al obtener gasto",
         alertStatus: "error",
       });
       return null;
     }
-  };
+  }
 
   async function sumOfAllOfExpensesMonthly() {
     const now = new Date();
@@ -185,6 +194,7 @@ export const ExpenseContextProvider = ({
   return (
     <ExpenseContext.Provider
       value={{
+        fetchData,
         addExpense,
         deleteExpenseById,
         sumOfAllOfExpensesMonthly,
