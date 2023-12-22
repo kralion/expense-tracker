@@ -1,3 +1,4 @@
+import { usePremiumStatusContext } from "@/context/PremiumContex";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   Button,
@@ -24,6 +25,7 @@ interface ICard {
 }
 
 export default function Stripe() {
+  const { setIsPremium } = usePremiumStatusContext();
   const {
     control,
     handleSubmit,
@@ -34,9 +36,9 @@ export default function Stripe() {
       divisa: "pen",
     },
   });
-
   const onSubmit = (data: ICard) => {
     console.log(data);
+    setIsPremium(true);
     reset();
   };
 
@@ -144,27 +146,13 @@ export default function Stripe() {
                   keyboardType="numeric"
                   marginY={3}
                   value={
-                    value instanceof Date
-                      ? `${value.getMonth() + 1}/${value
-                          .getFullYear()
-                          .toString()
-                          .substr(-2)}`
+                    value
+                      ? `${value.getMonth() + 1}/${value.getFullYear()}`
                       : ""
                   }
                   onChangeText={(value) => {
-                    // Remove non-numeric characters
-                    let newValue = value.replace(/[^0-9]/g, "");
-
-                    // Automatically add a slash after the month
-                    if (newValue.length >= 2) {
-                      newValue =
-                        newValue.substring(0, 2) +
-                        "/" +
-                        newValue.substring(2, 4);
-                    }
-
-                    // Update the state with the new formatted value
-                    onChange(newValue);
+                    const [month, year] = value.split("/");
+                    onChange(new Date(+year, +month - 1));
                   }}
                   rightElement={
                     <MaterialCommunityIcons
