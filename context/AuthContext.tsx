@@ -40,7 +40,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setSession(session);
       if (session) {
         await fetchUserData(session.user.id);
-        console.log("Sesión activa:", session.user.id);
       } else {
         localStorage.removeItem("supabase.auth.token");
         try {
