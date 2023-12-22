@@ -14,12 +14,14 @@ import BuyPremiumModal from "../popups/buy-premium";
 import useAuth from "@/context/AuthContext";
 import { supabase } from "@/utils/supabase";
 import { useExpenseContext } from "@/context";
+import { BudgetLimitExceededModal } from "../popups";
 
 export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
   const flip = useSharedValue(0);
   const [totalMonthExpenses, setTotalMonthExpenses] = React.useState(0);
   const { userData } = useAuth();
   const { sumOfAllOfExpensesMonthly } = useExpenseContext();
+  const [openBudgetLimitModal, setOpenBudgetLimitModal] = React.useState(false);
 
   const animatedStyles = useAnimatedStyle(() => {
     const rotateY = interpolate(
@@ -79,23 +81,21 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
 
   const [openModal, setOpenModal] = React.useState(false);
 
-  //TODO : Add animation to card when user first logs in (only once)
-  // React.useEffect(() => {
-  //   const runAnimation = async () => {
-  //     const hasAnimated = await AsyncStorage.getItem("hasAnimated");
-
-  //     if (!hasAnimated) {
-  //       flip.value = withTiming(1, { duration: 5000 });
-  //       await AsyncStorage.setItem("hasAnimated", "true");
-  //     }
-  //   };
-
-  //   runAnimation();
-  // }, []);
   React.useEffect(() => {
     flip.value = withTiming(1, { duration: 2000 });
   }, []);
 
+  const balance = presupuesto ? presupuesto - totalMonthExpenses : 0;
+
+  React.useEffect(() => {
+    if (
+      presupuesto &&
+      totalMonthExpenses &&
+      presupuesto - totalMonthExpenses <= 0
+    ) {
+      setOpenBudgetLimitModal(true);
+    }
+  }, [balance]);
   return (
     <Animated.View style={[styles.cardStyle, animatedStyles]}>
       <BuyPremiumModal setOpenModal={setOpenModal} openModal={openModal} />
@@ -131,14 +131,13 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
                 Balance
               </Text>
               <Text className="text-3xl font-bold tracking-tighter  text-mutedwhite">
-                S/.{" "}
-                {presupuesto
-                  ? presupuesto - totalMonthExpenses
-                  : totalMonthExpenses}
-                .00
+                S/. {balance}
               </Text>
             </View>
-
+            <BudgetLimitExceededModal
+              setShowNotification={setOpenBudgetLimitModal}
+              showNotification={openBudgetLimitModal}
+            />
             <Badge
               variant="solid"
               rounded={10}

@@ -1,6 +1,14 @@
 import { SavingGoalModal } from "@/components/popups/save-goals";
 import { router } from "expo-router";
-import { Button, FormControl, HStack, Input, VStack, WarningOutlineIcon, ScrollView } from "native-base";
+import {
+  Button,
+  FormControl,
+  HStack,
+  Input,
+  VStack,
+  WarningOutlineIcon,
+  ScrollView,
+} from "native-base";
 import * as React from "react";
 import { Image, Text, View, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,11 +24,10 @@ import useAuth from "@/context/AuthContext";
 export default function Wallet() {
   const [showSavingGoalModal, setShowSavingGoalModal] = React.useState(false);
   const [metas, setMetas] = React.useState<any>([]);
-  
-  async function getMetas () {
+
+  async function getMetas() {
     const { data } = await supabase.from("metas").select("*");
     setMetas(data);
-    console.log(data?.length);
   }
   React.useEffect(() => {
     getMetas();
@@ -33,44 +40,44 @@ export default function Wallet() {
     reset,
     setValue,
   } = useForm<ISaving>();
-  
+
   const { addExpense } = useExpenseContext();
   const [isLoading, setIsLoading] = React.useState(false);
   const { userData } = useAuth();
   async function onSubmit(data: ISaving) {
     data.id = userData?.id;
-    console.log("Datos a registrar", data); 
     setIsLoading(true);
-    try{
-      const { data: saving, error } = await supabase.from("metas").insert({
-        meta_ahorro: data.meta_ahorro,
-        ahorro_actual: data.ahorro_actual,
-      }).single();
-      if(error){
+    try {
+      const { error } = await supabase
+        .from("metas")
+        .insert({
+          meta_ahorro: data.meta_ahorro,
+          ahorro_actual: data.ahorro_actual,
+        })
+        .single();
+      setShowSavingGoalModal(true);
+      if (error) {
         console.log("Error al guardar la meta", error);
-      }else{
-        console.log("Meta guardada correctamente", saving);
       }
     } catch (error) {
       console.log("Error al guardar la meta", error);
-    } finally{
-      // setIsLoading(false);
-      // setShowSavingGoalModal(false);
+    } finally {
       getMetas();
       reset();
       setIsLoading(false);
     }
   }
 
-
   return (
-    <SafeAreaView className=" space-y-6 px-5 mt-5">
+    <SafeAreaView className="px-5 mt-5">
       <ScrollView>
-        <Text className="font-bold text-left text-2xl">Metas de ahorro</Text>
-        <Text>
-          Gestiona y visualiza tus metas de ahorro en la aplicación móvil de
-          gestión de gastos.
-        </Text>
+        <VStack space={2} mb={10}>
+          <Text className="font-bold text-left text-2xl">Metas de ahorro</Text>
+          <Text>
+            Gestiona y visualiza tus metas de ahorro en la aplicación móvil de
+            gestión de gastos.
+          </Text>
+        </VStack>
         <VStack space={7}>
           <HStack space={1} alignItems="center">
             <Image
@@ -123,7 +130,7 @@ export default function Wallet() {
               </FormControl.ErrorMessage>
             </FormControl>
           </HStack>
-          
+
           <HStack space={1} alignItems="center">
             <Image
               source={{
@@ -179,12 +186,8 @@ export default function Wallet() {
           <Button
             className="rounded-full"
             height={10}
-            w={40}
-            onPress={
-              // setShowSavingGoalModal(true);
-              handleSubmit(onSubmit)
-            }
-            maxW="100px"
+            isLoading={isLoading}
+            onPress={handleSubmit(onSubmit)}
           >
             Registrar
           </Button>
@@ -192,7 +195,9 @@ export default function Wallet() {
             openModal={showSavingGoalModal}
             setOpenModal={setShowSavingGoalModal}
           />
-          <Text className="font-bold text-left text-2xl">Listado de Metas</Text>
+          <Text className="font-bold text-left text-2xl">
+            Historial de Metas
+          </Text>
           <FlatList
             data={metas}
             keyExtractor={(metas) => String(metas.id)}

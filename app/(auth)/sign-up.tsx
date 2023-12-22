@@ -60,7 +60,6 @@ export default function SignUp() {
       if (error) {
         Alert.alert(`Error de Registro: ${error.message}`);
       } else if (authData) {
-        console.log("USER ID", authData.user?.id);
         const { error: insertError } = await supabase.from("usuarios").insert({
           nombres: data.nombres,
           apellidos: data.apellidos,
