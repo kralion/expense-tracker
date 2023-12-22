@@ -8,10 +8,8 @@ import * as React from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 
 export default function ExpenseDetailsModal() {
-  const [expenseDataDetails, setExpenseDataDetails] = React.useState<IGasto>(
-    {} as IGasto
-  );
-  const { showNotification } = useNotificationContext();
+  const [expenseDataDetails, setExpenseDataDetails] =
+    React.useState<IGasto | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const { deleteExpenseById, getSingleExpense } = useExpenseContext();
   const params = useLocalSearchParams<{ id: string }>();
@@ -23,27 +21,18 @@ export default function ExpenseDetailsModal() {
   };
 
   React.useEffect(() => {
-    const fetchExpenseDetails = async () => {
-      if (params.id) {
-        try {
-          const expenseDetails = await getSingleExpense(params.id);
-          if (expenseDetails) {
-            setExpenseDataDetails(expenseDetails);
-          }
-        } catch (error) {
-          // Manejar el error
-          showNotification({
-            title: "Error al obtener detalles del gasto",
-            alertStatus: "error",
-          });
-        }
-      }
+    const fetchExpense = async () => {
+      const fetchedExpense = await getSingleExpense(params.id);
+      console.log(params.id);
+      setExpenseDataDetails(fetchedExpense);
     };
 
-    fetchExpenseDetails();
-  }, [params.id, getSingleExpense, showNotification]);
-
-  const monto_gastado = parseInt(expenseDataDetails.monto);
+    fetchExpense();
+    console.log(JSON.stringify(expenseDataDetails, null, 2));
+  }, [params.id]);
+  const monto_gastado = parseInt(
+    expenseDataDetails?.monto ? expenseDataDetails?.monto : "0"
+  );
   // const monto_presupuestado = expense.cantidad;
   //TODO : Cambiar este valor por el monto presupuestado del mes actual
   const monto_presupuestado = 1000;
@@ -56,7 +45,7 @@ export default function ExpenseDetailsModal() {
           presentation: "card",
           headerBackTitle: "Gastos",
           headerRight: () => (
-            <Link href="/(expenses)/edit/12" asChild>
+            <Link href={`/(expenses)/edit/${params.id}`} asChild>
               <Pressable className="active:opacity-50">
                 <Text className="text-blue-500 text-[17px]">Editar</Text>
               </Pressable>

@@ -6,8 +6,7 @@ export default function ModalsLayout() {
   return (
     <Stack>
       <Stack.Screen
-        name="(modals)/add-expense-success
-            "
+        name="(modals)/add-expense-success"
         options={{ presentation: "modal", title: "Agregar Gasto" }}
       />
 

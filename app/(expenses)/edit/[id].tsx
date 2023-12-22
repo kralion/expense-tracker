@@ -1,4 +1,7 @@
+import { useExpenseContext } from "@/context";
+import { IGasto } from "@/interfaces";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { useLocalSearchParams } from "expo-router";
 import {
   Button,
   CheckIcon,
@@ -16,29 +19,42 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Keyboard, Text, TouchableWithoutFeedback, View } from "react-native";
 interface FormData {
-  cantidad: string;
+  monto: string;
   divisa: string;
   categoria: string;
   descripcion: string;
 }
-export default function AddExpense() {
+export default function EditExpense() {
+  const params = useLocalSearchParams<{ id: string }>();
+  const [expenseDataDetails, setExpenseDataDetails] =
+    React.useState<IGasto | null>();
   const {
     control,
     handleSubmit,
     formState: { errors },
-    reset,
-    setValue,
   } = useForm<FormData>({
     defaultValues: {
-      divisa: "pen",
+      monto: expenseDataDetails?.monto,
+      divisa: expenseDataDetails?.divisa,
+      categoria: expenseDataDetails?.categoria,
+      descripcion: expenseDataDetails?.descripcion,
     },
   });
+  const { getSingleExpense } = useExpenseContext();
 
   async function onSubmit(data: FormData) {
-    data.cantidad = parseFloat(data.cantidad).toString();
-
+    data.monto = parseFloat(data.monto).toString();
     alert(JSON.stringify(data));
   }
+  React.useEffect(() => {
+    const fetchExpense = async () => {
+      const fetchedExpense = await getSingleExpense(params.id);
+      setExpenseDataDetails(fetchedExpense);
+    };
+
+    fetchExpense();
+    console.log(JSON.stringify(expenseDataDetails, null, 2));
+  }, [params.id]);
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View className="bg-background h-screen px-7 mt-6 rounded-b-xl">
@@ -46,15 +62,12 @@ export default function AddExpense() {
           <Text className=" text-textmuted text-center text-xl ">
             Editar Gasto
           </Text>
-          <Text className="font-bold text-center text-xl ">#172</Text>
+          <Text className="font-bold text-center text-xl ">
+            #{expenseDataDetails?.numeroGasto}
+          </Text>
         </HStack>
         <VStack space={4} py={3}>
-          <FormControl
-            isInvalid={!!errors.categoria}
-            isRequired
-            w="90%"
-            width={335}
-          >
+          <FormControl isInvalid={!!errors.categoria} isRequired>
             <VStack space={1}>
               <FormControl.Label>
                 <Text className="font-semibold text-[18px]">Categoría</Text>
@@ -68,7 +81,6 @@ export default function AddExpense() {
                   id="categorias"
                   selectedValue={value}
                   size="lg"
-                  minWidth={300}
                   color="gray.800"
                   marginY={3}
                   accessibilityLabel="Seleccineuna categoria"
@@ -105,12 +117,7 @@ export default function AddExpense() {
             </FormControl.ErrorMessage>
           </FormControl>
 
-          <FormControl
-            isInvalid={!!errors.cantidad}
-            isRequired
-            w="90%"
-            width={335}
-          >
+          <FormControl isInvalid={!!errors.monto} isRequired>
             <VStack space={1}>
               <FormControl.Label>
                 <Text className="font-semibold text-[18px]">Monto</Text>
@@ -137,7 +144,7 @@ export default function AddExpense() {
                   borderRadius={7}
                 />
               )}
-              name="cantidad"
+              name="monto"
               rules={{
                 required: { value: true, message: "Ingrese el monto" },
                 pattern: {
@@ -150,7 +157,7 @@ export default function AddExpense() {
               marginTop={-1}
               leftIcon={<WarningOutlineIcon size="xs" />}
             >
-              {errors.cantidad && errors.cantidad.message}
+              {errors.monto && errors.monto.message}
             </FormControl.ErrorMessage>
           </FormControl>
           <FormControl marginY={3} w="90%" width={335}>
@@ -188,7 +195,6 @@ export default function AddExpense() {
               <TextArea
                 autoCompleteType
                 placeholder="Breve descripcion ..."
-                minH={35}
                 value={value}
                 onChangeText={(value) => onChange(value)}
                 borderRadius={5}
@@ -225,16 +231,16 @@ export default function AddExpense() {
             <Select.Item label="Variable" value="variable" />
           </Select> */}
         </VStack>
+        {/* //! Probar esto solo el los dispositivos, en los emuladores no funciona
+      <PushNotification /> */}
         <Button
           onPress={handleSubmit(onSubmit)}
-          className="rounded-full m-7"
-          marginTop={16}
+          className="rounded-full w-full"
           height={12}
+          marginTop={10}
         >
           Guardar
         </Button>
-        {/* //! Probar esto solo el los dispositivos, en los emuladores no funciona
-      <PushNotification /> */}
       </View>
     </TouchableWithoutFeedback>
   );
