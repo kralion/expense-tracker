@@ -1,7 +1,9 @@
-import { useExpenseContext, useNotificationContext } from "@/context";
+import { useNotificationContext } from "@/context";
 import useAuth from "@/context/AuthContext";
 import { IGasto } from "@/interfaces";
+import { supabase } from "@/utils/supabase";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import {
   Button,
   CheckIcon,
@@ -17,7 +19,7 @@ import {
 } from "native-base";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Text, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { Keyboard, Text, TouchableWithoutFeedback } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AddExpense() {
@@ -34,24 +36,55 @@ export default function AddExpense() {
       divisa: "pen",
     },
   });
-  const { addExpense } = useExpenseContext();
+  
+  // const { addExpense } = useExpenseContext();
   const [isLoading, setIsLoading] = React.useState(false);
   async function onSubmit(data: IGasto) {
-    const dataToSubmit = {
-      ...data,
-      session_id: userData?.id,
-      fecha: new Date(),
-    };
+    data.id = userData?.id;
     setIsLoading(true);
-    console.log("Datos a registrar", dataToSubmit);
-    await addExpense(dataToSubmit);
-    setValue("categoria", "");
-    reset();
-    showNotification({
-      title: "Gasto registrado",
-      alertStatus: "success",
-    });
+    try {
+      // Obtén el último gasto
+      const { data: lastExpense, error: lastExpenseError } = await supabase
+        .from("expenses")
+        .select("numeroGasto")
+        .order("numeroGasto", { ascending: false })
+        .limit(1)
+        .single();
+  
+      if (lastExpenseError) {
+        console.log("Error al obtener el último gasto", lastExpenseError);
+        return;
+      }
+  
+      // Calcula el nuevo numeroGasto
+      const numeroGasto = lastExpense ? lastExpense.numeroGasto + 1 : 1;
+  
+      // Inserta el nuevo gasto
+      const { error } = await supabase
+        .from("expenses")
+        .insert({
+          categoria: data.categoria,
+          monto: data.monto,
+          divisa: data.divisa,
+          descripcion: data.descripcion,
+          numeroGasto,
+        })
+        .single();
+  
+      if (error) {
+        console.log("Error al guardar las gastos", error);
+      }else{
+        showNotification({
+          title: "Gasto registrado",
+          alertStatus: "success",
+        });    
+      }
+    } catch (error) {
+      console.log("Error al guardar las gastos", error);
+    }finally{
     setIsLoading(false);
+    router.push("/(tabs)/");
+    }
   }
 
   return (
