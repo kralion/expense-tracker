@@ -14,6 +14,7 @@ export const ExpenseContext = createContext<IExpenseContextProvider>({
   updateExpense: () => {},
   getSingleExpense: async (id: string) => null,
   sumOfAllOfExpensesMonthly: async () => 0,
+  getTopExpenses: async (): Promise<IGasto[]> => [],
 });
 
 export const ExpenseContextProvider = ({
@@ -156,6 +157,31 @@ export const ExpenseContextProvider = ({
       });
     }
   }
+
+  async function getTopExpenses() {
+    try {
+      const { data: expenses, error } = await supabase
+        .from("expenses")
+        .select("*")
+        .eq("session_id", session?.user.id)
+        .limit(10);
+
+      if (error) throw error;
+
+      // Convert 'monto' to number and sort the expenses
+      const sortedExpenses = expenses.sort(
+        (a, b) => Number(b.monto) - Number(a.monto)
+      );
+
+      return sortedExpenses;
+    } catch (error) {
+      showNotification({
+        title: "Error al obtener gastos",
+        alertStatus: "error",
+      });
+      return [];
+    }
+  }
   return (
     <ExpenseContext.Provider
       value={{
@@ -164,6 +190,7 @@ export const ExpenseContextProvider = ({
         sumOfAllOfExpensesMonthly,
         expenses,
         updateExpense,
+        getTopExpenses,
         getSingleExpense,
       }}
     >

@@ -51,10 +51,6 @@ export default function Index() {
           <SafeAreaView>
             <ScrollView className=" rounded-t-3xl ">
               <VStack space={5} className="bg-background rounded-t-3xl ">
-                {/* <BudgetLimitExceededModal
-            setShowNotification={setShowBudgetLimitNotification}
-            showNotification={showBudgetLimitNotification}
-          /> */}
                 <HStack
                   px={4}
                   mt={4}
@@ -162,6 +158,7 @@ export default function Index() {
                     </Text>
                   </Box>
                 )}
+
                 <FlatList
                   data={expenses}
                   keyExtractor={(expense) => String(expense.id)}
