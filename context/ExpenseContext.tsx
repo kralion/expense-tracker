@@ -4,6 +4,8 @@ import { supabase } from "@/utils/supabase";
 import * as React from "react";
 import { NotificationContext } from "./NotificationContext";
 import useAuth from "./AuthContext";
+import { router } from "expo-router";
+import { startOfMonth, endOfMonth, formatISO } from "date-fns";
 
 export const ExpenseContext = createContext<IExpenseContextProvider>({
   addExpense: () => {},
@@ -11,6 +13,8 @@ export const ExpenseContext = createContext<IExpenseContextProvider>({
   expenses: [],
   updateExpense: () => {},
   getSingleExpense: async (id: string) => null,
+  sumOfAllOfExpensesMonthly: async () => 0,
+  getTopExpenses: async (): Promise<IGasto[]> => [],
 });
 
 export const ExpenseContextProvider = ({
@@ -18,7 +22,7 @@ export const ExpenseContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [expenses, setExpenses] = React.useState([]);
+  const [expenses, setExpenses] = React.useState<IGasto[]>([]);
   const { showNotification } = useContext(NotificationContext);
   const { session } = useAuth();
 
@@ -47,22 +51,28 @@ export const ExpenseContextProvider = ({
     if (session) {
       fetchData(session.user.id);
     }
-  }, [session]);
+  }, [session, expenses]);
 
   const addExpense = async (expense: IGasto) => {
     try {
-      await supabase.from("expenses").insert({
-        ...expense,
-        session_id: session?.user.id,
-      });
-      console.log(expense);
-      console.log(session?.user.id);
+      const { error } = await supabase.from("expenses").insert(expense);
+      if (session) {
+        fetchData(session.user.id);
+      }
+      if (error) {
+        showNotification({
+          title: "Error al agregar gasto",
+          alertStatus: "error",
+        });
+      }
     } catch (error) {
       showNotification({
         title: "Error al agregar gasto",
         alertStatus: "error",
       });
       return;
+    } finally {
+      router.push("/(tabs)/");
     }
   };
 
@@ -85,6 +95,38 @@ export const ExpenseContextProvider = ({
       return null;
     }
   };
+
+  async function sumOfAllOfExpensesMonthly() {
+    const now = new Date();
+    const startOfThisMonth = formatISO(startOfMonth(now), {
+      representation: "date",
+    });
+    const endOfThisMonth = formatISO(endOfMonth(now), {
+      representation: "date",
+    });
+
+    try {
+      const { data } = await supabase
+        .from("expenses")
+        .select("monto")
+        .eq("session_id", session?.user.id)
+        .gte("fecha", startOfThisMonth)
+        .lte("fecha", endOfThisMonth);
+
+      if (data) {
+        const sum = data.reduce(
+          (total, expense) => total + Number(expense.monto),
+          0
+        );
+        return sum;
+      }
+    } catch (error) {
+      console.log("Error al obtener gastos", error);
+    }
+
+    return 0;
+  }
+
   const updateExpense = async (expense: IGasto) => {
     try {
       const { id, fecha, ...expenseParsedForUpdate } = expense;
@@ -115,13 +157,40 @@ export const ExpenseContextProvider = ({
       });
     }
   }
+
+  async function getTopExpenses() {
+    try {
+      const { data: expenses, error } = await supabase
+        .from("expenses")
+        .select("*")
+        .eq("session_id", session?.user.id)
+        .limit(10);
+
+      if (error) throw error;
+
+      // Convert 'monto' to number and sort the expenses
+      const sortedExpenses = expenses.sort(
+        (a, b) => Number(b.monto) - Number(a.monto)
+      );
+
+      return sortedExpenses;
+    } catch (error) {
+      showNotification({
+        title: "Error al obtener gastos",
+        alertStatus: "error",
+      });
+      return [];
+    }
+  }
   return (
     <ExpenseContext.Provider
       value={{
         addExpense,
         deleteExpenseById,
+        sumOfAllOfExpensesMonthly,
         expenses,
         updateExpense,
+        getTopExpenses,
         getSingleExpense,
       }}
     >

@@ -1,21 +1,28 @@
-import { BudgetLimitExceededModal } from "@/components/popups";
 import Card from "@/components/dashboard/card";
+import BuyPremiumModal from "@/components/popups/buy-premium";
 import { Expense } from "@/components/shared";
 import { useExpenseContext, useNotificationContext } from "@/context";
 import useAuth from "@/context/AuthContext";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link } from "expo-router";
-import { Button, HStack, Heading, ScrollView, Text, VStack } from "native-base";
+import {
+  Box,
+  Button,
+  Center,
+  HStack,
+  Heading,
+  ScrollView,
+  Text,
+  VStack,
+} from "native-base";
+import NoDataAsset from "@/assets/svgs/no-data.svg";
 import * as React from "react";
-import { FlatList, View, Animated } from "react-native";
+import { Animated, FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import BuyPremiumModal from "@/components/popups/buy-premium";
 
 export default function Index() {
   const fadeAnim = React.useRef(new Animated.Value(1)).current;
   const { expenses } = useExpenseContext();
-  const [showBudgetLimitNotification, setShowBudgetLimitNotification] =
-    React.useState(false);
+
   const [showAll, setShowAll] = React.useState(false);
   const [showBuyPremiumModal, setShowBuyPremiumModal] = React.useState(false);
 
@@ -44,10 +51,6 @@ export default function Index() {
           <SafeAreaView>
             <ScrollView className=" rounded-t-3xl ">
               <VStack space={5} className="bg-background rounded-t-3xl ">
-                {/* <BudgetLimitExceededModal
-            setShowNotification={setShowBudgetLimitNotification}
-            showNotification={showBudgetLimitNotification}
-          /> */}
                 <HStack
                   px={4}
                   mt={4}
@@ -125,10 +128,6 @@ export default function Index() {
             </View>
             <ScrollView className=" rounded-t-3xl ">
               <VStack space={5} className="bg-background rounded-t-3xl ">
-                {/* <BudgetLimitExceededModal
-            setShowNotification={setShowBudgetLimitNotification}
-            showNotification={showBudgetLimitNotification}
-          /> */}
                 <HStack
                   px={4}
                   marginTop={100}
@@ -139,8 +138,6 @@ export default function Index() {
 
                   <Button
                     onPress={() => {
-                      // setShowBudgetLimitNotification(true);
-                      // {
                       setShowAll(true);
                     }}
                     variant="ghost"
@@ -150,6 +147,18 @@ export default function Index() {
                     Ver Todo
                   </Button>
                 </HStack>
+                {expenses && expenses.length === 0 && (
+                  <Box
+                    my={16}
+                    className="flex flex-col items-center justify-center"
+                  >
+                    <NoDataAsset width={200} height={200} />
+                    <Text className="text-textmuted text-[18px] ">
+                      No hay gastos registrados
+                    </Text>
+                  </Box>
+                )}
+
                 <FlatList
                   data={expenses}
                   keyExtractor={(expense) => String(expense.id)}

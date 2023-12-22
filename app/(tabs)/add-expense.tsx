@@ -1,4 +1,5 @@
-import { useExpenseContext } from "@/context";
+import { useExpenseContext, useNotificationContext } from "@/context";
+import useAuth from "@/context/AuthContext";
 import { IGasto } from "@/interfaces";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
@@ -20,6 +21,8 @@ import { Text, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AddExpense() {
+  const { userData } = useAuth();
+  const { showNotification } = useNotificationContext();
   const {
     control,
     handleSubmit,
@@ -34,17 +37,26 @@ export default function AddExpense() {
   const { addExpense } = useExpenseContext();
   const [isLoading, setIsLoading] = React.useState(false);
   async function onSubmit(data: IGasto) {
+    const dataToSubmit = {
+      ...data,
+      session_id: userData?.id,
+      fecha: new Date(),
+    };
     setIsLoading(true);
-    data.monto = parseFloat(data.monto).toString();
-    addExpense(data);
-    reset();
+    console.log("Datos a registrar", dataToSubmit);
+    await addExpense(dataToSubmit);
     setValue("categoria", "");
+    reset();
+    showNotification({
+      title: "Gasto registrado",
+      alertStatus: "success",
+    });
     setIsLoading(false);
   }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView className="bg-accent">
+      <SafeAreaView className="bg-accent h-screen">
         <HStack justifyContent="space-between" className="p-7">
           <Text className="font-bold text-center text-xl ">
             Registrar Gasto
