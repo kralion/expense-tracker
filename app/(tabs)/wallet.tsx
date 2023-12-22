@@ -46,7 +46,7 @@ export default function Wallet() {
   const { userData } = useAuth();
   async function onSubmit(data: ISaving) {
     data.id = userData?.id;
-    setIsLoading(true);
+    setIsLoading(true);  
     try {
       const { error } = await supabase
         .from("metas")

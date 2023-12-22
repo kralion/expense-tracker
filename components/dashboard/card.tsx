@@ -192,8 +192,8 @@ const styles = StyleSheet.create({
       height: 4,
     },
     shadowOpacity: 0.5,
-    shadowRadius: 15,
-    elevation: 5,
+    shadowRadius: 25,
+    elevation: 45,
     backgroundColor: "rgba(255, 255, 255, 0.001)",
   },
 });
