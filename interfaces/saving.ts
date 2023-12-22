@@ -1,7 +1,8 @@
 export interface ISaving{
-    id: number;
+    id?: string;
+    presupuesto_id?: string;
     meta_ahorro?: string | undefined;
-    ahorro_actual?: number;
+    ahorro_actual?: string | undefined;
 }
 export interface ISavingContextProvider {
     addSaving: (saving: ISaving) => void;
