@@ -1,18 +1,18 @@
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import { Badge, Button, Modal, VStack } from "native-base";
 import * as React from "react";
 import { Text, TouchableOpacity } from "react-native";
-import UpgradeAsset from "@/assets/svgs/unlock.svg";
+import BuyPremiumAsset from "@/assets/svgs/buy-premium.svg";
 import { LinearGradient } from "expo-linear-gradient";
-type NotAllowedProps = {
+type ModalProps = {
   openModal: boolean;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function NotAllowedModal({
+export default function BuyPremiumModal({
   openModal,
   setOpenModal,
-}: NotAllowedProps) {
+}: ModalProps) {
   return (
     <Modal
       _backdropFade={{
@@ -34,12 +34,11 @@ export default function NotAllowedModal({
           <Modal.CloseButton rounded={15} />
           <Modal.Body className="space-y-10">
             <VStack space={7} alignItems="center">
-              <UpgradeAsset width={200} height={220} />
+              <BuyPremiumAsset width={200} height={220} />
               <Text className=" font-bold text-2xl ">Desbloquea Ahora</Text>
               <Text className="text-[16px] text-center">
-                Esta funcionalidad está{" "}
-                <Text className="font-bold">disponible</Text> en el plan{" "}
-                <Text className="font-bold">Premium</Text>.
+                Con el plan <Text className="font-bold">Premium</Text> podrás
+                acceder a funcionalidades exclusivas.
               </Text>
               <Text className="italic text-center">
                 ¡Mejora tu experiencia hoy! y sacale el máximo provecho a la
@@ -47,16 +46,18 @@ export default function NotAllowedModal({
               </Text>
             </VStack>
             <VStack space={3}>
-              <Button
-                className="w-full bg-white active:bg-zinc-200 mt-10 rounded-full"
-                height={12}
-                variant="solid"
-                onPress={() => {
-                  setOpenModal(false), router.push("/(modals)/buy-premium");
-                }}
-              >
-                <Text className="font-semibold  ">Adquiere Premium</Text>
-              </Button>
+              <Link href="/(modals)/buy-premium" asChild>
+                <Button
+                  className="w-full bg-white active:bg-zinc-200 mt-10 rounded-full"
+                  height={12}
+                  variant="solid"
+                  onPress={() => {
+                    setOpenModal(false), router.push("/(modals)/buy-premium");
+                  }}
+                >
+                  <Text className="font-semibold  ">Adquiere Premium</Text>
+                </Button>
+              </Link>
             </VStack>
           </Modal.Body>
         </LinearGradient>

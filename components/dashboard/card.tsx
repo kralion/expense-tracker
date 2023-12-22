@@ -10,10 +10,13 @@ import Animated, {
   interpolate,
   Extrapolate,
 } from "react-native-reanimated";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import BuyPremiumModal from "../popups/buy-premium";
+import useAuth from "@/context/AuthContext";
+import { supabase } from "@/utils/supabase";
 
 export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
   const flip = useSharedValue(0);
+  const { userData } = useAuth();
 
   const animatedStyles = useAnimatedStyle(() => {
     const rotateY = interpolate(
@@ -38,6 +41,30 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
       backfaceVisibility: "hidden",
     };
   });
+  const [presupuesto, setPresupuesto] = React.useState<number>();
+
+  async function getPremiumStatus() {
+    const { data, error } = await supabase
+      .from("presupuestos")
+      .select("*")
+      //TODO : Change this to the user id
+      .eq("usuario_id", "61c2c871-855e-41e5-8fe4-3c8059ed8ae2")
+      .single();
+
+    if (error) {
+      console.log(error);
+    }
+    if (data) {
+      setPresupuesto(data.monto);
+    }
+    console.log(userData.id);
+  }
+
+  React.useEffect(() => {
+    getPremiumStatus();
+  }, []);
+
+  const [openModal, setOpenModal] = React.useState(false);
 
   //TODO : Add animation to card when user first logs in (only once)
   // React.useEffect(() => {
@@ -55,31 +82,23 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
   React.useEffect(() => {
     flip.value = withTiming(1, { duration: 2000 });
   }, []);
-  function handleMorePress() {
-    Alert.alert(
-      "Card Options",
-      "Choose an option",
-      [
-        { text: "Edit", onPress: () => console.log("Edit pressed") },
-        {
-          text: "Delete",
-          onPress: () => console.log("Delete pressed"),
-          style: "destructive",
-        },
-        { text: "Share", onPress: () => console.log("Share pressed") },
-        { text: "Save", onPress: () => console.log("Save pressed") },
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-      ],
-      { cancelable: true }
-    );
-  }
+
   return (
     <Animated.View style={[styles.cardStyle, animatedStyles]}>
-      <View style={styles.shadowContainer}>
+      <BuyPremiumModal setOpenModal={setOpenModal} openModal={openModal} />
+      <Pressable
+        onPress={() => {
+          if (isPremiumUser) {
+            Alert.alert(
+              "Premium",
+              "Ya eres usuario premium, tienes acceso a todas las funcionalidades."
+            );
+          } else {
+            setOpenModal(true);
+          }
+        }}
+        style={styles.shadowContainer}
+      >
         <LinearGradient
           className={`flex flex-col justify-between border-2 rounded-3xl p-5 shadow-2xl space-y-10 ${
             isPremiumUser ? " border-yellow-500 " : "border-indigo-500"
@@ -131,12 +150,12 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
                 </Text>
               </View>
               <Text className="text-xl font-semibold text-center text-mutedwhite">
-                S/. 5,400
+                S/. {presupuesto}
               </Text>
             </View>
           </Pressable>
         </LinearGradient>
-      </View>
+      </Pressable>
     </Animated.View>
   );
 }

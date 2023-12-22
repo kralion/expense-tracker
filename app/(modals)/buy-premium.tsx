@@ -5,12 +5,20 @@ import { Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Button, Divider, HStack, ScrollView, VStack } from "native-base";
 import * as React from "react";
-import { Dimensions, Image, Platform, Pressable, Text } from "react-native";
+import {
+  Dimensions,
+  Image,
+  Platform,
+  Pressable,
+  Text,
+  Animated as AnimatedRN,
+} from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function BuyPremiumModal() {
@@ -24,6 +32,23 @@ export default function BuyPremiumModal() {
       duration: 300,
     });
   };
+  const fadeAnimCard = React.useRef(new AnimatedRN.Value(1)).current;
+  const fadeAnimYape = React.useRef(new AnimatedRN.Value(1)).current;
+  React.useEffect(() => {
+    AnimatedRN.timing(fadeAnimCard, {
+      toValue: yapePaymentMethod ? 0 : 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [yapePaymentMethod]);
+
+  React.useEffect(() => {
+    AnimatedRN.timing(fadeAnimYape, {
+      toValue: cardPaymentMethod ? 0 : 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [cardPaymentMethod]);
 
   const handleYapePayment = () => {
     setYapePaymentMethod(true);
@@ -51,7 +76,7 @@ export default function BuyPremiumModal() {
             <HStack space={3} alignItems="center">
               <Image
                 source={{
-                  uri: "https://userstock.io/data/wp-content/uploads/2017/09/bewakoof-com-official-219589-300x300.jpg",
+                  uri: userData?.perfil.uri,
                 }}
                 alt="profile-pic"
                 width={50}
@@ -69,8 +94,14 @@ export default function BuyPremiumModal() {
                 </Text>
               </VStack>
             </HStack>
-            <Link href="/(modals)/personal-info">
-              <Button size="sm" variant="solid" bg={"white"}>
+            <Link href="/(modals)/personal-info" asChild>
+              <Button
+                height={10}
+                width={20}
+                rounded={7}
+                variant="solid"
+                bg={"white"}
+              >
                 <Text className=" ">Editar</Text>
               </Button>
             </Link>
@@ -108,7 +139,15 @@ export default function BuyPremiumModal() {
               </Pressable>
             </HStack>
 
-            {cardPaymentMethod ? <Stripe /> : <Yape />}
+            {cardPaymentMethod ? (
+              <AnimatedRN.View style={{ opacity: fadeAnimCard }}>
+                <Stripe />
+              </AnimatedRN.View>
+            ) : (
+              <AnimatedRN.View style={{ opacity: fadeAnimYape }}>
+                <Yape />
+              </AnimatedRN.View>
+            )}
           </VStack>
           <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
         </VStack>
