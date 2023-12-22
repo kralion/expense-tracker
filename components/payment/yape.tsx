@@ -14,7 +14,7 @@ export default function Yape() {
       <VStack space={2}>
         <Text className=" text-textmuted ">Monto</Text>
         <Badge className="rounded-lg p-3">
-          <Text className="font-semibold ">S/. 15.00</Text>
+          <Text className="font-semibold  ">S/. 15.00</Text>
         </Badge>
       </VStack>
       <Text className="text-textmuted text-[12px] mt-3  ">
