@@ -13,10 +13,13 @@ import Animated, {
 import BuyPremiumModal from "../popups/buy-premium";
 import useAuth from "@/context/AuthContext";
 import { supabase } from "@/utils/supabase";
+import { useExpenseContext } from "@/context";
 
 export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
   const flip = useSharedValue(0);
+  const [totalMonthExpenses, setTotalMonthExpenses] = React.useState(0);
   const { userData } = useAuth();
+  const { sumOfAllOfExpensesMonthly } = useExpenseContext();
 
   const animatedStyles = useAnimatedStyle(() => {
     const rotateY = interpolate(
@@ -44,25 +47,35 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
   const [presupuesto, setPresupuesto] = React.useState<number>();
 
   async function getPremiumStatus() {
+    const now = new Date();
+    const oneMonthFromNow = new Date();
+    oneMonthFromNow.setMonth(now.getMonth() + 1);
+
     const { data, error } = await supabase
       .from("presupuestos")
       .select("*")
-      //TODO : Change this to the user id
-      .eq("usuario_id", "61c2c871-855e-41e5-8fe4-3c8059ed8ae2")
+      .eq("usuario_id", userData.id)
+      .lte("fecha_registro", now.toISOString().split("T")[0])
+      .gte("fecha_final", now.toISOString().split("T")[0])
       .single();
 
     if (error) {
-      console.log(error);
+      console.log("Error al obtener el presupuesto", error);
     }
     if (data) {
       setPresupuesto(data.monto);
     }
-    console.log(userData.id);
   }
 
   React.useEffect(() => {
+    async function fetchExpenses() {
+      const totalExpenses = await sumOfAllOfExpensesMonthly();
+      setTotalMonthExpenses(totalExpenses);
+    }
+
     getPremiumStatus();
-  }, []);
+    fetchExpenses();
+  }, [userData]);
 
   const [openModal, setOpenModal] = React.useState(false);
 
@@ -118,7 +131,11 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
                 Balance
               </Text>
               <Text className="text-3xl font-bold tracking-tighter  text-mutedwhite">
-                S/. 4,651.0
+                S/.{" "}
+                {presupuesto
+                  ? presupuesto - totalMonthExpenses
+                  : totalMonthExpenses}
+                .00
               </Text>
             </View>
 
@@ -140,7 +157,7 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
                 </Text>
               </View>
               <Text className="text-xl font-semibold text-center text-mutedwhite">
-                S/. 749.50
+                S/. {totalMonthExpenses}
               </Text>
             </View>
             <View className="flex flex-col gap-1">

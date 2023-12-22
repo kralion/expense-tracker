@@ -35,11 +35,15 @@ export default function AddExpense() {
   const [isLoading, setIsLoading] = React.useState(false);
   async function onSubmit(data: IGasto) {
     setIsLoading(true);
-    data.monto = parseFloat(data.monto).toString();
-    addExpense(data);
+
+    // await addExpense(data);
+    console.log("Datos a registrar", data);
+    // addExpense(data);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
     reset();
     setValue("categoria", "");
-    setIsLoading(false);
   }
 
   return (

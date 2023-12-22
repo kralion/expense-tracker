@@ -18,8 +18,8 @@ import { Keyboard, Text, TouchableWithoutFeedback } from "react-native";
 interface ICard {
   cardNumber: string;
   cvc: string;
+  expiracion: string;
   monto: string;
-  expiracion: Date;
   divisa: string;
   mensaje: string;
 }
@@ -145,14 +145,13 @@ export default function Stripe() {
                   size="lg"
                   keyboardType="numeric"
                   marginY={3}
-                  value={
-                    value
-                      ? `${value.getMonth() + 1}/${value.getFullYear()}`
-                      : ""
-                  }
+                  value={value}
                   onChangeText={(value) => {
-                    const [month, year] = value.split("/");
-                    onChange(new Date(+year, +month - 1));
+                    if (value.length === 2 && !value.includes("/")) {
+                      onChange(value + "/");
+                    } else {
+                      onChange(value);
+                    }
                   }}
                   rightElement={
                     <MaterialCommunityIcons
@@ -182,7 +181,7 @@ export default function Stripe() {
               marginTop={-1}
               leftIcon={<WarningOutlineIcon size="xs" />}
             >
-              {errors.cardNumber && errors.cardNumber.message}
+              {errors.expiracion && errors.expiracion.message}
             </FormControl.ErrorMessage>
           </FormControl>
           <FormControl isInvalid={!!errors.monto} isRequired>
