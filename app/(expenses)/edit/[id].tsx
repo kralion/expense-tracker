@@ -1,5 +1,7 @@
-import { useExpenseContext } from "@/context";
+import { useExpenseContext, useNotificationContext } from "@/context";
+import useAuth from "@/context/AuthContext";
 import { IGasto } from "@/interfaces";
+import { supabase } from "@/utils/supabase";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
 import {
@@ -28,33 +30,60 @@ export default function EditExpense() {
   const params = useLocalSearchParams<{ id: string }>();
   const [expenseDataDetails, setExpenseDataDetails] =
     React.useState<IGasto | null>();
+  const { session } = useAuth();
+  const { showNotification } = useNotificationContext();
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
     defaultValues: {
-      monto: expenseDataDetails?.monto,
-      divisa: expenseDataDetails?.divisa,
-      categoria: expenseDataDetails?.categoria,
-      descripcion: expenseDataDetails?.descripcion,
+      monto: "150",
+      divisa: "pen",
+      categoria: "ropa",
+      descripcion: "Gasto de Ropa",
     },
   });
-  const { getSingleExpense } = useExpenseContext();
 
+  React.useEffect(() => {
+    const fetchExpenseData = async () => {
+      const data = await getSingleExpense(params.id);
+      setExpenseDataDetails(data);
+    };
+
+    fetchExpenseData();
+  }, []);
   async function onSubmit(data: FormData) {
     data.monto = parseFloat(data.monto).toString();
     alert(JSON.stringify(data));
   }
-  React.useEffect(() => {
-    const fetchExpense = async () => {
-      const fetchedExpense = await getSingleExpense(params.id);
-      setExpenseDataDetails(fetchedExpense);
-    };
+  async function getSingleExpense(id: string): Promise<IGasto | null> {
+    if (!session?.user?.id) {
+      throw new Error("La sesión o el ID de usuario no están definidos");
+    }
 
-    fetchExpense();
-    console.log(JSON.stringify(expenseDataDetails, null, 2));
-  }, [params.id]);
+    try {
+      const { data, error } = await supabase
+        .from("expenses")
+        .select("*")
+        .eq("id", id) // Verificar el ID del gasto
+        .eq("session_id", session.user.id); // Verificar que el gasto pertenezca al usuario en sesión
+
+      if (error) throw error;
+      if (data.length === 0) return null;
+
+      console.log("Datos del Gasto", JSON.stringify(data));
+      return data[0];
+    } catch (error) {
+      console.error("Error al obtener gasto:", error);
+      showNotification({
+        title: "Error al obtener gasto",
+        alertStatus: "error",
+      });
+      return null;
+    }
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View className="bg-background h-screen px-7 mt-6 rounded-b-xl">
@@ -83,7 +112,7 @@ export default function EditExpense() {
                   size="lg"
                   color="gray.800"
                   marginY={3}
-                  accessibilityLabel="Seleccineuna categoria"
+                  accessibilityLabel="Seleccione una categoria"
                   placeholder="Seleccione"
                   borderRadius={7}
                   dropdownIcon={

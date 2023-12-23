@@ -1,25 +1,23 @@
 import { SavingGoalModal } from "@/components/popups/save-goals";
-import { router } from "expo-router";
+import { Metas } from "@/components/shared/metas";
+import useAuth from "@/context/AuthContext";
+import { useExpenseContext } from "@/context/ExpenseContext";
+import { ISaving } from "@/interfaces/saving";
+import { supabase } from "@/utils/supabase";
+import { FontAwesome5 } from "@expo/vector-icons";
 import {
   Button,
   FormControl,
   HStack,
   Input,
+  ScrollView,
   VStack,
   WarningOutlineIcon,
-  ScrollView,
 } from "native-base";
 import * as React from "react";
-import { Image, Text, View, FlatList } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { ProgressBar } from "react-native-paper";
-import { supabase } from "@/utils/supabase";
 import { Controller, useForm } from "react-hook-form";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { ISaving } from "@/interfaces/saving";
-import { useExpenseContext } from "@/context/ExpenseContext";
-import { Metas } from "@/components/shared/metas";
-import useAuth from "@/context/AuthContext";
+import { FlatList, Image, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Wallet() {
   const [showSavingGoalModal, setShowSavingGoalModal] = React.useState(false);
@@ -46,7 +44,7 @@ export default function Wallet() {
   const { userData } = useAuth();
   async function onSubmit(data: ISaving) {
     data.id = userData?.id;
-    setIsLoading(true);  
+    setIsLoading(true);
     try {
       const { error } = await supabase
         .from("metas")

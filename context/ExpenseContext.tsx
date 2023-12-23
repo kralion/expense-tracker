@@ -87,8 +87,7 @@ export const ExpenseContextProvider = ({
       const { data, error } = await supabase
         .from("expenses")
         .select("*")
-        .eq("session_id", session.user.id)
-        .eq("id", id);
+        .eq("session_id", session.user.id);
 
       if (error) throw error;
       if (data.length === 0) return null;

@@ -1,5 +1,7 @@
 import { useExpenseContext, useNotificationContext } from "@/context";
+import useAuth from "@/context/AuthContext";
 import { IGasto } from "@/interfaces";
+import { supabase } from "@/utils/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack, router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -11,8 +13,12 @@ export default function ExpenseDetailsModal() {
   const [expenseDataDetails, setExpenseDataDetails] =
     React.useState<IGasto | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
-  const { deleteExpenseById, getSingleExpense } = useExpenseContext();
+  const { session } = useAuth();
+  const { showNotification } = useNotificationContext();
+  const { deleteExpenseById } = useExpenseContext();
   const params = useLocalSearchParams<{ id: string }>();
+  const [presupuesto, setPresupuesto] = React.useState<any>([]);
+
   const handleDeleteExpense = async (id: string) => {
     setIsLoading(true);
     deleteExpenseById(id);
@@ -20,24 +26,65 @@ export default function ExpenseDetailsModal() {
     router.push("/(tabs)/");
   };
 
+  async function getSingleExpense(id: string): Promise<IGasto | null> {
+    if (!session?.user?.id) {
+      throw new Error("La sesión o el ID de usuario no están definidos");
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from("expenses")
+        .select("*")
+        .eq("id", id) // Verificar el ID del gasto
+        .eq("session_id", session.user.id); // Verificar que el gasto pertenezca al usuario en sesión
+
+      if (error) throw error;
+      if (data.length === 0) return null;
+
+      console.log("Datos del Gasto", JSON.stringify(data));
+      return data[0];
+    } catch (error) {
+      console.error("Error al obtener gasto:", error);
+      showNotification({
+        title: "Error al obtener gasto",
+        alertStatus: "error",
+      });
+      return null;
+    }
+  }
+
   React.useEffect(() => {
-    const fetchExpense = async () => {
-      const fetchedExpense = await getSingleExpense(params.id);
-      console.log(params.id);
-      setExpenseDataDetails(fetchedExpense);
+    const fetchExpenseData = async () => {
+      const data = await getSingleExpense(params.id);
+      setExpenseDataDetails(data);
     };
 
-    fetchExpense();
-    console.log(JSON.stringify(expenseDataDetails, null, 2));
-  }, [params.id]);
+    fetchExpenseData();
+  }, []);
+  async function getPresupuesto() {
+    const { data, error } = await supabase
+      .from("presupuestos")
+      .select("monto")
+      .eq("usuario_id", session?.user?.id)
+      .single();
+    if (error) {
+      console.log("Error al obtener el presupuesto", error);
+    }
+    if (data) {
+      setPresupuesto(data.monto);
+    }
+  }
+  React.useEffect(() => {
+    getPresupuesto();
+  }, []);
+
   const monto_gastado = parseInt(
     expenseDataDetails?.monto ? expenseDataDetails?.monto : "0"
   );
-  // const monto_presupuestado = expense.cantidad;
-  //TODO : Cambiar este valor por el monto presupuestado del mes actual
-  const monto_presupuestado = 1000;
-  const totalPercentageExpensed = (monto_gastado / monto_presupuestado) * 100;
-
+  const monto_presupuestado = 2470;
+  const totalPercentageExpensed = parseFloat(
+    ((monto_gastado / monto_presupuestado) * 100).toFixed(2)
+  );
   return (
     <VStack bgColor="white" rounded={7} p={3}>
       <Stack.Screen
@@ -92,7 +139,14 @@ export default function ExpenseDetailsModal() {
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Divisa</Text>
-          <Text className="font-bold">{expenseDataDetails?.divisa}</Text>
+          <Text className="font-bold">
+            {" "}
+            {expenseDataDetails?.divisa === "pen"
+              ? "soles"
+              : expenseDataDetails?.divisa === "usd"
+              ? "dolares"
+              : expenseDataDetails?.divisa}
+          </Text>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Categoría</Text>
@@ -105,12 +159,21 @@ export default function ExpenseDetailsModal() {
         <HStack justifyContent="space-between" alignItems="center">
           <Text>% Presupuesto</Text>
 
-          <Text className="font-bold">{expenseDataDetails?.monto}</Text>
+          <Text className="font-bold">{totalPercentageExpensed}%</Text>
         </HStack>
 
         <HStack justifyContent="flex-end" space={3}>
           <Badge size="lg" variant="outline" className="rounded-full">
-            {expenseDataDetails?.fecha?.toLocaleString()}
+            {expenseDataDetails?.fecha
+              ? new Date(expenseDataDetails?.fecha).toLocaleDateString(
+                  "en-GB",
+                  {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  }
+                )
+              : ""}
           </Badge>
           <Badge size="lg" variant="solid" className="rounded-full">
             {expenseDataDetails?.fecha
@@ -147,8 +210,7 @@ export default function ExpenseDetailsModal() {
 
       <HStack justifyContent="center" p={5} space={3}>
         <Slider
-          maxW="330"
-          defaultValue={totalPercentageExpensed}
+          defaultValue={30}
           minValue={0}
           maxValue={100}
           colorScheme={totalPercentageExpensed >= 80 ? "error" : "primary"}
