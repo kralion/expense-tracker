@@ -1,3 +1,6 @@
+import DefaultAvatar from "@/assets/svgs/avatar.svg";
+import { useNotificationContext } from "@/context";
+import useAuth from "@/context/AuthContext";
 import { supabase } from "@/utils/supabase";
 import {
   Entypo,
@@ -5,15 +8,11 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { Session } from "@supabase/supabase-js";
+import { Image } from "expo-image";
 import { Link, router } from "expo-router";
 import { Center, HStack, Heading, Icon, VStack } from "native-base";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
-import DefaultAvatar from "@/assets/svgs/avatar.svg";
-import { Image } from "expo-image";
-import { useNotificationContext } from "@/context";
-import useAuth from "@/context/AuthContext";
 
 export default function App() {
   const { userData } = useAuth();
@@ -41,7 +40,7 @@ export default function App() {
           {userData ? (
             <Image
               source={{
-                uri: userData.perfil.uri,
+                uri: "https://img.icons8.com/?size=40&id=23454&format=png",
               }}
               className="rounded-full"
               alt="profile"

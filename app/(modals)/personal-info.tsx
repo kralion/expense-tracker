@@ -36,7 +36,7 @@ export default function PersonalInfo() {
       nombres: userData?.nombres,
       apellidos: userData?.apellidos,
       email: session?.user?.email,
-      perfil: userData?.perfil.uri,
+      perfil: "https://img.icons8.com/?size=40&id=23454&format=png",
     },
   });
 
@@ -55,7 +55,7 @@ export default function PersonalInfo() {
           title: "Error al actualizar los datos",
           alertStatus: "error",
         });
-        return; // Salir de la función en caso de error
+        return;
       }
 
       showNotification({
@@ -111,7 +111,7 @@ export default function PersonalInfo() {
             {userData ? (
               <Image
                 source={{
-                  uri: userData.perfil.uri,
+                  uri: "https://img.icons8.com/?size=40&id=23454&format=png",
                 }}
                 alt="profile-pic"
                 style={{ width: 80, height: 80 }}
