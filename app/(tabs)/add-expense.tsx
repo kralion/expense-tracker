@@ -13,12 +13,13 @@ import {
   Input,
   Radio,
   Select,
+  Switch,
   TextArea,
   VStack,
   WarningOutlineIcon,
 } from "native-base";
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, Form, useForm } from "react-hook-form";
 import { Keyboard, Text, TouchableWithoutFeedback } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -60,26 +61,27 @@ export default function AddExpense() {
       const numeroGasto = lastExpense ? lastExpense.numeroGasto + 1 : 1;
 
       // Inserta el nuevo gasto
-      const { error } = await supabase
-        .from("expenses")
-        .insert({
-          categoria:
-            data.categoria.charAt(0).toUpperCase() + data.categoria.slice(1),
-          monto: data.monto,
-          divisa: data.divisa,
-          descripcion: data.descripcion,
-          numeroGasto,
-        })
-        .single();
+      // const { error } = await supabase
+      //   .from("expenses")
+      //   .insert({
+      //     categoria:
+      //       data.categoria.charAt(0).toUpperCase() + data.categoria.slice(1),
+      //     monto: data.monto,
+      //     divisa: data.divisa,
+      //     descripcion: data.descripcion,
+      //     numeroGasto,
+      //   })
+      //   .single();
 
-      if (error) {
-        console.log("Error al guardar las gastos", error);
-      } else {
-        showNotification({
-          title: "Gasto registrado",
-          alertStatus: "success",
-        });
-      }
+      // if (error) {
+      //   console.log("Error al guardar las gastos", error);
+      // } else {
+      //   showNotification({
+      //     title: "Gasto registrado",
+      //     alertStatus: "success",
+      //   });
+      // }
+      alert(JSON.stringify(data));
     } catch (error) {
       console.log("Error al guardar las gastos", error);
     } finally {
@@ -91,7 +93,7 @@ export default function AddExpense() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView className="bg-accent h-screen">
+      <SafeAreaView className=" h-screen">
         <HStack justifyContent="space-between" className="p-7">
           <Text className="font-bold text-center text-xl ">
             Registrar Gasto
@@ -163,7 +165,6 @@ export default function AddExpense() {
               {errors.categoria && "Selecciona una categoría"}
             </FormControl.ErrorMessage>
           </FormControl>
-
           <FormControl isInvalid={!!errors.monto} isRequired>
             <VStack space={1}>
               <FormControl.Label>
@@ -256,33 +257,17 @@ export default function AddExpense() {
             )}
             defaultValue=""
           />
-
-          {/* //! Quiza despues se implemente esta feature */}
-          {/* <Select
-            id="tipo"
-            borderRadius={7}
-            selectedValue={type}
-            size="md"
-            color="gray.800"
-            placeholder="Tipo"
-            minWidth="105"
-            dropdownIcon={
-              <FontAwesome5
-                name="chevron-down"
-                color="#6D6868"
-                marginRight={10}
-                size={10}
-              />
-            }
-            _selectedItem={{
-              bg: "teal.500",
-            }}
-            mt={1}
-            onValueChange={(itemValue) => setType(itemValue)}
-          >
-            <Select.Item label="Fijo" value="transporte" />
-            <Select.Item label="Variable" value="variable" />
-          </Select> */}
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <HStack alignItems="center" space={4}>
+                <Text>Gasto Periódico</Text>
+                <Switch value={value} onToggle={onChange} />
+              </HStack>
+            )}
+            name="periodicidad"
+            defaultValue={false}
+          />
         </VStack>
         <Button
           onPress={handleSubmit(onSubmit)}

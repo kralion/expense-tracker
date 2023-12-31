@@ -2,6 +2,7 @@ export interface IGasto {
   id?: string;
   fecha?: Date;
   descripcion?: string;
+  periodicidad?: boolean;
   categoria: string;
   monto: string;
   assetIdentificador?: string;
