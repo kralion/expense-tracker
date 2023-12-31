@@ -176,7 +176,6 @@ export default function SignUp() {
 
             <FormControl
               flex={1}
-              maxW={180}
               isInvalid={!!errors.apellidos && !!errors.apellidos.message}
             >
               <Controller
