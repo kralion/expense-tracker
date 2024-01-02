@@ -17,7 +17,7 @@ import {
 } from "native-base";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { FlatList, Image, Pressable, Text } from "react-native";
+import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Budget() {
@@ -89,228 +89,177 @@ export default function Budget() {
 
   return (
     <SafeAreaView className="px-5">
-      <ScrollView>
-        <VStack space={2} mb={10}>
+      <ScrollView className="space-y-5">
+        <VStack space={2}>
           <Text className="font-bold text-left text-2xl">Presupuesto</Text>
-          <Text>Gestiona tus finanzas personales.</Text>
+          <Text>Registra un presupuesto mensuales para limitarte</Text>
         </VStack>
-        <VStack space={7}>
-          <VStack>
-            <HStack alignItems="center" space={2}>
-              <Image
-                source={{
-                  uri: "https://img.icons8.com/?size=48&id=34028&format=png",
-                }}
-                alt="Presupuesto"
-                width={30}
-                height={30}
-              />
-              <Text className="font-semibold text-lg">Presupuesto</Text>
-            </HStack>
-            <FormControl isInvalid={!!errors.monto} isRequired>
+        <VStack space={5}>
+          <FormControl isInvalid={!!errors.monto} isRequired>
+            <FormControl.Label>Monto</FormControl.Label>
+            <Controller
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  size="lg"
+                  keyboardType="numeric"
+                  isFocused
+                  w={350}
+                  value={value}
+                  onChangeText={(value) => onChange(value)}
+                  rightElement={
+                    <FontAwesome5
+                      name="dollar-sign"
+                      color="#6D6868"
+                      marginRight={10}
+                      size={10}
+                    />
+                  }
+                  placeholder="450.50"
+                  borderRadius={7}
+                />
+              )}
+              name="monto"
+              rules={{
+                required: { value: true, message: "Ingrese el monto" },
+                pattern: {
+                  value: /^\d+(\.\d*)?$/,
+                  message: "Solo se permiten números válidos",
+                },
+              }}
+            />
+            <FormControl.ErrorMessage
+              marginTop={-1}
+              leftIcon={<WarningOutlineIcon size="xs" />}
+            >
+              {errors.monto && errors.monto.message}
+            </FormControl.ErrorMessage>
+          </FormControl>
+
+          <HStack space={3}>
+            <FormControl
+              flex={1}
+              isInvalid={!!errors.fecha_registro}
+              isRequired
+            >
+              <FormControl.Label>Fecha Registro</FormControl.Label>
               <Controller
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <Input
-                    size="lg"
-                    keyboardType="numeric"
-                    isFocused
-                    marginY={3}
-                    w={350}
-                    value={value}
-                    onChangeText={(value) => onChange(value)}
-                    rightElement={
-                      <FontAwesome5
-                        name="dollar-sign"
-                        color="#6D6868"
-                        marginRight={10}
-                        size={10}
+                  <Pressable onPress={toggleDatepicker}>
+                    <Input
+                      size="lg"
+                      editable={false}
+                      value={
+                        value
+                          ? new Date(value).toLocaleDateString()
+                          : "12/12/2021"
+                      }
+                    />
+                    {showPicker && (
+                      <DateTimePicker
+                        value={fechaRegistro}
+                        mode="date"
+                        display="default"
+                        onChange={(_, selectedDate) => {
+                          onChangeRegistro(selectedDate);
+                          onChange(selectedDate);
+                          toggleDatepicker(); // Esto ocultará el DateTimePicker
+                        }}
                       />
-                    }
-                    placeholder="450.50"
-                    borderRadius={7}
-                  />
+                    )}
+                  </Pressable>
                 )}
-                name="monto"
+                name="fecha_registro"
                 rules={{
-                  required: { value: true, message: "Ingrese el monto" },
-                  pattern: {
-                    value: /^\d+(\.\d*)?$/,
-                    message: "Solo se permiten números válidos",
-                  },
+                  required: { value: true, message: "Requerido" },
                 }}
               />
               <FormControl.ErrorMessage
-                marginTop={-1}
                 leftIcon={<WarningOutlineIcon size="xs" />}
               >
-                {errors.monto && errors.monto.message}
+                {errors.fecha_registro && errors.fecha_registro.message}
               </FormControl.ErrorMessage>
             </FormControl>
-          </VStack>
 
-          <HStack justifyContent="space-between">
-            <VStack space={2}>
-              <HStack alignItems="center" space={2}>
-                <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=80&id=67337&format=png",
-                  }}
-                  alt="Fecha inicio"
-                  width={30}
-                  height={30}
-                />
-                <Text className="font-semibold text-lg ">Fecha inicio</Text>
-              </HStack>
-
-              <FormControl
-                flex={1}
-                isInvalid={!!errors.fecha_registro}
-                isRequired
+            <FormControl flex={1} isInvalid={!!errors.fecha_final} isRequired>
+              <FormControl.Label>Fecha Expiración</FormControl.Label>
+              <Controller
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <Pressable onPress={toggleDatepicker}>
+                    <Input
+                      size="lg"
+                      editable={false}
+                      value={
+                        value
+                          ? new Date(value).toLocaleDateString()
+                          : "12/12/2023"
+                      }
+                    />
+                    {showPicker && (
+                      <DateTimePicker
+                        value={fechaFinal}
+                        mode="date"
+                        display="default"
+                        onChange={(_, selectedDate) => {
+                          onChangeFinal(selectedDate);
+                          onChange(selectedDate);
+                          toggleDatepicker();
+                        }}
+                      />
+                    )}
+                  </Pressable>
+                )}
+                name="fecha_final"
+                rules={{
+                  required: { value: true, message: "Requerido" },
+                }}
+              />
+              <FormControl.ErrorMessage
+                leftIcon={<WarningOutlineIcon size="xs" />}
               >
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <Pressable onPress={toggleDatepicker}>
-                      <Input
-                        size="lg"
-                        editable={false}
-                        value={
-                          value
-                            ? new Date(value).toLocaleDateString()
-                            : "12/12/2021"
-                        }
-                      />
-                      {showPicker && (
-                        <DateTimePicker
-                          value={fechaRegistro}
-                          mode="date"
-                          display="default"
-                          onChange={(_, selectedDate) => {
-                            onChangeRegistro(selectedDate);
-                            onChange(selectedDate);
-                            toggleDatepicker(); // Esto ocultará el DateTimePicker
-                          }}
-                        />
-                      )}
-                    </Pressable>
-                  )}
-                  name="fecha_registro"
-                  rules={{
-                    required: { value: true, message: "Requerido" },
-                  }}
-                />
-                <FormControl.ErrorMessage
-                  leftIcon={<WarningOutlineIcon size="xs" />}
-                >
-                  {errors.fecha_registro && errors.fecha_registro.message}
-                </FormControl.ErrorMessage>
-              </FormControl>
-            </VStack>
-
-            <VStack space={2}>
-              <HStack alignItems="center" space={2}>
-                <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=80&id=67337&format=png",
-                  }}
-                  alt="Fecha final"
-                  width={30}
-                  height={30}
-                />
-                <Text className="font-semibold text-lg">Fecha final</Text>
-              </HStack>
-
-              <FormControl flex={1} isInvalid={!!errors.fecha_final} isRequired>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <Pressable onPress={toggleDatepicker}>
-                      <Input
-                        size="lg"
-                        editable={false}
-                        value={
-                          value
-                            ? new Date(value).toLocaleDateString()
-                            : "12/12/2023"
-                        }
-                      />
-                      {showPicker && (
-                        <DateTimePicker
-                          value={fechaFinal}
-                          mode="date"
-                          display="default"
-                          onChange={(_, selectedDate) => {
-                            onChangeFinal(selectedDate);
-                            onChange(selectedDate);
-                            toggleDatepicker();
-                          }}
-                        />
-                      )}
-                    </Pressable>
-                  )}
-                  name="fecha_final"
-                  rules={{
-                    required: { value: true, message: "Requerido" },
-                  }}
-                />
-                <FormControl.ErrorMessage
-                  leftIcon={<WarningOutlineIcon size="xs" />}
-                >
-                  {errors.fecha_final && errors.fecha_final.message}
-                </FormControl.ErrorMessage>
-              </FormControl>
-            </VStack>
+                {errors.fecha_final && errors.fecha_final.message}
+              </FormControl.ErrorMessage>
+            </FormControl>
           </HStack>
 
-          <VStack space={3}>
-            <HStack alignItems="center" space={2}>
-              <Image
-                source={{
-                  uri: "https://img.icons8.com/?size=80&id=czTWm4uF2TUo&format=png",
-                }}
-                alt="Descripción"
-                width={30}
-                height={30}
-              />
-              <Text className="font-semibold text-lg">Descripción</Text>
-            </HStack>
-            <FormControl isInvalid={!!errors.descripcion} isRequired>
-              <Controller
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <TextArea
-                    autoCompleteType
-                    placeholder="Escribe aquí ..."
-                    minH={35}
-                    isFocused
-                    value={value}
-                    onChangeText={(value) => onChange(value)}
-                    borderRadius={7}
-                    size="lg"
-                  />
-                )}
-                name="descripcion"
-              />
-              <FormControl.ErrorMessage
-                marginTop={-1}
-                leftIcon={<WarningOutlineIcon size="xs" />}
-              >
-                {errors.descripcion && errors.descripcion.message}
-              </FormControl.ErrorMessage>
-            </FormControl>
-          </VStack>
-          <Button
-            className="rounded-lg mt-10"
-            py={5}
-            isLoading={isLoading}
-            onPress={handleSubmit(onSubmit)}
-          >
-            Registrar
-          </Button>
-          <Text className="font-bold text-xl mt-20">
-            Historial de Presupuestos
-          </Text>
+          <FormControl isInvalid={!!errors.descripcion} isRequired>
+            <FormControl.Label>Descripción</FormControl.Label>
+            <Controller
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <TextArea
+                  autoCompleteType
+                  placeholder="Escribe aquí ..."
+                  minH={35}
+                  isFocused
+                  value={value}
+                  onChangeText={(value) => onChange(value)}
+                  borderRadius={7}
+                  size="lg"
+                />
+              )}
+              name="descripcion"
+            />
+            <FormControl.ErrorMessage
+              marginTop={-1}
+              leftIcon={<WarningOutlineIcon size="xs" />}
+            >
+              {errors.descripcion && errors.descripcion.message}
+            </FormControl.ErrorMessage>
+          </FormControl>
+        </VStack>
+        <Button
+          className="rounded-lg"
+          py={3}
+          isLoading={isLoading}
+          onPress={handleSubmit(onSubmit)}
+        >
+          Registrar
+        </Button>
+        <VStack space={3}>
+          <Text className="font-bold text-xl">Historial de Presupuestos</Text>
           <FlatList
             data={presupuesto}
             keyExtractor={(presupuesto) => String(presupuesto.id)}
