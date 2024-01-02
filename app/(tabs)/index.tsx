@@ -43,7 +43,7 @@ export default function Index() {
 
   async function createNotification() {
     const notification = {
-      titulo: "Bienvenido a Expense Tracker",
+      titulo: "Bienvenido !!!",
       descripcion:
         "Gracias por registrarte en Expense Tracker, ahora puedes comenzar a usar la aplicación.",
       fecha: new Date().toISOString(),

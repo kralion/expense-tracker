@@ -17,15 +17,7 @@ import {
 } from "native-base";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
-import {
-  FlatList,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { FlatList, Image, Pressable, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Budget() {

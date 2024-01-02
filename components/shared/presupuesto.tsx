@@ -38,21 +38,19 @@ export function Presupuesto({ presupuesto }: { presupuesto: IPresupuesto }) {
                   />
                 </Box>
                 <VStack space={1}>
-                  <Text className="font-semibold">Presupuesto:</Text>
-                  <Text className="text-textmuted">Fechas:</Text>
-                </VStack>
-              </HStack>
-              <VStack space={1}>
-                <HStack justifyContent="space-between">
+                  <Text className="text-textmuted">Monto Actual</Text>
                   <Text className=" text-[16px] text-black font-bold">
                     S/. {monto}
                   </Text>
+                </VStack>
+              </HStack>
+              <VStack space={1}>
+                <HStack justifyContent="space-between"></HStack>
+                <HStack justifyContent={"space-between"}>
+                  <Text className="text-primary ">{fecha_registro}</Text>
                 </HStack>
                 <HStack justifyContent={"space-between"}>
-                  <Text className="text-[14px] ">{fecha_registro}</Text>
-                </HStack>
-                <HStack justifyContent={"space-between"}>
-                  <Text className="text-[14px] ">{fecha_final}</Text>
+                  <Text className="text-red-500 ">{fecha_final}</Text>
                 </HStack>
               </VStack>
             </HStack>
