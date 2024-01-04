@@ -64,9 +64,9 @@ export default function BuyPremiumModal() {
   };
 
   return (
-    <SafeAreaView className="px-6 h-screen pt-6 bg-primary">
-      <ScrollView>
-        <VStack space={5}>
+    <ScrollView>
+      <SafeAreaView className=" h-screen pt-6 bg-primary">
+        <VStack space={5} className="px-6">
           <HStack justifyContent="space-between" alignItems="center">
             <Text className=" text-xl font-bold text-white ">
               Información de Compra
@@ -152,7 +152,7 @@ export default function BuyPremiumModal() {
           </VStack>
           <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
         </VStack>
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ScrollView>
   );
 }

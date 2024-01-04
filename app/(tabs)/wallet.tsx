@@ -1,24 +1,23 @@
 import { SavingGoalModal } from "@/components/popups/save-goals";
-import { router } from "expo-router";
+import { Metas } from "@/components/shared/metas";
+import useAuth from "@/context/AuthContext";
+import { useExpenseContext } from "@/context/ExpenseContext";
+import { ISaving } from "@/interfaces/saving";
+import { supabase } from "@/utils/supabase";
+import { FontAwesome5 } from "@expo/vector-icons";
 import {
   Button,
   FormControl,
   HStack,
   Input,
+  ScrollView,
   VStack,
   WarningOutlineIcon,
-  ScrollView,
 } from "native-base";
 import * as React from "react";
-import { Image, Text, View, FlatList } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { supabase } from "@/utils/supabase";
 import { Controller, useForm } from "react-hook-form";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { ISaving } from "@/interfaces/saving";
-import { useExpenseContext } from "@/context/ExpenseContext";
-import { Metas } from "@/components/shared/metas";
-import useAuth from "@/context/AuthContext";
+import { FlatList, Image, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Wallet() {
   const [showSavingGoalModal, setShowSavingGoalModal] = React.useState(false);
@@ -37,10 +36,8 @@ export default function Wallet() {
     handleSubmit,
     formState: { errors },
     reset,
-    setValue,
   } = useForm<ISaving>();
 
-  const { addExpense } = useExpenseContext();
   const [isLoading, setIsLoading] = React.useState(false);
   const { userData } = useAuth();
   async function onSubmit(data: ISaving) {
@@ -68,9 +65,9 @@ export default function Wallet() {
   }
 
   return (
-    <SafeAreaView className="px-5 mt-5">
-      <ScrollView>
-        <VStack space={2} mb={10}>
+    <ScrollView>
+      <SafeAreaView className="px-5 pt-5">
+        <VStack space={2} mb={7}>
           <Text className="font-bold text-left text-2xl">Metas de ahorro</Text>
           <Text>
             Gestiona y visualiza tus metas de ahorro en la aplicación móvil de
@@ -203,7 +200,7 @@ export default function Wallet() {
             renderItem={({ item: metas }) => <Metas metas={metas} />}
           />
         </VStack>
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ScrollView>
   );
 }

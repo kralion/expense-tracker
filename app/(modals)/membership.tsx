@@ -1,14 +1,12 @@
-import { View, Text } from "react-native";
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Image } from "expo-image";
 import { ScrollView } from "native-base";
+import React from "react";
+import { Text } from "react-native";
 
-const Membership = () => {
+export default function Membership() {
   return (
     <ScrollView className="p-5">
       <Text className="text-xl font-bold">Plan Actual</Text>
     </ScrollView>
   );
-};
-
-export default Membership;
+}

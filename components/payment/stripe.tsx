@@ -291,10 +291,12 @@ export default function Stripe() {
             colorScheme="accent"
             onPress={handleSubmit(onSubmit)}
             isLoading={isLoading}
-            rounded={7}
+            rounded={10}
+            p={4}
+            className="w-full"
             marginTop={2}
           >
-            <Text className="font-semibold px-5 py-1">Realizar Compra</Text>
+            <Text className="font-bold px-5 py-1">Realizar Compra</Text>
           </Button>
         </Center>
       </VStack>

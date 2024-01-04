@@ -3,9 +3,8 @@ import { useNotificationContext } from "@/context";
 import useAuth from "@/context/AuthContext";
 import { INotification } from "@/interfaces/notification";
 import { supabase } from "@/utils/supabase";
-import { FlatList, VStack, View } from "native-base";
+import { FlatList, VStack } from "native-base";
 import * as React from "react";
-import { ScrollView, Text } from "react-native";
 
 export default function Notifications() {
   const { showNotification } = useNotificationContext();

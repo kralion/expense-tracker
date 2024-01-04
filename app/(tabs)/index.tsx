@@ -97,8 +97,8 @@ export default function Index() {
     <>
       {showAll ? (
         <Animated.View style={{ opacity: fadeAnim }}>
-          <SafeAreaView>
-            <ScrollView className=" rounded-t-3xl ">
+          <ScrollView className=" rounded-t-3xl ">
+            <SafeAreaView>
               <VStack space={5} className="bg-background rounded-t-3xl ">
                 <HStack
                   px={4}
@@ -127,8 +127,8 @@ export default function Index() {
                   )}
                 />
               </VStack>
-            </ScrollView>
-          </SafeAreaView>
+            </SafeAreaView>
+          </ScrollView>
         </Animated.View>
       ) : (
         <SafeAreaView className="bg-primary  ">
@@ -175,11 +175,14 @@ export default function Index() {
             <View className="z-10 h-20">
               <Card isPremiumUser={isPremiumUser} />
             </View>
-            <ScrollView className=" rounded-t-3xl ">
-              <VStack space={5} className="bg-background rounded-t-3xl ">
+            <ScrollView className=" rounded-t-3xl  ">
+              <VStack
+                space={5}
+                className="bg-background h-screen rounded-t-3xl "
+              >
                 <HStack
                   px={4}
-                  marginTop={100}
+                  marginTop={120}
                   className="items-center"
                   justifyContent="space-between"
                 >

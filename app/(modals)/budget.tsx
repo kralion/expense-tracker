@@ -96,8 +96,8 @@ export default function Budget() {
   }
 
   return (
-    <SafeAreaView className="p-5">
-      <ScrollView className="space-y-5 h-screen">
+    <ScrollView>
+      <SafeAreaView className="p-5 h-screen space-y-5">
         <HStack justifyContent="space-between" alignItems="start">
           <VStack space={2} className="w-2/3">
             <Text className="font-bold text-left text-2xl">Presupuestos</Text>
@@ -287,7 +287,7 @@ export default function Budget() {
             )}
           />
         </VStack>
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ScrollView>
   );
 }
