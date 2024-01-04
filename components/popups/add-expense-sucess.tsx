@@ -1,16 +1,6 @@
-import {
-  Alert,
-  Badge,
-  Box,
-  Button,
-  Center,
-  Heading,
-  Text,
-  VStack,
-} from "native-base";
+import { Badge, Box, Button, Center, Heading, Text, VStack } from "native-base";
 import React from "react";
 import { Image, ImageBackground } from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AddExpenseSuccesModal() {
   return (

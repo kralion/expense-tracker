@@ -61,25 +61,24 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const { session } = useAuth();
-
-  if (!session) {
-    return (
-      <Stack>
-        <Stack.Screen
-          name="(auth)"
-          options={{
-            headerShown: false,
-            title: "",
-          }}
-        />
-      </Stack>
-    );
-  }
-
   return (
     <Stack>
+      <Stack.Screen
+        name="(auth)"
+        options={{
+          headerShown: false,
+          title: "",
+        }}
+      />
       <Stack.Screen name="(tabs)" options={{ headerShown: false, title: "" }} />
+      <Stack.Screen
+        name="(modals)"
+        options={{ headerShown: false, title: "" }}
+      />
+      <Stack.Screen
+        name="(expenses)"
+        options={{ headerShown: false, title: "" }}
+      />
     </Stack>
   );
 }
