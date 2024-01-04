@@ -3,8 +3,9 @@ import useAuth from "@/context/AuthContext";
 import { useExpenseContext } from "@/context/ExpenseContext";
 import { IPresupuesto } from "@/interfaces/presupuesto";
 import { supabase } from "@/utils/supabase";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { router } from "expo-router";
 import {
   Button,
   FormControl,
@@ -17,7 +18,14 @@ import {
 } from "native-base";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { FlatList, Image, Pressable, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Budget() {
@@ -88,12 +96,23 @@ export default function Budget() {
   }
 
   return (
-    <SafeAreaView className="px-5">
-      <ScrollView className="space-y-5">
-        <VStack space={2}>
-          <Text className="font-bold text-left text-2xl">Presupuesto</Text>
-          <Text>Registra un presupuesto mensuales para limitarte</Text>
-        </VStack>
+    <SafeAreaView className="p-5">
+      <ScrollView className="space-y-5 h-screen">
+        <HStack justifyContent="space-between" alignItems="start">
+          <VStack space={2} className="w-2/3">
+            <Text className="font-bold text-left text-2xl">Presupuestos</Text>
+            <Text>Registra un presupuesto mensuales para limitarte</Text>
+          </VStack>
+
+          <TouchableOpacity
+            className="mt-1 bg-teal-500/30 rounded-full p-1"
+            onPress={() => {
+              router.back();
+            }}
+          >
+            <AntDesign name="close" size={20} />
+          </TouchableOpacity>
+        </HStack>
         <VStack space={5}>
           <FormControl isInvalid={!!errors.monto} isRequired>
             <FormControl.Label>Monto</FormControl.Label>

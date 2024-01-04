@@ -94,10 +94,9 @@ export default function PersonalInfo() {
   }, []);
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <VStack margin={6} space={5}>
+      <VStack margin={5}>
         <HStack
           space={12}
-          marginBottom={5}
           alignItems="center"
           justifyContent="space-between"
           className="bg-background"
@@ -132,7 +131,7 @@ export default function PersonalInfo() {
             </Button>
           </HStack>
         </HStack>
-        <Divider h={0.3} />
+        <Divider h={0.5} my={3} className="bg-accent rounded-full" />
         <HStack>
           <View className="bg-accent w-1 h-8 rounded-full my-3 " />
           <Text className="text-[#464444] p-3 font-bold text-lg">

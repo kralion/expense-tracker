@@ -48,8 +48,18 @@ export default function ModalsLayout() {
         name="membership"
         options={{
           presentation: "card",
-          title: "",
-          headerShown: false,
+          title: "Membresía",
+          headerLeft: () => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  router.back();
+                }}
+              >
+                <FontAwesome5 name="chevron-left" size={20} color="teal" />
+              </TouchableOpacity>
+            );
+          },
         }}
       />
       <Stack.Screen
@@ -63,6 +73,17 @@ export default function ModalsLayout() {
       <Stack.Screen
         name="personal-info"
         options={{
+          headerLeft: () => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  router.back();
+                }}
+              >
+                <FontAwesome5 name="chevron-left" size={20} color="teal" />
+              </TouchableOpacity>
+            );
+          },
           presentation: "card",
           title: "Tus Datos",
         }}
