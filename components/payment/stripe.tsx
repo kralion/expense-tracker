@@ -284,33 +284,15 @@ export default function Stripe() {
               )}
             />
           </FormControl>
-
-          <Controller
-            control={control}
-            name="mensaje"
-            render={({ field: { onChange, value } }) => (
-              <TextArea
-                marginTop={5}
-                autoCompleteType
-                placeholder="Mensaje..."
-                minH={35}
-                value={value}
-                onChangeText={(value) => onChange(value)}
-                borderRadius={7}
-                size="lg"
-              />
-            )}
-            defaultValue=""
-          />
         </VStack>
 
         <Center>
           <Button
             colorScheme="accent"
             onPress={handleSubmit(onSubmit)}
-            marginTop={16}
             isLoading={isLoading}
             rounded={7}
+            marginTop={2}
           >
             <Text className="font-semibold px-5 py-1">Realizar Compra</Text>
           </Button>

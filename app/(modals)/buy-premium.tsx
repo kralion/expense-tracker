@@ -1,17 +1,19 @@
 import Stripe from "@/components/payment/stripe";
 import Yape from "@/components/payment/yape";
 import useAuth from "@/context/AuthContext";
-import { Link } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Button, Divider, HStack, ScrollView, VStack } from "native-base";
+import { Divider, HStack, ScrollView, VStack } from "native-base";
 import * as React from "react";
 import {
+  Animated as AnimatedRN,
   Dimensions,
   Image,
   Platform,
   Pressable,
   Text,
-  Animated as AnimatedRN,
+  TouchableOpacity,
 } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -62,21 +64,26 @@ export default function BuyPremiumModal() {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className="px-6 h-screen pt-6 bg-primary">
       <ScrollView>
-        <VStack space={5} className="p-7  bg-primary">
-          <Text className=" text-xl font-bold text-white ">
-            Confirma tus datos de pago
-          </Text>
+        <VStack space={5}>
+          <HStack justifyContent="space-between" alignItems="center">
+            <Text className=" text-xl font-bold text-white ">
+              Información de Compra
+            </Text>
+            <TouchableOpacity onPress={() => router.back()}>
+              <AntDesign name="close" size={20} color="white" />
+            </TouchableOpacity>
+          </HStack>
           <Divider color="gray.100" h={0.2} />
-          <Text className=" font-semibold text-white ">
-            Información de Facturación
-          </Text>
-          <HStack justifyContent="space-between">
+
+          <HStack justifyContent="space-between" alignItems="center">
             <HStack space={3} alignItems="center">
               <Image
                 source={{
-                  uri: userData?.perfil.uri,
+                  //TODO change to user avatar
+                  // uri: userData?.perfil.uri,
+                  uri: "https://img.icons8.com/?size=40&id=23454&format=png",
                 }}
                 alt="profile-pic"
                 width={50}
@@ -94,19 +101,13 @@ export default function BuyPremiumModal() {
                 </Text>
               </VStack>
             </HStack>
-            <Link href="/(modals)/personal-info" asChild>
-              <Button
-                height={10}
-                width={20}
-                rounded={7}
-                variant="solid"
-                bg={"white"}
-              >
-                <Text className=" ">Editar</Text>
-              </Button>
-            </Link>
+            <TouchableOpacity
+              onPress={() => router.push("/(modals)/personal-info")}
+            >
+              <AntDesign name="edit" size={20} color="#A3E062" />
+            </TouchableOpacity>
           </HStack>
-          <Divider color="gray.100" h={0.3} />
+          <Divider h={0.3} />
 
           <Text className=" font-semibold text-white ">Método de Pago</Text>
           <VStack space={4}>

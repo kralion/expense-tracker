@@ -1,5 +1,7 @@
-import { Stack } from "expo-router";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { Stack, router } from "expo-router";
 import React from "react";
+import { TouchableOpacity } from "react-native";
 
 export default function ModalsLayout() {
   return (
@@ -7,23 +9,39 @@ export default function ModalsLayout() {
       <Stack.Screen
         name="export-data"
         options={{
-          headerBackTitle: "Estadisticas",
+          headerLeft: () => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  router.back();
+                }}
+              >
+                <FontAwesome5 name="chevron-left" size={20} color="teal" />
+              </TouchableOpacity>
+            );
+          },
           presentation: "card",
           title: "Exportar",
-          contentStyle: {
-            backgroundColor: "#368983",
-          },
         }}
       />
+      <Stack.Screen name="buy-premium" options={{ headerShown: false }} />
+
       <Stack.Screen
         name="notifications"
         options={{
-          headerBackTitle: "Perfil",
+          headerLeft: () => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  router.back();
+                }}
+              >
+                <FontAwesome5 name="chevron-left" size={20} color="teal" />
+              </TouchableOpacity>
+            );
+          },
           presentation: "card",
           title: "Notificaciones",
-          contentStyle: {
-            backgroundColor: "#368983",
-          },
         }}
       />
       <Stack.Screen
@@ -40,6 +58,13 @@ export default function ModalsLayout() {
           presentation: "card",
           title: "",
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="personal-info"
+        options={{
+          presentation: "card",
+          title: "Tus Datos",
         }}
       />
     </Stack>

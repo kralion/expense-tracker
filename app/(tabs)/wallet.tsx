@@ -12,7 +12,6 @@ import {
 import * as React from "react";
 import { Image, Text, View, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ProgressBar } from "react-native-paper";
 import { supabase } from "@/utils/supabase";
 import { Controller, useForm } from "react-hook-form";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -46,7 +45,7 @@ export default function Wallet() {
   const { userData } = useAuth();
   async function onSubmit(data: ISaving) {
     data.id = userData?.id;
-    setIsLoading(true);  
+    setIsLoading(true);
     try {
       const { error } = await supabase
         .from("metas")

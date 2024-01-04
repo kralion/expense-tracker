@@ -1,12 +1,9 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { Button, HStack, VStack } from "native-base";
 import * as React from "react";
-import { Image, Pressable, Text, View } from "react-native";
-import { Alert } from "react-native";
+import { Alert, Image, Text, View } from "react-native";
 
 export default function Export() {
-  const [show, setShow] = React.useState(false);
-
   return (
     <View className="flex flex-col space-y-6 justify-between">
       <VStack space={1} className="bg-background rounded-b-lg py-4 px-7">
@@ -24,14 +21,15 @@ export default function Export() {
 
         <VStack mt={10} space={4}>
           <HStack space={4}>
-            <Button 
-              colorScheme="blue" 
-              variant="subtle" 
-              py={4} 
-              w={40} 
-              borderWidth={1} 
+            <Button
+              colorScheme="blue"
+              variant="subtle"
+              py={4}
+              borderWidth={1}
               borderColor="blue.400"
-              onPress={() => Alert.alert('Exportación', 'Se exportó correctamente')}
+              onPress={() =>
+                Alert.alert("Exportación", "Se exportó correctamente")
+              }
             >
               <HStack alignItems="center">
                 <Image
@@ -40,21 +38,19 @@ export default function Export() {
                     uri: "https://img.icons8.com/?size=48&id=13674&format=png",
                   }}
                 />
-                <Text className="font-semibold text-black">
-                  Documento de Word
-                </Text>
-
+                <Text className="font-semibold text-black">Documento</Text>
               </HStack>
             </Button>
 
-            <Button 
-              colorScheme="green" 
-              variant="subtle" 
-              py={4} 
-              w={40} 
-              borderWidth={1} 
+            <Button
+              colorScheme="green"
+              variant="subtle"
+              py={4}
+              borderWidth={1}
               borderColor="green.400"
-              onPress={() => Alert.alert('Exportación', 'Se exportó correctamente')}
+              onPress={() =>
+                Alert.alert("Exportación", "Se exportó correctamente")
+              }
             >
               <HStack alignItems="center">
                 <Image
@@ -63,19 +59,22 @@ export default function Export() {
                     uri: "https://img.icons8.com/?size=48&id=13654&format=png",
                   }}
                 />
-                <Text className="font-semibold text-black">Documento de excel</Text>
+                <Text className="font-semibold text-black">
+                  Hoja de Cálculo
+                </Text>
               </HStack>
             </Button>
           </HStack>
 
-          <Button 
-            colorScheme="red" 
-            variant="subtle" 
-            py={4} 
-            h={20} 
-            borderWidth={1} 
+          <Button
+            colorScheme="red"
+            variant="subtle"
+            p={4}
+            borderWidth={1}
             borderColor="red.400"
-            onPress={() => Alert.alert('Exportación', 'Se exportó correctamente')}
+            onPress={() =>
+              Alert.alert("Exportación", "Se exportó correctamente")
+            }
           >
             <HStack alignItems="center">
               <Image
@@ -84,7 +83,7 @@ export default function Export() {
                   uri: "https://img.icons8.com/?size=48&id=13417&format=png",
                 }}
               />
-              <Text className="font-semibold text-black">Archivo en PDF</Text>
+              <Text className="font-semibold text-black">Archivo PDF</Text>
             </HStack>
           </Button>
         </VStack>
@@ -100,9 +99,11 @@ export default function Export() {
             />
           }
         >
-          <Text 
+          <Text
             className="font-semibold text-white"
-            onPress={() => Alert.alert('Exportación', 'Se exportó correctamente')}
+            onPress={() =>
+              Alert.alert("Exportación", "Se exportó correctamente")
+            }
           >
             Exportar en los 3 formatos
           </Text>

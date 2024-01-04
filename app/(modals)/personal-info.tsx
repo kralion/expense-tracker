@@ -6,6 +6,7 @@ import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import {
   Button,
+  Divider,
   FormControl,
   HStack,
   Input,
@@ -93,13 +94,7 @@ export default function PersonalInfo() {
   }, []);
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <VStack marginX={7} space={5}>
-        <HStack>
-          <View className="bg-accent w-1 h-8 rounded-full my-3 " />
-          <Text className="text-[#464444] p-3 font-bold text-lg">
-            Foto de Perfil
-          </Text>
-        </HStack>
+      <VStack margin={6} space={5}>
         <HStack
           space={12}
           marginBottom={5}
@@ -121,6 +116,7 @@ export default function PersonalInfo() {
               <DefaultAvatar width={80} height={80} />
             )}
           </HStack>
+
           <HStack space={2}>
             <Button
               rounded={7}
@@ -136,7 +132,7 @@ export default function PersonalInfo() {
             </Button>
           </HStack>
         </HStack>
-
+        <Divider h={0.3} />
         <HStack>
           <View className="bg-accent w-1 h-8 rounded-full my-3 " />
           <Text className="text-[#464444] p-3 font-bold text-lg">

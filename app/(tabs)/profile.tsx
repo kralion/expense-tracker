@@ -40,6 +40,8 @@ export default function App() {
           {userData ? (
             <Image
               source={{
+                //TODO change to user avatar
+                // uri: userData?.perfil.uri,
                 uri: "https://img.icons8.com/?size=40&id=23454&format=png",
               }}
               className="rounded-full"
