@@ -41,7 +41,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (session) {
         await fetchUserData(session.user.id);
       } else {
-        localStorage.removeItem("supabase.auth.token");
         try {
           await router.push("/(auth)/sign-in");
         } catch (error) {

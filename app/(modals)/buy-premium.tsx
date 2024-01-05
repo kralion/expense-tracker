@@ -30,7 +30,7 @@ export default function BuyPremiumModal() {
   const { userData } = useAuth();
   const animation = useSharedValue(0);
   const handlePress = (index: number) => {
-    animation.value = withTiming((index * screenWidth) / 2.4, {
+    animation.value = withTiming((index * screenWidth) / 2.3, {
       duration: 300,
     });
   };
@@ -65,8 +65,8 @@ export default function BuyPremiumModal() {
 
   return (
     <ScrollView>
-      <SafeAreaView className=" h-screen pt-6 bg-primary">
-        <VStack space={5} className="px-6">
+      <SafeAreaView className=" h-screen pt-5 bg-primary">
+        <VStack space={6} className="px-5">
           <HStack justifyContent="space-between" alignItems="center">
             <Text className=" text-xl font-bold text-white ">
               Información de Compra
@@ -75,7 +75,6 @@ export default function BuyPremiumModal() {
               <AntDesign name="close" size={20} color="white" />
             </TouchableOpacity>
           </HStack>
-          <Divider color="gray.100" h={0.2} />
 
           <HStack justifyContent="space-between" alignItems="center">
             <HStack space={3} alignItems="center">
@@ -91,8 +90,8 @@ export default function BuyPremiumModal() {
                 className="rounded-full "
               />
               <VStack>
-                <Text className="font-bold text-white ">
-                  {userData?.nombres}
+                <Text className="font-bold text-white text-lg ">
+                  {userData?.nombres} {userData?.apellidos}
                 </Text>
                 <Text className="text-white ">
                   {userData.rol === "premium"
@@ -109,7 +108,9 @@ export default function BuyPremiumModal() {
           </HStack>
           <Divider h={0.3} />
 
-          <Text className=" font-semibold text-white ">Método de Pago</Text>
+          <Text className=" font-semibold text-xl text-white ">
+            Método de Pago
+          </Text>
           <VStack space={4}>
             <HStack bg="white" justifyContent="center" p={1} rounded={7}>
               <Animated.View

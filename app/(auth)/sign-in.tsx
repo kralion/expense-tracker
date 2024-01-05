@@ -18,6 +18,7 @@ import {
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
+  Alert,
   Keyboard,
   Pressable,
   Text,
@@ -57,6 +58,36 @@ export default function SignIn() {
         router.push("/(tabs)/");
       }
     } catch (e: any) {
+      showNotification({
+        title: "Error de Inicio de Sesión",
+        alertStatus: "error",
+      });
+      setInvalidCredentials(true);
+    } finally {
+      setLoading(false);
+    }
+  }
+  async function signInWithEmail2(data: FormData) {
+    setLoading(true);
+
+    let timeoutId;
+
+    try {
+      timeoutId = setTimeout(() => {
+        // Show timeout alert
+      }, 5000);
+
+      const { error } = await supabase.auth.signInWithPassword(data);
+
+      if (error) {
+        throw error;
+      }
+
+      // Login succeeded
+      clearTimeout(timeoutId);
+      router.push("/");
+    } catch (error) {
+      clearTimeout(timeoutId);
       showNotification({
         title: "Error de Inicio de Sesión",
         alertStatus: "error",

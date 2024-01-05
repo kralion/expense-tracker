@@ -31,7 +31,10 @@ export default function BuyPremiumModal({
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
         >
-          <Modal.CloseButton rounded={15} />
+          <Modal.CloseButton
+            className="active:opacity-50 bg-white/30"
+            rounded={15}
+          />
           <Modal.Body className="space-y-10">
             <VStack space={7} alignItems="center">
               <BuyPremiumAsset width={200} height={220} />

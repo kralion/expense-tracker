@@ -2,7 +2,7 @@ import { useNotificationContext } from "@/context";
 import useAuth from "@/context/AuthContext";
 import { IGasto } from "@/interfaces";
 import { supabase } from "@/utils/supabase";
-import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { router } from "expo-router";
 import {
   Button,
@@ -96,22 +96,7 @@ export default function AddExpense() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView>
         <SafeAreaView className=" h-screen p-5">
-          <HStack justifyContent="space-between">
-            <Text className="font-bold text-center text-xl ">
-              Registrar Gasto
-            </Text>
-            <Button
-              onPress={() => {
-                reset();
-                setValue("categoria", "");
-              }}
-              colorScheme="danger"
-              variant="subtle"
-              className="rounded-full active:opacity-70"
-            >
-              <MaterialCommunityIcons color="red" name="broom" size={20} />
-            </Button>
-          </HStack>
+          <Text className="font-bold mb-5 text-xl ">Registrar Gasto</Text>
           <VStack space={4}>
             <FormControl isInvalid={!!errors.categoria} isRequired>
               <VStack space={1}>
@@ -268,7 +253,7 @@ export default function AddExpense() {
                     justifyContent="space-between"
                     space={4}
                   >
-                    <Text> Es un Gasto Recurrente / Periódico ?</Text>
+                    <Text> Será un Gasto Recurrente / Periódico ?</Text>
                     <HStack space={1} alignItems="center">
                       <Text>{value ? "Sí" : "No"}</Text>
                       <Switch size="sm" value={value} onToggle={onChange} />
@@ -276,15 +261,14 @@ export default function AddExpense() {
                   </HStack>
                   {value && (
                     <Text className="text-textmuted">
-                      El gasto recurrente se hará efectivo cada mes en la fecha
-                      en la que fue creado inicialmente, en este caso{" "}
-                      <Text className="font-semibold">
+                      La recurrencia del gasto se hará efectivo cada mes en la
+                      fecha en la que fue creado inicialmente, en este caso cada{" "}
+                      <Text className="font-bold text-black">
                         {new Date().toLocaleDateString("es-PE", {
                           day: "numeric",
-                          month: "long",
-                          year: "numeric",
                         })}
-                      </Text>
+                      </Text>{" "}
+                      de cada mes
                     </Text>
                   )}
                 </VStack>
@@ -297,7 +281,7 @@ export default function AddExpense() {
             onPress={handleSubmit(onSubmit)}
             isLoading={isLoading}
             className="rounded-xl w-full"
-            marginTop={16}
+            marginTop={12}
             height={12}
           >
             <Text className="font-semibold text-white ">Registrar</Text>

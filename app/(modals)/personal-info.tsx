@@ -10,6 +10,7 @@ import {
   FormControl,
   HStack,
   Input,
+  ScrollView,
   VStack,
   WarningOutlineIcon,
 } from "native-base";
@@ -94,140 +95,142 @@ export default function PersonalInfo() {
   }, []);
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <VStack margin={5}>
-        <HStack
-          space={12}
-          alignItems="center"
-          justifyContent="space-between"
-          className="bg-background"
-        >
-          <HStack space={2} alignItems="center">
-            {userData ? (
-              <Image
-                source={{
-                  uri: "https://img.icons8.com/?size=40&id=23454&format=png",
-                }}
-                alt="profile-pic"
-                style={{ width: 80, height: 80 }}
-                className="rounded-full "
-              />
-            ) : (
-              <DefaultAvatar width={80} height={80} />
-            )}
-          </HStack>
-
-          <HStack space={2}>
-            <Button
-              rounded={7}
-              variant="outline"
-              height={10}
-              px={4}
-              onPress={pickImageAsync}
-            >
-              <Text className="text-primary">Cambiar</Text>
-            </Button>
-            <Button rounded={7} px={6} height={10} colorScheme="rose">
-              <Text className="text-white ">Quitar</Text>
-            </Button>
-          </HStack>
-        </HStack>
-        <Divider h={0.5} my={3} className="bg-accent rounded-full" />
-        <HStack>
-          <View className="bg-accent w-1 h-8 rounded-full my-3 " />
-          <Text className="text-[#464444] p-3 font-bold text-lg">
-            Datos personales
-          </Text>
-        </HStack>
-        <VStack space={5}>
-          <FormControl isInvalid={!!errors.nombres}>
-            <FormControl.Label>Nombres</FormControl.Label>
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  size="lg"
-                  rounded={7}
-                  onBlur={onBlur}
-                  py={3}
-                  onChangeText={onChange}
-                  value={value}
-                />
-              )}
-              name="nombres"
-              rules={{ required: true }}
-              defaultValue=""
-            />
-            <FormControl.ErrorMessage
-              leftIcon={<WarningOutlineIcon size="xs" />}
-            >
-              {errors.nombres && "Este campo es requerido"}
-            </FormControl.ErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={!!errors.apellidos}>
-            <FormControl.Label>Apellidos</FormControl.Label>
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  size="lg"
-                  rounded={7}
-                  py={3}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  //TODO : El valor debe ser el apellido del usuario y no un placeholder
-                  value={value}
-                  placeholder="Apellido"
-                />
-              )}
-              name="apellidos"
-              rules={{ required: true }}
-              defaultValue=""
-            />
-            <FormControl.ErrorMessage
-              leftIcon={<WarningOutlineIcon size="xs" />}
-            >
-              {errors.apellidos && "Este campo es requerido"}
-            </FormControl.ErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={!!errors.email}>
-            <FormControl.Label>Correo electrónico</FormControl.Label>
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  onBlur={onBlur}
-                  size="lg"
-                  rounded={7}
-                  py={3}
-                  onChangeText={onChange}
-                  value={value}
-                  placeholder="Correo electrónico"
-                />
-              )}
-              name="email"
-              rules={{ required: true }}
-              defaultValue=""
-            />
-            <FormControl.ErrorMessage
-              leftIcon={<WarningOutlineIcon size="xs" />}
-            >
-              {errors.email && "Este campo es requerido"}
-            </FormControl.ErrorMessage>
-          </FormControl>
-
-          <Button
-            onPress={handleSubmit(onSubmit)}
-            colorScheme="primary"
-            rounded={10}
-            mt={4}
-            py={4}
+      <ScrollView>
+        <VStack margin={5}>
+          <HStack
+            space={12}
+            alignItems="center"
+            justifyContent="space-between"
+            className="bg-background"
           >
-            Actualizar datos
-          </Button>
+            <HStack space={2} alignItems="center">
+              {userData ? (
+                <Image
+                  source={{
+                    uri: "https://img.icons8.com/?size=40&id=23454&format=png",
+                  }}
+                  alt="profile-pic"
+                  style={{ width: 80, height: 80 }}
+                  className="rounded-full "
+                />
+              ) : (
+                <DefaultAvatar width={80} height={80} />
+              )}
+            </HStack>
+
+            <HStack space={2}>
+              <Button
+                rounded={7}
+                variant="outline"
+                height={10}
+                px={4}
+                onPress={pickImageAsync}
+              >
+                <Text className="text-primary">Cambiar</Text>
+              </Button>
+              <Button rounded={7} px={6} height={10} colorScheme="rose">
+                <Text className="text-white ">Quitar</Text>
+              </Button>
+            </HStack>
+          </HStack>
+          <Divider h={0.5} my={3} className="bg-accent rounded-full" />
+          <HStack>
+            <View className="bg-accent w-1 h-8 rounded-full my-3 " />
+            <Text className="text-[#464444] p-3 font-bold text-lg">
+              Datos personales
+            </Text>
+          </HStack>
+          <VStack space={5}>
+            <FormControl isInvalid={!!errors.nombres}>
+              <FormControl.Label>Nombres</FormControl.Label>
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    size="lg"
+                    rounded={7}
+                    onBlur={onBlur}
+                    py={3}
+                    onChangeText={onChange}
+                    value={value}
+                  />
+                )}
+                name="nombres"
+                rules={{ required: true }}
+                defaultValue=""
+              />
+              <FormControl.ErrorMessage
+                leftIcon={<WarningOutlineIcon size="xs" />}
+              >
+                {errors.nombres && "Este campo es requerido"}
+              </FormControl.ErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.apellidos}>
+              <FormControl.Label>Apellidos</FormControl.Label>
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    size="lg"
+                    rounded={7}
+                    py={3}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    //TODO : El valor debe ser el apellido del usuario y no un placeholder
+                    value={value}
+                    placeholder="Apellido"
+                  />
+                )}
+                name="apellidos"
+                rules={{ required: true }}
+                defaultValue=""
+              />
+              <FormControl.ErrorMessage
+                leftIcon={<WarningOutlineIcon size="xs" />}
+              >
+                {errors.apellidos && "Este campo es requerido"}
+              </FormControl.ErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.email}>
+              <FormControl.Label>Correo electrónico</FormControl.Label>
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    onBlur={onBlur}
+                    size="lg"
+                    rounded={7}
+                    py={3}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="Correo electrónico"
+                  />
+                )}
+                name="email"
+                rules={{ required: true }}
+                defaultValue=""
+              />
+              <FormControl.ErrorMessage
+                leftIcon={<WarningOutlineIcon size="xs" />}
+              >
+                {errors.email && "Este campo es requerido"}
+              </FormControl.ErrorMessage>
+            </FormControl>
+
+            <Button
+              onPress={handleSubmit(onSubmit)}
+              colorScheme="primary"
+              rounded={10}
+              mt={4}
+              py={4}
+            >
+              Actualizar datos
+            </Button>
+          </VStack>
         </VStack>
-      </VStack>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 }

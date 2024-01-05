@@ -41,11 +41,11 @@ export default function Index() {
     }).start();
   }, [showAll, isPremiumUser]);
 
-  async function createNotification() {
+  async function welcomeNotification() {
     const notification = {
       titulo: "Bienvenido !!!",
       descripcion:
-        "Gracias por registrarte en Expense Tracker, ahora puedes comenzar a usar la aplicación.",
+        "Registrado exitosamente en la app, ahora puedes comenzar a usarla con el plan gratuito.",
       fecha: new Date().toISOString(),
       icono: {
         uri: "https://img.icons8.com/color/96/000000/checked--v1.png",
@@ -84,7 +84,7 @@ export default function Index() {
 
   React.useEffect(() => {
     if (session) {
-      createNotification();
+      welcomeNotification();
       fetchData(session.user.id);
     }
   }, [session, isPremiumUser]);
