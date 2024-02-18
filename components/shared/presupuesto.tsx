@@ -34,14 +34,11 @@ export function Presupuesto({ presupuesto }: { presupuesto: IPresupuesto }) {
                   : "coolGray.200"
               }
               rounded={10}
-              p={3}
+              p={4}
             >
               <HStack justifyContent="space-between" alignItems="center">
-                <HStack space={2} alignItems="center">
-                  <Box
-                    className="border-[0.5px] border-zinc-500"
-                    borderRadius={35}
-                  >
+                <HStack space={3} alignItems="center">
+                  <Box className="rounded-full">
                     <Image
                       width={40}
                       height={40}
@@ -50,11 +47,11 @@ export function Presupuesto({ presupuesto }: { presupuesto: IPresupuesto }) {
                       }}
                     />
                   </Box>
-                  <Text className="text-textmuted">Monto Presupuestado</Text>
+                  <Text className="text-textmuted text-xs w-1/2">
+                    Monto Mensual Presupuestado
+                  </Text>
                 </HStack>
-                <Text className=" text-[16px] text-black font-bold">
-                  S/. {monto}
-                </Text>
+                <Text className=" text-black font-bold">S/. {monto}</Text>
               </HStack>
             </Box>
             <Modal
@@ -62,21 +59,22 @@ export function Presupuesto({ presupuesto }: { presupuesto: IPresupuesto }) {
               onClose={() => setOpenBudgetDetails(false)}
               safeAreaTop={true}
             >
-              <Modal.Content rounded={14}>
-                <Modal.CloseButton />
-                <Modal.Header>Detalles del Presupuesto</Modal.Header>
+              <Modal.Content rounded={10} padding={3}>
+                <Modal.Header className=" flex justify-center items-center">
+                  Detalles del Presupuesto
+                </Modal.Header>
                 <Modal.Body>
                   <VStack space={3}>
                     <VStack>
                       <Text className="font-bold">Monto</Text>
-                      <Text>{monto}</Text>
+                      <Text>S/. {monto}</Text>
                     </VStack>
                     <VStack>
                       <Text className="font-bold">Fecha de Registro</Text>
                       <Text>{fecha_registro}</Text>
                     </VStack>
                     <VStack>
-                      <Text className="font-bold">Fecha Final</Text>
+                      <Text className="font-bold">Fecha Final Propuesta</Text>
                       <Text>{fecha_final}</Text>
                     </VStack>
                     <VStack>
@@ -97,7 +95,7 @@ export function Presupuesto({ presupuesto }: { presupuesto: IPresupuesto }) {
                       Cerrar
                     </Button>
                     <Button
-                      rounded={10}
+                      rounded={5}
                       onPress={() => {
                         alert("La funcionalidad aun no esta disponible");
                         setOpenBudgetDetails(false);

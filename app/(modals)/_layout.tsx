@@ -65,7 +65,7 @@ export default function ModalsLayout() {
       <Stack.Screen
         name="budget"
         options={{
-          presentation: "card",
+          presentation: "modal",
           title: "",
           headerShown: false,
         }}

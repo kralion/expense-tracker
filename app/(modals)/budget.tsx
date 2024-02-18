@@ -97,15 +97,16 @@ export default function Budget() {
 
   return (
     <ScrollView>
-      <SafeAreaView className="p-5 h-screen space-y-5">
+      <SafeAreaView className="p-5">
         <HStack justifyContent="space-between" alignItems="start">
-          <VStack space={2} className="w-2/3">
+          <VStack space={2}>
             <Text className="font-bold text-left text-2xl">Presupuestos</Text>
-            <Text>Registra un presupuesto mensuales para limitarte</Text>
+            <Text className="text-xs text-textmuted">
+              Registra presupuestos mensuales para limitar tus gastos
+            </Text>
           </VStack>
 
           <TouchableOpacity
-            className="mt-1 bg-teal-500/30 rounded-full p-1"
             onPress={() => {
               router.back();
             }}
@@ -113,7 +114,7 @@ export default function Budget() {
             <AntDesign name="close" size={20} />
           </TouchableOpacity>
         </HStack>
-        <VStack space={5}>
+        <VStack space={5} mt={5}>
           <FormControl isInvalid={!!errors.monto} isRequired>
             <FormControl.Label>Monto</FormControl.Label>
             <Controller
@@ -181,7 +182,7 @@ export default function Budget() {
                         mode="date"
                         display="default"
                         onChange={(_, selectedDate) => {
-                          onChangeRegistro(selectedDate);
+                          onChangeRegistro(selectedDate as any);
                           onChange(selectedDate);
                           toggleDatepicker(); // Esto ocultará el DateTimePicker
                         }}
@@ -222,7 +223,7 @@ export default function Budget() {
                         mode="date"
                         display="default"
                         onChange={(_, selectedDate) => {
-                          onChangeFinal(selectedDate);
+                          onChangeFinal(selectedDate as any);
                           onChange(selectedDate);
                           toggleDatepicker();
                         }}
@@ -270,14 +271,15 @@ export default function Budget() {
           </FormControl>
         </VStack>
         <Button
-          className="rounded-lg"
-          py={3}
+          borderRadius={10}
+          mt={5}
+          height={12}
           isLoading={isLoading}
           onPress={handleSubmit(onSubmit)}
         >
-          Registrar
+          <Text className="font-semibold text-white ">Registrar Nuevo</Text>
         </Button>
-        <VStack space={3}>
+        <VStack space={5} mt={10}>
           <Text className="font-bold text-xl">Historial de Presupuestos</Text>
           <FlatList
             data={presupuesto}

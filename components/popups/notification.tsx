@@ -1,7 +1,7 @@
 import { INotification } from "@/interfaces/notification";
-import { VStack, HStack, Box, Pressable } from "native-base";
+import { Box, HStack, VStack } from "native-base";
 import React from "react";
-import { Text, Image, View } from "react-native";
+import { Image, Text, View } from "react-native";
 
 export default function SingleNotification({
   notification,
@@ -37,20 +37,21 @@ export default function SingleNotification({
   };
   return (
     <View className="mx-3 my-2">
-      <Box borderColor="coolGray.300" rounded={14} p={2} bg={"white"}>
-        <HStack alignItems="center" className="p-2 rounded-xl">
+      <Box borderColor="coolGray.300" rounded={10} p={1} bg={"white"}>
+        <HStack alignItems="center" space={2} className="p-2 rounded-xl">
           <Image
-            className="w-10 h-10 mr-4"
+            width={40}
+            height={40}
             source={{
               uri: icono.uri,
             }}
           />
           <VStack space={2} flex={1}>
             <HStack justifyContent="space-between">
-              <Text className="font-bold ">{notification.titulo}</Text>
+              <Text className="font-semibold ">{notification.titulo}</Text>
               <Text className="text-mute   text-xs">{formatDate(fecha)}</Text>
             </HStack>
-            <Text className="text-[#464444] ">{descripcion}</Text>
+            <Text className="text-textmuted text-xs ">{descripcion}</Text>
           </VStack>
         </HStack>
       </Box>
