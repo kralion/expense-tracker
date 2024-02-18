@@ -22,7 +22,7 @@ export function Metas({ metas }: { metas: ISaving }) {
           <Box mb={4} rounded={10} p={4} bg="coolGray.200">
             <HStack alignItems="center" justifyContent="space-between">
               <HStack space={2}>
-                <Box className="rounded-full border-zinc-500">
+                <Box className="rounded-full ">
                   <Image
                     width={40}
                     height={40}
@@ -43,7 +43,7 @@ export function Metas({ metas }: { metas: ISaving }) {
                   </Text>
                 </HStack>
                 <HStack justifyContent="space-between">
-                  <Text className=" text-text-muted">S/. {ahorro_actual}</Text>
+                  <Text className=" text-textmuted">S/. {ahorro_actual}</Text>
                 </HStack>
               </VStack>
             </HStack>

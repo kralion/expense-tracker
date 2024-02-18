@@ -1,12 +1,12 @@
 import DefaultAvatar from "@/assets/svgs/avatar.svg";
 import { useNotificationContext } from "@/context";
 import useAuth from "@/context/AuthContext";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { supabase } from "@/utils/supabase";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import {
   Button,
-  Divider,
   FormControl,
   HStack,
   Input,
@@ -96,13 +96,8 @@ export default function PersonalInfo() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView>
-        <VStack margin={5}>
-          <HStack
-            space={12}
-            alignItems="center"
-            justifyContent="space-between"
-            className="bg-background"
-          >
+        <VStack margin={5} space={3}>
+          <VStack alignItems="center" space={3} className="bg-background">
             <HStack space={2} alignItems="center">
               {userData ? (
                 <Image
@@ -110,7 +105,7 @@ export default function PersonalInfo() {
                     uri: "https://img.icons8.com/?size=40&id=23454&format=png",
                   }}
                   alt="profile-pic"
-                  style={{ width: 80, height: 80 }}
+                  style={{ width: 120, height: 120 }}
                   className="rounded-full "
                 />
               ) : (
@@ -118,26 +113,21 @@ export default function PersonalInfo() {
               )}
             </HStack>
 
-            <HStack space={2}>
-              <Button
-                rounded={7}
-                variant="outline"
-                height={10}
-                px={4}
-                onPress={pickImageAsync}
-              >
-                <Text className="text-primary">Cambiar</Text>
-              </Button>
-              <Button rounded={7} px={6} height={10} colorScheme="rose">
-                <Text className="text-white ">Quitar</Text>
-              </Button>
-            </HStack>
-          </HStack>
-          <Divider h={0.5} my={3} className="bg-accent rounded-full" />
+            <Button
+              onPress={pickImageAsync}
+              rounded={7}
+              variant="outline"
+              colorScheme="teal"
+              px={6}
+              height={10}
+            >
+              <FontAwesome5 name="camera" size={20} color="black" />
+            </Button>
+          </VStack>
           <HStack>
             <View className="bg-accent w-1 h-8 rounded-full my-3 " />
             <Text className="text-[#464444] p-3 font-bold text-lg">
-              Datos personales
+              Informacion Básica
             </Text>
           </HStack>
           <VStack space={5}>
@@ -222,11 +212,13 @@ export default function PersonalInfo() {
             <Button
               onPress={handleSubmit(onSubmit)}
               colorScheme="primary"
-              rounded={10}
+              borderRadius={10}
               mt={4}
-              py={4}
+              height={12}
             >
-              Actualizar datos
+              <Text className="font-semibold text-white ">
+                Actualizar Datos
+              </Text>
             </Button>
           </VStack>
         </VStack>

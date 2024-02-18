@@ -10,7 +10,7 @@ module.exports = {
         secondary: "#9E9E9E",
         tertiary: "#12557B",
         mute: "#AEACAC",
-        textmuted: "#6D6868",
+        textmuted: "#BDBBBC",
         bold: "#2F7D79",
         background: "#F5F3F3",
         mutedwhite: "#F2F3EE",

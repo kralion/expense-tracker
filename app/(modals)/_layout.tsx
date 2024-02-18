@@ -1,7 +1,7 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Stack, router } from "expo-router";
 import React from "react";
-import { TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 
 export default function ModalsLayout() {
   return (
@@ -85,7 +85,7 @@ export default function ModalsLayout() {
             );
           },
           presentation: "card",
-          title: "Tus Datos",
+          title: "Datos Personales",
         }}
       />
     </Stack>

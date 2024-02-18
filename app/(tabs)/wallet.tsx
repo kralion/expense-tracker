@@ -185,7 +185,7 @@ export default function Wallet() {
             isLoading={isLoading}
             onPress={handleSubmit(onSubmit)}
           >
-            Registrar
+            <Text className="font-semibold text-white ">Registrar</Text>
           </Button>
           <SavingGoalModal
             openModal={showSavingGoalModal}

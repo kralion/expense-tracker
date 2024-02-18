@@ -26,9 +26,8 @@ export default function Chart() {
           color: (opacity = 1) => `rgba(54, 137, 131, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(109, 104, 104, ${opacity})`,
           strokeWidth: 4,
-
           propsForBackgroundLines: {
-            opacity: 0.5,
+            opacity: 0.1,
           },
 
           propsForDots: {

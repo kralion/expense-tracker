@@ -99,11 +99,11 @@ export default function AddExpense() {
           <Text className="font-bold mb-5 text-xl ">Registrar Gasto</Text>
           <VStack space={4}>
             <FormControl isInvalid={!!errors.categoria} isRequired>
-              <VStack space={1}>
+              <VStack>
                 <FormControl.Label>
                   <Text className="font-semibold text-[18px]">Categoría</Text>
                 </FormControl.Label>
-                <Text className="text-textmuted">
+                <Text className="text-textmuted text-xs">
                   Como se categoriza el gasto
                 </Text>
               </VStack>
@@ -153,11 +153,11 @@ export default function AddExpense() {
               </FormControl.ErrorMessage>
             </FormControl>
             <FormControl isInvalid={!!errors.monto} isRequired>
-              <VStack space={1}>
+              <VStack>
                 <FormControl.Label>
                   <Text className="font-semibold text-[18px]">Monto</Text>
                 </FormControl.Label>
-                <Text className="text-textmuted">
+                <Text className="text-textmuted text-xs">
                   Cantidad de dinero expedido en el gasto
                 </Text>
               </VStack>
@@ -260,7 +260,7 @@ export default function AddExpense() {
                     </HStack>
                   </HStack>
                   {value && (
-                    <Text className="text-textmuted">
+                    <Text className="text-textmuted text-xs">
                       La recurrencia del gasto se hará efectivo cada mes en la
                       fecha en la que fue creado inicialmente, en este caso cada{" "}
                       <Text className="font-bold text-black">
@@ -280,7 +280,8 @@ export default function AddExpense() {
           <Button
             onPress={handleSubmit(onSubmit)}
             isLoading={isLoading}
-            className="rounded-xl w-full"
+            className="w-full"
+            borderRadius={10}
             marginTop={12}
             height={12}
           >

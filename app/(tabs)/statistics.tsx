@@ -76,7 +76,8 @@ export default function Statistics() {
           >
             <Button
               variant="ghost"
-              className="py-2.5 w-[90px]  rounded-lg"
+              className="py-2.5 w-[90px]"
+              borderRadius={5}
               isPressed
               onPress={() => alert("Diario")}
             >
@@ -91,16 +92,18 @@ export default function Statistics() {
             </Button>
             <Button
               variant="ghost"
-              className="py-2.5 w-[90px]  rounded-lg"
+              className="py-2.5 w-[90px] "
               onPress={() => alert("Mensual")}
+              borderRadius={5}
             >
               Mensual
             </Button>
             <Button
               disabled
               variant="ghost"
-              className="py-2.5 w-[90px]  rounded-lg"
+              className="py-2.5 w-[90px] "
               onPress={() => alert("Anual")}
+              borderRadius={5}
             >
               Anual
             </Button>
@@ -118,10 +121,10 @@ export default function Statistics() {
                   <FontAwesome
                     name="file-pdf-o"
                     color="white"
-                    marginRight={3}
+                    marginRight={2}
                   />
                 }
-                borderRadius={7}
+                borderRadius={5}
               >
                 Exportar
               </Button>
@@ -130,7 +133,7 @@ export default function Statistics() {
               selectedValue={service}
               minWidth="150"
               size="lg"
-              borderRadius={7}
+              borderRadius={5}
               dropdownIcon={
                 <FontAwesome5
                   name="chevron-down"
