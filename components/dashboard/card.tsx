@@ -1,20 +1,19 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { Badge, Icon, IconButton } from "native-base";
-import * as React from "react";
-import { Pressable, Text, View, StyleSheet, Alert } from "react-native";
-import Animated, {
-  useSharedValue,
-  withTiming,
-  useAnimatedStyle,
-  interpolate,
-  Extrapolate,
-} from "react-native-reanimated";
-import BuyPremiumModal from "../popups/buy-premium";
+import { useExpenseContext } from "@/context";
 import useAuth from "@/context/AuthContext";
 import { supabase } from "@/utils/supabase";
-import { useExpenseContext } from "@/context";
+import { LinearGradient } from "expo-linear-gradient";
+import { Badge } from "native-base";
+import * as React from "react";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import Animated, {
+  Extrapolate,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import { BudgetLimitExceededModal } from "../popups";
+import BuyPremiumModal from "../popups/buy-premium";
 
 export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
   const flip = useSharedValue(0);
@@ -113,9 +112,7 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
         style={styles.shadowContainer}
       >
         <LinearGradient
-          className={`flex flex-col justify-between border-2 rounded-3xl p-5 shadow-2xl space-y-10 ${
-            isPremiumUser ? " border-yellow-500 " : "border-indigo-500"
-          } `}
+          className="flex flex-col justify-between rounded-3xl p-5 shadow-2xl space-y-10 "
           colors={
             isPremiumUser
               ? ["#D4AF37", "#FFD700", "#A79647"]
@@ -189,11 +186,11 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 2,
     },
     shadowOpacity: 0.5,
-    shadowRadius: 25,
-    elevation: 45,
+    shadowRadius: 20,
+    elevation: 30,
     backgroundColor: "rgba(255, 255, 255, 0.001)",
   },
 });

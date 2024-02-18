@@ -1,24 +1,23 @@
+import NoDataAsset from "@/assets/svgs/no-data.svg";
 import Card from "@/components/dashboard/card";
 import BuyPremiumModal from "@/components/popups/buy-premium";
 import { Expense } from "@/components/shared";
 import { useExpenseContext, useNotificationContext } from "@/context";
 import useAuth from "@/context/AuthContext";
+import { supabase } from "@/utils/supabase";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   Box,
   Button,
-  Center,
   HStack,
   Heading,
   ScrollView,
   Text,
   VStack,
 } from "native-base";
-import NoDataAsset from "@/assets/svgs/no-data.svg";
 import * as React from "react";
 import { Animated, FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { supabase } from "@/utils/supabase";
 
 export default function Index() {
   const fadeAnim = React.useRef(new Animated.Value(1)).current;
@@ -159,12 +158,13 @@ export default function Index() {
                   onPress={() => {
                     setShowBuyPremiumModal(true);
                   }}
-                  colorScheme="A3E062"
-                  className="rounded-full active:opacity-70"
-                  variant="ghost"
+                  colorScheme="teal"
+                  borderRadius={10}
+                  className=" active:opacity-70 bg-accent"
+                  variant="unstyled"
                 >
                   <FontAwesome
-                    color="#A3E062"
+                    color="black"
                     name={userData.rol === "premium" ? "unlock" : "lock"}
                     size={20}
                   />
@@ -201,12 +201,13 @@ export default function Index() {
                 </HStack>
                 {expenses && expenses.length === 0 && (
                   <Box
-                    my={16}
+                    my={10}
                     className="flex flex-col items-center justify-center"
                   >
                     <NoDataAsset width={200} height={200} />
-                    <Text className="text-textmuted text-[18px] ">
-                      No hay gastos registrados
+                    <Text className="text-textmuted mt-5 text-center text-xs px-10">
+                      Parece que no tienes gastos registrados, haz click en el
+                      icono + para agregar uno.
                     </Text>
                   </Box>
                 )}

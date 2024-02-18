@@ -113,13 +113,14 @@ export default function App() {
             className="flex gap-3 flex-row p-2 items-center active:opacity-30"
           >
             <Icon
-              color="gray.500"
+              color="red.500"
               as={MaterialCommunityIcons}
+              className="rotate-180"
               size={21}
               name="logout"
             />
 
-            <Text className="text-xl font-bold text-gray-500">Salir</Text>
+            <Text className="text-xl font-bold text-red-500">Salir</Text>
           </Pressable>
         </VStack>
         <Center>

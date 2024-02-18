@@ -361,7 +361,7 @@ export default function SignUp() {
           </VStack>
           <Center mt={20}>
             <Text className="text-mute text-[12px]">
-              Copyright © SoloPrenuer - FIS Corp. Derechos Reservados
+              Copyright © Brayan & Miguel | Derechos Reservados
             </Text>
           </Center>
         </SafeAreaView>

@@ -1,6 +1,6 @@
-import { Box, HStack, Pressable, Spacer, Text, VStack } from "native-base";
+import { Box, HStack, Pressable, Text, VStack } from "native-base";
 import * as React from "react";
-import { Image, View } from "react-native";
+import { Image } from "react-native";
 import { ISaving } from "../../interfaces/saving";
 export function Metas({ metas }: { metas: ISaving }) {
   const { meta_ahorro, ahorro_actual } = metas;
@@ -19,13 +19,10 @@ export function Metas({ metas }: { metas: ISaving }) {
     >
       {({ isHovered, isPressed }) => {
         return (
-          <Box mb={4} rounded={14} p={3} bg="coolGray.200">
+          <Box mb={4} rounded={10} p={4} bg="coolGray.200">
             <HStack alignItems="center" justifyContent="space-between">
-              <HStack space={3}>
-                <Box
-                  className="border-[0.5px] border-zinc-500"
-                  borderRadius={35}
-                >
+              <HStack space={2}>
+                <Box className="rounded-full border-zinc-500">
                   <Image
                     width={40}
                     height={40}
@@ -34,19 +31,19 @@ export function Metas({ metas }: { metas: ISaving }) {
                     }}
                   />
                 </Box>
-                <VStack space={1}>
+                <VStack>
                   <Text className="font-semibold">Meta de ahorro:</Text>
                   <Text className="text-textmuted">Ahorros actuales:</Text>
                 </VStack>
               </HStack>
-              <VStack space={1}>
+              <VStack>
                 <HStack justifyContent="space-between">
-                  <Text className=" text-[16px] text-black font-bold">
+                  <Text className="text-black font-bold">
                     S/. {meta_ahorro}
                   </Text>
                 </HStack>
-                <HStack justifyContent={"space-between"}>
-                  <Text className="text-[14px] ">S/. {ahorro_actual}</Text>
+                <HStack justifyContent="space-between">
+                  <Text className=" text-text-muted">S/. {ahorro_actual}</Text>
                 </HStack>
               </VStack>
             </HStack>

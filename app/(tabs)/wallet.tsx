@@ -180,8 +180,8 @@ export default function Wallet() {
           </HStack>
 
           <Button
-            className="rounded-full"
-            height={10}
+            borderRadius={10}
+            height={12}
             isLoading={isLoading}
             onPress={handleSubmit(onSubmit)}
           >
