@@ -92,11 +92,11 @@ export default function SignUp() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView>
         <SafeAreaView>
-          <VStack space={5} className="flex items-start " mx={7}>
-            <VStack space={2}>
-              <Text className="mt-6 text-3xl font-bold ">Crea una cuenta</Text>
+          <VStack space={4} className="flex items-start " m={4}>
+            <VStack space={1}>
+              <Text className="text-3xl font-bold ">Crea una cuenta</Text>
               <HStack space={1} alignItems="center">
-                <Text className=" ">Si ya tienes una cuenta ?</Text>
+                <Text className=" ">Ya tienes una cuenta ?</Text>
                 <Link asChild href="/(auth)/sign-in">
                   <Button className="p-0" variant="link">
                     Inicia Sesión
@@ -105,18 +105,18 @@ export default function SignUp() {
               </HStack>
             </VStack>
           </VStack>
-          <VStack justifyContent="center" space={5} mx={7}>
-            <HStack mt={4} space={3}>
-              <Button bgColor="black" flex={1} rounded={7} height={12}>
+          <VStack justifyContent="center" space={4} mx={4}>
+            <HStack space={4}>
+              <Button bgColor="black" flex={1} rounded={5} height={12}>
                 <FontAwesome5 size={24} color="white" name="apple" />
               </Button>
-              <Button colorScheme="blue" flex={1} rounded={7} height={12}>
+              <Button colorScheme="blue" flex={1} rounded={5} height={12}>
                 <FontAwesome5 size={24} color="white" name="facebook" />
               </Button>
               <Button
                 background="#F5F3F3"
                 flex={1}
-                rounded={7}
+                rounded={5}
                 borderWidth={0.2}
                 height={12}
               >
@@ -138,7 +138,7 @@ export default function SignUp() {
               openModal={showTCModal}
               setOpenModal={setShowTCModal}
             />
-            <HStack space={3}>
+            <HStack space={4}>
               <FormControl
                 flex={1}
                 isRequired
@@ -297,14 +297,14 @@ export default function SignUp() {
               </FormControl.ErrorMessage>
             </FormControl>
           </VStack>
-          <VStack space={5} px={7}>
+          <VStack space={4} mx={4}>
             <FormControl
               isInvalid={
                 !!errors.termsAndConditions &&
                 !!errors.termsAndConditions.message
               }
             >
-              <HStack mt={5}>
+              <HStack mt={4}>
                 <Controller
                   control={control}
                   name="termsAndConditions"
@@ -338,7 +338,7 @@ export default function SignUp() {
             </FormControl>
 
             <Button
-              className="mt-5 "
+              mt={4}
               size="lg"
               onPress={handleSubmit(signUpWithEmail)}
               py={5}
@@ -348,7 +348,7 @@ export default function SignUp() {
               <Text className="font-semibold text-white ">Registrarse</Text>
             </Button>
 
-            <Text className="text-mute text-[12px] mt-3  ">
+            <Text className="text-mute text-xs mt-4">
               Al continuar aceptas los{" "}
               <Text
                 onPress={() => setShowTCModal(true)}
@@ -360,9 +360,9 @@ export default function SignUp() {
               privacidad.
             </Text>
           </VStack>
-          <Center mt={20}>
-            <Text className="text-mute text-[12px]">
-              Copyright © Brayan & Miguel | Derechos Reservados
+          <Center mt={16}>
+            <Text className="text-mute text-xs">
+              Copyright © Brayan & Miguel - 2024
             </Text>
           </Center>
         </SafeAreaView>

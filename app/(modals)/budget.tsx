@@ -97,7 +97,7 @@ export default function Budget() {
 
   return (
     <ScrollView>
-      <SafeAreaView className="p-5">
+      <SafeAreaView className="px-4 mt-6">
         <HStack justifyContent="space-between" alignItems="start">
           <VStack space={2}>
             <Text className="font-bold text-left text-2xl">Presupuestos</Text>
@@ -114,7 +114,7 @@ export default function Budget() {
             <AntDesign name="close" size={20} />
           </TouchableOpacity>
         </HStack>
-        <VStack space={5} mt={5}>
+        <VStack space={5} mt={5} px={7}>
           <FormControl isInvalid={!!errors.monto} isRequired>
             <FormControl.Label>Monto</FormControl.Label>
             <Controller

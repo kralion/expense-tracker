@@ -1,6 +1,6 @@
 import WelcomeAsset from "@/assets/svgs/welcome.svg";
 import { Link } from "expo-router";
-import { Button, Center } from "native-base";
+import { Button, Center, VStack } from "native-base";
 import { Platform, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -16,21 +16,27 @@ export default function Welcome() {
       className="z-10 h-screen"
     >
       <SafeAreaView>
-        <Center className="space-y-10 mt-20">
+        <Center className="flex flex-col justify-center h-screen items-center">
           {Platform.OS === "ios" ? (
             <WelcomeAsset width={300} height={300} />
           ) : (
             <WelcomeAndroidAsset width={300} height={300} />
           )}
-          <View className="items-center space-y-5">
+          <VStack space={4} alignItems="center">
             <Text className="font-bold text-2xl">Controla tus gastos</Text>
-            <Text className=" px-10 text-center">
+            <Text className=" px-8 text-center">
               La mejor solución para controlar los gastos que realizas en tu día
               a día, sin pederte de nada.
             </Text>
-          </View>
+          </VStack>
           <Link asChild href="/(auth)/sign-up">
-            <Button className="px-10  py-5 mt-10" rounded={10}>
+            <Button
+              px={10}
+              className="shadow-md border border-b-teal-600 border-t-transparent border-l-transparent border-r-transparent"
+              py={5}
+              mt={10}
+              rounded={10}
+            >
               <Text className="font-semibold text-white ">Empezar</Text>
             </Button>
           </Link>
