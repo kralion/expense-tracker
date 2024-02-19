@@ -94,7 +94,7 @@ export default function SignUp() {
         <SafeAreaView>
           <VStack space={5} className="flex items-start " mx={7}>
             <VStack space={2}>
-              <Text className="mt-10 text-3xl font-bold ">Crea una cuenta</Text>
+              <Text className="mt-6 text-3xl font-bold ">Crea una cuenta</Text>
               <HStack space={1} alignItems="center">
                 <Text className=" ">Si ya tienes una cuenta ?</Text>
                 <Link asChild href="/(auth)/sign-in">
@@ -129,7 +129,7 @@ export default function SignUp() {
                 />
               </Button>
             </HStack>
-            <HStack space={3} alignItems="center">
+            <HStack space={2} alignItems="center">
               <Divider flex={1} orientation="horizontal" />
               <Text>o</Text>
               <Divider flex={1} orientation="horizontal" />
@@ -318,6 +318,7 @@ export default function SignUp() {
                   }}
                   render={({ field }) => (
                     <Checkbox
+                      className="border"
                       value={field.value.toString()}
                       isChecked={field.value}
                       onChange={(isChecked) => field.onChange(isChecked)}

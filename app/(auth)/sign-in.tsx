@@ -7,6 +7,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
 import {
   Button,
+  Divider,
   FormControl,
   HStack,
   Icon,
@@ -105,7 +106,7 @@ export default function SignIn() {
           <View className="flex flex-col space-y-7 justify-between">
             <VStack space={5} className="flex items-start " mx={7}>
               <VStack space={2}>
-                <Text className=" text-3xl font-bold tracking-tight mt-10">
+                <Text className=" text-3xl font-bold tracking-tight mt-6">
                   Inicio de Sesión
                 </Text>
 
@@ -200,7 +201,7 @@ export default function SignIn() {
               <Button
                 rounded={10}
                 py={5}
-                marginTop={7}
+                marginTop={5}
                 alignItems="center"
                 onPress={handleSubmit((data) => {
                   signInWithEmail(data);
@@ -210,11 +211,11 @@ export default function SignIn() {
                 <Text className="font-semibold text-white ">Ingresar</Text>
               </Button>
 
-              <View className="flex flex-row px-4 items-center text-center justify-center">
-                <View className="w-1/2 border-[1px] h-0.5 border-gray-300"></View>
-                <Text className="text-textmuted mx-2 text-center">o</Text>
-                <View className=" w-1/2 border-[1px] h-0.5 border-gray-300"></View>
-              </View>
+              <HStack space={2} alignItems="center">
+                <Divider flex={1} orientation="horizontal" />
+                <Text>o</Text>
+                <Divider flex={1} orientation="horizontal" />
+              </HStack>
               <GoogleSignInButton />
               <AppleAuthButton />
               <FacebookSignInButton />
