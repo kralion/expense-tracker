@@ -205,7 +205,7 @@ export default function Index() {
                     className="flex flex-col items-center justify-center"
                   >
                     <NoDataAsset width={200} height={200} />
-                    <Text className="text-textmuted mt-5 text-center text-xs px-10">
+                    <Text className="text-zinc-400 mt-5 text-center text-sm px-10">
                       Parece que no tienes gastos registrados, haz click en el
                       icono + para agregar uno.
                     </Text>

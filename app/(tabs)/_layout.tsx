@@ -1,5 +1,5 @@
 import { ExpenseContextProvider, NotificationContextProvider } from "@/context";
-import { Entypo, FontAwesome5 as FontAwesome } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import { Tabs, router } from "expo-router";
 import * as React from "react";
 import {
@@ -10,13 +10,7 @@ import {
 } from "react-native";
 import Colors from "@/constants/Colors";
 import NotAllowed from "@/components/popups/not-allowed";
-
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={25} style={{ marginBottom: -7 }} {...props} />;
-}
+import { Image } from "expo-image";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -28,6 +22,7 @@ export default function TabLayout() {
             tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
             tabBarStyle: {
               height: 80,
+              paddingTop: 10,
             },
             tabBarHideOnKeyboard: true,
             headerShown: false,
@@ -38,8 +33,16 @@ export default function TabLayout() {
             options={{
               title: "Inicio",
               headerShown: false,
-              tabBarIcon: ({ color }) => (
-                <TabBarIcon name="tachometer-alt" color={color} />
+              tabBarIcon: ({ color, focused }) => (
+                <Image
+                  style={{ width: 28, height: 28, tintColor: color }}
+                  source={{
+                    uri: focused
+                      ? "https://api.iconify.design/mingcute:home-4-fill.svg"
+                      : "https://api.iconify.design/mingcute:home-4-line.svg",
+                  }}
+                  alt="google"
+                />
               ),
             }}
           />
@@ -48,8 +51,16 @@ export default function TabLayout() {
             name="statistics"
             options={{
               title: "Reportes",
-              tabBarIcon: ({ color }) => (
-                <TabBarIcon name="chart-bar" color={color} />
+              tabBarIcon: ({ color, focused }) => (
+                <Image
+                  style={{ width: 28, height: 28, tintColor: color }}
+                  source={{
+                    uri: focused
+                      ? "https://api.iconify.design/mingcute:chart-vertical-fill.svg"
+                      : "https://api.iconify.design/mingcute:chart-vertical-line.svg",
+                  }}
+                  alt="google"
+                />
               ),
               headerShown: false,
             }}
@@ -77,8 +88,16 @@ export default function TabLayout() {
             name="wallet"
             options={{
               title: "Saldo",
-              tabBarIcon: ({ color }) => (
-                <TabBarIcon name="wallet" color={color} />
+              tabBarIcon: ({ color, focused }) => (
+                <Image
+                  style={{ width: 28, height: 28, tintColor: color }}
+                  source={{
+                    uri: focused
+                      ? "https://api.iconify.design/mingcute:wallet-4-fill.svg"
+                      : "https://api.iconify.design/mingcute:wallet-4-line.svg",
+                  }}
+                  alt="google"
+                />
               ),
               headerShown: false,
             }}
@@ -91,8 +110,16 @@ export default function TabLayout() {
                 <View className="bg-accent" style={{ flex: 1 }} />
               ),
               title: "Perfil",
-              tabBarIcon: ({ color }) => (
-                <TabBarIcon name="user-alt" color={color} />
+              tabBarIcon: ({ color, focused }) => (
+                <Image
+                  style={{ width: 28, height: 28, tintColor: color }}
+                  source={{
+                    uri: focused
+                      ? "https://api.iconify.design/mingcute:user-3-fill.svg"
+                      : "https://api.iconify.design/mingcute:user-3-line.svg",
+                  }}
+                  alt="google"
+                />
               ),
             }}
           />

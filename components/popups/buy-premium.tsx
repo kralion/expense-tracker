@@ -44,8 +44,8 @@ export default function BuyPremiumModal({
                 acceder a funcionalidades exclusivas.
               </Text>
               <Text className="italic text-center">
-                ¡Mejora tu experiencia hoy! y sacale el máximo provecho a la
-                applicación.
+                ¡Mejora tu experiencia hoy! y sácale el máximo provecho a la app
+                🚀
               </Text>
             </VStack>
             <VStack space={3}>
