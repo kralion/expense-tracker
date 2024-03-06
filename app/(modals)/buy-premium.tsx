@@ -2,6 +2,7 @@ import Stripe from "@/components/payment/stripe";
 import Yape from "@/components/payment/yape";
 import useAuth from "@/context/AuthContext";
 import { AntDesign } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Divider, HStack, ScrollView, VStack } from "native-base";
@@ -9,11 +10,11 @@ import * as React from "react";
 import {
   Animated as AnimatedRN,
   Dimensions,
-  Image,
   Platform,
   Pressable,
   Text,
   TouchableOpacity,
+  View,
 } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -85,26 +86,22 @@ export default function BuyPremiumModal() {
                   uri: "https://img.icons8.com/?size=40&id=23454&format=png",
                 }}
                 alt="profile-pic"
-                width={50}
-                height={50}
+                style={{ width: 40, height: 40 }}
                 className="rounded-full "
               />
               <VStack>
                 <Text className="font-bold text-white text-lg ">
                   {userData?.nombres} {userData?.apellidos}
                 </Text>
-                <Text className="text-white ">
-                  {userData.rol === "premium"
-                    ? "Plan Actual Premium"
-                    : "Plan Actual Básico"}
-                </Text>
+                <View className="bg-orange-400 px-3  py-1 rounded-full">
+                  <Text className="text-white  text-xs ">
+                    {userData.rol === "premium"
+                      ? "Plan Actual Premium"
+                      : "Plan Actual Básico"}
+                  </Text>
+                </View>
               </VStack>
             </HStack>
-            <TouchableOpacity
-              onPress={() => router.push("/(modals)/personal-info")}
-            >
-              <AntDesign name="edit" size={20} color="#A3E062" />
-            </TouchableOpacity>
           </HStack>
           <Divider h={0.3} />
 

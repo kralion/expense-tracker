@@ -112,7 +112,7 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
         style={styles.shadowContainer}
       >
         <LinearGradient
-          className="flex flex-col justify-between rounded-3xl p-5 shadow-2xl space-y-10 "
+          className="flex flex-col justify-between rounded-2xl p-5 shadow-2xl space-y-10 "
           colors={
             isPremiumUser
               ? ["#D4AF37", "#FFD700", "#A79647"]

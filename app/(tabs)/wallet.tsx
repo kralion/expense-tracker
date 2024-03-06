@@ -5,6 +5,7 @@ import { useExpenseContext } from "@/context/ExpenseContext";
 import { ISaving } from "@/interfaces/saving";
 import { supabase } from "@/utils/supabase";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import {
   Button,
   FormControl,
@@ -16,7 +17,8 @@ import {
 } from "native-base";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { FlatList, Image, Text } from "react-native";
+import { FlatList, Text } from "react-native";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Wallet() {
@@ -74,132 +76,138 @@ export default function Wallet() {
             gestión de gastos.
           </Text>
         </VStack>
-        <VStack space={7}>
-          <HStack space={1} alignItems="center">
-            <Image
-              source={{
-                uri: "https://img.icons8.com/?size=50&id=6x8oEfs1nn_K&format=png",
-              }}
-              alt="Meta de Ahorro"
-              width={30}
-              height={30}
-            />
-            <Text className="font-semibold mr-4">Meta de Ahorro</Text>
-            <FormControl isInvalid={!!errors.meta_ahorro} isRequired>
-              <Controller
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <Input
-                    size="lg"
-                    keyboardType="numeric"
-                    isFocused
-                    marginY={3}
-                    w={190}
-                    value={value}
-                    onChangeText={(value) => onChange(value)}
-                    rightElement={
-                      <FontAwesome5
-                        name="dollar-sign"
-                        color="#6D6868"
-                        marginRight={10}
-                        size={10}
-                      />
-                    }
-                    placeholder="1500"
-                    borderRadius={7}
-                  />
-                )}
-                name="meta_ahorro"
-                rules={{
-                  required: { value: true, message: "Ingrese el monto" },
-                  pattern: {
-                    value: /^\d+(\.\d*)?$/,
-                    message: "Solo se permiten números válidos",
-                  },
-                }}
-              />
-              <FormControl.ErrorMessage
-                marginTop={-1}
-                leftIcon={<WarningOutlineIcon size="xs" />}
-              >
-                {errors.meta_ahorro && errors.meta_ahorro.message}
-              </FormControl.ErrorMessage>
-            </FormControl>
-          </HStack>
 
-          <HStack space={1} alignItems="center">
-            <Image
-              source={{
-                uri: "https://img.icons8.com/?size=50&id=423&format=png",
+        <HStack space={2} alignItems="center">
+          <Image
+            source={{
+              uri: "https://api.iconify.design/solar:money-bag-outline.svg",
+            }}
+            style={{
+              tintColor: "black",
+              width: 24,
+              height: 24,
+            }}
+            alt="Meta de Ahorro"
+          />
+          <Text className="font-semibold mr-4">Meta de Ahorro</Text>
+          <FormControl isInvalid={!!errors.meta_ahorro} isRequired>
+            <Controller
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  size="lg"
+                  keyboardType="numeric"
+                  isFocused
+                  marginY={2}
+                  w={190}
+                  value={value}
+                  onChangeText={(value) => onChange(value)}
+                  rightElement={
+                    <FontAwesome5
+                      name="dollar-sign"
+                      color="#6D6868"
+                      marginRight={10}
+                      size={10}
+                    />
+                  }
+                  placeholder="1500"
+                  borderRadius={7}
+                />
+              )}
+              name="meta_ahorro"
+              rules={{
+                required: { value: true, message: "Ingrese el monto" },
+                pattern: {
+                  value: /^\d+(\.\d*)?$/,
+                  message: "Solo se permiten números válidos",
+                },
               }}
-              alt="Ahorro actual"
-              width={30}
-              height={30}
             />
-            <Text className="font-semibold mr-7">Ahorro actual</Text>
-            <FormControl isInvalid={!!errors.ahorro_actual} isRequired>
-              <Controller
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <Input
-                    size="lg"
-                    keyboardType="numeric"
-                    isFocused
-                    marginY={3}
-                    w={190}
-                    value={value}
-                    onChangeText={(value) => onChange(value)}
-                    rightElement={
-                      <FontAwesome5
-                        name="dollar-sign"
-                        color="#6D6868"
-                        marginRight={10}
-                        size={10}
-                      />
-                    }
-                    placeholder="100"
-                    borderRadius={7}
-                  />
-                )}
-                name="ahorro_actual"
-                rules={{
-                  required: { value: true, message: "Ingrese el monto" },
-                  pattern: {
-                    value: /^\d+(\.\d*)?$/,
-                    message: "Solo se permiten números válidos",
-                  },
-                }}
-              />
-              <FormControl.ErrorMessage
-                marginTop={-1}
-                leftIcon={<WarningOutlineIcon size="xs" />}
-              >
-                {errors.ahorro_actual && errors.ahorro_actual.message}
-              </FormControl.ErrorMessage>
-            </FormControl>
-          </HStack>
+            <FormControl.ErrorMessage
+              marginTop={-1}
+              leftIcon={<WarningOutlineIcon size="xs" />}
+            >
+              {errors.meta_ahorro && errors.meta_ahorro.message}
+            </FormControl.ErrorMessage>
+          </FormControl>
+        </HStack>
 
-          <Button
-            borderRadius={10}
-            height={12}
-            isLoading={isLoading}
-            onPress={handleSubmit(onSubmit)}
-          >
-            <Text className="font-semibold text-white ">Registrar</Text>
-          </Button>
-          <SavingGoalModal
-            openModal={showSavingGoalModal}
-            setOpenModal={setShowSavingGoalModal}
+        <HStack space={2} alignItems="center">
+          <Image
+            source={{
+              uri: "https://api.iconify.design/solar:chat-round-money-broken.svg",
+            }}
+            alt="Ahorro actual"
+            style={{
+              tintColor: "black",
+              width: 24,
+              height: 24,
+            }}
           />
-          <Text className="font-bold text-left text-2xl">
-            Historial de Metas
-          </Text>
-          <FlatList
-            data={metas}
-            keyExtractor={(metas) => String(metas.id)}
-            renderItem={({ item: metas }) => <Metas metas={metas} />}
-          />
-        </VStack>
+          <Text className="font-semibold mr-7">Ahorro actual</Text>
+          <FormControl isInvalid={!!errors.ahorro_actual} isRequired>
+            <Controller
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  size="lg"
+                  keyboardType="numeric"
+                  isFocused
+                  marginY={2}
+                  w={190}
+                  value={value}
+                  onChangeText={(value) => onChange(value)}
+                  rightElement={
+                    <FontAwesome5
+                      name="dollar-sign"
+                      color="#6D6868"
+                      marginRight={10}
+                      size={10}
+                    />
+                  }
+                  placeholder="100"
+                  borderRadius={7}
+                />
+              )}
+              name="ahorro_actual"
+              rules={{
+                required: { value: true, message: "Ingrese el monto" },
+                pattern: {
+                  value: /^\d+(\.\d*)?$/,
+                  message: "Solo se permiten números válidos",
+                },
+              }}
+            />
+            <FormControl.ErrorMessage
+              marginTop={-1}
+              leftIcon={<WarningOutlineIcon size="xs" />}
+            >
+              {errors.ahorro_actual && errors.ahorro_actual.message}
+            </FormControl.ErrorMessage>
+          </FormControl>
+        </HStack>
+
+        <Button
+          borderRadius={10}
+          marginY={10}
+          height={12}
+          isLoading={isLoading}
+          onPress={handleSubmit(onSubmit)}
+        >
+          <Text className="font-semibold text-white ">Registrar</Text>
+        </Button>
+        <SavingGoalModal
+          openModal={showSavingGoalModal}
+          setOpenModal={setShowSavingGoalModal}
+        />
+        <Text className="font-bold text-left mb-5 text-2xl">
+          Historial de Metas
+        </Text>
+        <FlatList
+          data={metas}
+          keyExtractor={(metas) => String(metas.id)}
+          renderItem={({ item: metas }) => <Metas metas={metas} />}
+        />
       </SafeAreaView>
     </ScrollView>
   );

@@ -6,6 +6,7 @@ import { useExpenseContext, useNotificationContext } from "@/context";
 import useAuth from "@/context/AuthContext";
 import { supabase } from "@/utils/supabase";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { Image } from "expo-image";
 import {
   Box,
   Button,
@@ -158,15 +159,16 @@ export default function Index() {
                   onPress={() => {
                     setShowBuyPremiumModal(true);
                   }}
-                  colorScheme="teal"
-                  borderRadius={10}
-                  className=" active:opacity-70 bg-accent"
+                  borderRadius={7}
+                  className=" active:opacity-70 p-1.5 animate-ping bg-accent"
                   variant="unstyled"
                 >
-                  <FontAwesome
-                    color="black"
-                    name={userData.rol === "premium" ? "unlock" : "lock"}
-                    size={20}
+                  <Image
+                    style={{ width: 26, height: 26 }}
+                    source={{
+                      uri: "https://api.iconify.design/mingcute:lock-line.svg",
+                    }}
+                    alt="lock"
                   />
                 </Button>
               </View>

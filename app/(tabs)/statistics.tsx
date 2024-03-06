@@ -13,6 +13,7 @@ import { Text, TouchableOpacity, Animated } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Chart from "../../components/estadisticas/chart";
 import { IGasto } from "@/interfaces";
+import { Image } from "expo-image";
 
 export default function Statistics() {
   const [service, setService] = useState("gastos");
@@ -118,10 +119,12 @@ export default function Statistics() {
             <Link asChild href="/(modals)/export-data">
               <Button
                 startIcon={
-                  <FontAwesome
-                    name="file-pdf-o"
-                    color="white"
-                    marginRight={2}
+                  <Image
+                    style={{ width: 16, height: 16, tintColor: "#ffff" }}
+                    source={{
+                      uri: "https://api.iconify.design/mingcute:file-export-line.svg",
+                    }}
+                    alt="google"
                   />
                 }
                 borderRadius={5}
