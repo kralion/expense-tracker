@@ -20,6 +20,7 @@ import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   Alert,
+  AppState,
   Keyboard,
   Pressable,
   Text,
@@ -32,11 +33,18 @@ type FormData = {
   email: string;
   password: string;
 };
-
+AppState.addEventListener("change", (state) => {
+  if (state === "active") {
+    supabase.auth.startAutoRefresh();
+  } else {
+    supabase.auth.stopAutoRefresh();
+  }
+});
 export default function SignIn() {
   const {
     control,
     handleSubmit,
+
     formState: { errors },
   } = useForm<FormData>();
   const [show, setShow] = React.useState(false);
@@ -45,58 +53,20 @@ export default function SignIn() {
   const { showNotification } = useNotificationContext();
   async function signInWithEmail(data: FormData) {
     setLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: data.email,
-        password: data.password,
-      });
-
-      // Handle response here...
-
-      if (error) {
-        throw error;
-      } else {
-        router.push("/(tabs)/");
-      }
-    } catch (e: any) {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password,
+    });
+    if (error) {
       showNotification({
         title: "Error de Inicio de Sesión",
         alertStatus: "error",
       });
       setInvalidCredentials(true);
-    } finally {
-      setLoading(false);
+    } else {
+      router.push("/(tabs)/");
     }
-  }
-  async function signInWithEmail2(data: FormData) {
-    setLoading(true);
-
-    let timeoutId;
-
-    try {
-      timeoutId = setTimeout(() => {
-        // Show timeout alert
-      }, 5000);
-
-      const { error } = await supabase.auth.signInWithPassword(data);
-
-      if (error) {
-        throw error;
-      }
-
-      // Login succeeded
-      clearTimeout(timeoutId);
-      router.push("/");
-    } catch (error) {
-      clearTimeout(timeoutId);
-      showNotification({
-        title: "Error de Inicio de Sesión",
-        alertStatus: "error",
-      });
-      setInvalidCredentials(true);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(false);
   }
 
   return (

@@ -14,7 +14,7 @@ type TUserData = {
   nombres: string;
   apellidos: string;
   email: string;
-  rol: string;
+  rol: "free";
   perfil: {
     uri: string;
   };
@@ -57,7 +57,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         .eq("session_id", id)
         .single();
       if (error) {
-        throw error;
+        showNotification({
+          title: "Error al obtener datos del usuario",
+          alertStatus: "error",
+        });
+        console.error("Error al obtener datos del usuario:", error);
+        return;
       }
       setUserData(data);
     } catch (error) {

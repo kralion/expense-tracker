@@ -19,6 +19,7 @@ import {
 import * as React from "react";
 import { Animated, FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import LockIcon from "@/assets/svgs/lock.svg";
 
 export default function Index() {
   const fadeAnim = React.useRef(new Animated.Value(1)).current;
@@ -154,23 +155,14 @@ export default function Index() {
                 openModal={showBuyPremiumModal}
               />
               <View>
-                <Button
-                  isPressed={true}
+                <LockIcon
                   onPress={() => {
                     setShowBuyPremiumModal(true);
                   }}
-                  borderRadius={7}
-                  className=" active:opacity-70 p-1.5 animate-ping bg-accent"
-                  variant="unstyled"
-                >
-                  <Image
-                    style={{ width: 26, height: 26 }}
-                    source={{
-                      uri: "https://api.iconify.design/mingcute:lock-line.svg",
-                    }}
-                    alt="lock"
-                  />
-                </Button>
+                  className="text-white drop-shadow-lg "
+                  width={36}
+                  height={36}
+                />
               </View>
             </HStack>
 
