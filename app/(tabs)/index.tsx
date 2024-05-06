@@ -3,7 +3,7 @@ import NoDataAsset from "@/assets/svgs/no-data.svg";
 import Card from "@/components/dashboard/card";
 import BuyPremiumModal from "@/components/popups/buy-premium";
 import { Expense } from "@/components/shared";
-import { useExpenseContext } from "@/context";
+import { useExpenseContext } from "@/context/ExpenseContext";
 import useAuth from "@/context/AuthContext";
 import { supabase } from "@/utils/supabase";
 import {

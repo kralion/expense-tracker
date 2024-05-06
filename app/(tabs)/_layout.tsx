@@ -1,4 +1,4 @@
-import { ExpenseContextProvider, NotificationContextProvider } from "@/context";
+import { ExpenseContextProvider } from "@/context/ExpenseContext";
 import { Entypo } from "@expo/vector-icons";
 import { Tabs, router } from "expo-router";
 import * as React from "react";
@@ -16,115 +16,113 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
   return (
     <ExpenseContextProvider>
-      <NotificationContextProvider>
-        <Tabs
-          screenOptions={{
-            tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-            tabBarStyle: {
-              height: 80,
-              paddingTop: 10,
-            },
-            tabBarHideOnKeyboard: true,
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+          tabBarStyle: {
+            height: 80,
+            paddingTop: 10,
+          },
+          tabBarHideOnKeyboard: true,
+          headerShown: false,
+        }}
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: "Inicio",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <Image
+                style={{ width: 28, height: 28, tintColor: color }}
+                source={{
+                  uri: focused
+                    ? "https://api.iconify.design/mingcute:home-4-fill.svg"
+                    : "https://api.iconify.design/mingcute:home-4-line.svg",
+                }}
+                alt="google"
+              />
+            ),
+          }}
+        />
+
+        <Tabs.Screen
+          name="statistics"
+          options={{
+            title: "Reportes",
+            tabBarIcon: ({ color, focused }) => (
+              <Image
+                style={{ width: 28, height: 28, tintColor: color }}
+                source={{
+                  uri: focused
+                    ? "https://api.iconify.design/mingcute:chart-vertical-fill.svg"
+                    : "https://api.iconify.design/mingcute:chart-vertical-line.svg",
+                }}
+                alt="google"
+              />
+            ),
             headerShown: false,
           }}
-        >
-          <Tabs.Screen
-            name="index"
-            options={{
-              title: "Inicio",
-              headerShown: false,
-              tabBarIcon: ({ color, focused }) => (
-                <Image
-                  style={{ width: 28, height: 28, tintColor: color }}
-                  source={{
-                    uri: focused
-                      ? "https://api.iconify.design/mingcute:home-4-fill.svg"
-                      : "https://api.iconify.design/mingcute:home-4-line.svg",
-                  }}
-                  alt="google"
-                />
-              ),
-            }}
-          />
+        />
+        <Tabs.Screen
+          name="add-expense"
+          options={{
+            title: "",
+            headerShown: false,
+            tabBarIcon: () => (
+              <View>
+                <TouchableOpacity
+                  style={styles.customTabStyle}
+                  onPress={() => router.push("/(tabs)/add-expense")}
+                  activeOpacity={0.8}
+                >
+                  <Entypo name="plus" size={40} color="white" />
+                </TouchableOpacity>
+              </View>
+            ),
+          }}
+        />
 
-          <Tabs.Screen
-            name="statistics"
-            options={{
-              title: "Reportes",
-              tabBarIcon: ({ color, focused }) => (
-                <Image
-                  style={{ width: 28, height: 28, tintColor: color }}
-                  source={{
-                    uri: focused
-                      ? "https://api.iconify.design/mingcute:chart-vertical-fill.svg"
-                      : "https://api.iconify.design/mingcute:chart-vertical-line.svg",
-                  }}
-                  alt="google"
-                />
-              ),
-              headerShown: false,
-            }}
-          />
-          <Tabs.Screen
-            name="add-expense"
-            options={{
-              title: "",
-              headerShown: false,
-              tabBarIcon: () => (
-                <View>
-                  <TouchableOpacity
-                    style={styles.customTabStyle}
-                    onPress={() => router.push("/(tabs)/add-expense")}
-                    activeOpacity={0.8}
-                  >
-                    <Entypo name="plus" size={40} color="white" />
-                  </TouchableOpacity>
-                </View>
-              ),
-            }}
-          />
+        <Tabs.Screen
+          name="wallet"
+          options={{
+            title: "Saldo",
+            tabBarIcon: ({ color, focused }) => (
+              <Image
+                style={{ width: 28, height: 28, tintColor: color }}
+                source={{
+                  uri: focused
+                    ? "https://api.iconify.design/mingcute:wallet-4-fill.svg"
+                    : "https://api.iconify.design/mingcute:wallet-4-line.svg",
+                }}
+                alt="google"
+              />
+            ),
+            headerShown: false,
+          }}
+        />
 
-          <Tabs.Screen
-            name="wallet"
-            options={{
-              title: "Saldo",
-              tabBarIcon: ({ color, focused }) => (
-                <Image
-                  style={{ width: 28, height: 28, tintColor: color }}
-                  source={{
-                    uri: focused
-                      ? "https://api.iconify.design/mingcute:wallet-4-fill.svg"
-                      : "https://api.iconify.design/mingcute:wallet-4-line.svg",
-                  }}
-                  alt="google"
-                />
-              ),
-              headerShown: false,
-            }}
-          />
-
-          <Tabs.Screen
-            name="profile"
-            options={{
-              headerBackground: () => (
-                <View className="bg-accent" style={{ flex: 1 }} />
-              ),
-              title: "Perfil",
-              tabBarIcon: ({ color, focused }) => (
-                <Image
-                  style={{ width: 28, height: 28, tintColor: color }}
-                  source={{
-                    uri: focused
-                      ? "https://api.iconify.design/mingcute:user-3-fill.svg"
-                      : "https://api.iconify.design/mingcute:user-3-line.svg",
-                  }}
-                  alt="google"
-                />
-              ),
-            }}
-          />
-        </Tabs>
-      </NotificationContextProvider>
+        <Tabs.Screen
+          name="profile"
+          options={{
+            headerBackground: () => (
+              <View className="bg-accent" style={{ flex: 1 }} />
+            ),
+            title: "Perfil",
+            tabBarIcon: ({ color, focused }) => (
+              <Image
+                style={{ width: 28, height: 28, tintColor: color }}
+                source={{
+                  uri: focused
+                    ? "https://api.iconify.design/mingcute:user-3-fill.svg"
+                    : "https://api.iconify.design/mingcute:user-3-line.svg",
+                }}
+                alt="google"
+              />
+            ),
+          }}
+        />
+      </Tabs>
     </ExpenseContextProvider>
   );
 }

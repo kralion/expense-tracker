@@ -1,4 +1,3 @@
-import DefaultAvatar from "@/assets/svgs/avatar.svg";
 import useAuth from "@/context/AuthContext";
 import { supabase } from "@/utils/supabase";
 import {
@@ -7,9 +6,16 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { Image } from "expo-image";
 import { Link, router } from "expo-router";
-import { Center, HStack, Heading, Icon, VStack } from "native-base";
+import {
+  Avatar,
+  Badge,
+  Center,
+  HStack,
+  Heading,
+  Icon,
+  VStack,
+} from "native-base";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 
@@ -24,25 +30,30 @@ export default function App() {
     <View>
       <View className="bg-accent relative h-40">
         <VStack
-          space={2}
+          space={3}
           className=" absolute left-28 right-28 top-24"
           alignItems="center"
         >
-          {userData ? (
-            <Image
-              source={{
-                //TODO change to user avatar
-                // uri: userData?.perfil.uri,
-                uri: "https://img.icons8.com/?size=40&id=23454&format=png",
-              }}
-              className="rounded-full"
-              alt="profile"
-              style={{ width: 120, height: 120 }}
-            />
-          ) : (
-            <DefaultAvatar width={120} height={120} />
-          )}
-          <Heading size="md">{`${userData.nombres} ${userData.apellidos}`}</Heading>
+          <Avatar
+            bg="teal.600"
+            alignSelf="center"
+            size="2xl"
+            source={{
+              uri: userData.foto,
+            }}
+          />
+
+          <VStack space={1}>
+            <Heading size="md">{`${userData.nombres} ${userData.apellidos}`}</Heading>
+            <Badge
+              className="border border-orange-500"
+              variant="solid"
+              borderRadius={10}
+              colorScheme={userData.rol === "premium" ? "success" : "warning"}
+            >
+              {`Usuario ${userData.rol}`}
+            </Badge>
+          </VStack>
         </VStack>
       </View>
       <HStack>

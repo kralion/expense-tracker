@@ -1,4 +1,4 @@
-import { useExpenseContext } from "@/context";
+import { useExpenseContext } from "@/context/ExpenseContext";
 import useAuth from "@/context/AuthContext";
 import { supabase } from "@/utils/supabase";
 import { LinearGradient } from "expo-linear-gradient";

@@ -1,5 +1,5 @@
 import { Expense } from "@/components/shared";
-import { useExpenseContext } from "@/context";
+import { useExpenseContext } from "@/context/ExpenseContext";
 import {
   FontAwesome,
   FontAwesome5,

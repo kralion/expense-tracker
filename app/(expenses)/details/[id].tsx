@@ -1,4 +1,4 @@
-import { useExpenseContext } from "@/context";
+import { useExpenseContext } from "@/context/ExpenseContext";
 import { IGasto } from "@/interfaces";
 import { supabase } from "@/utils/supabase";
 import { Ionicons } from "@expo/vector-icons";

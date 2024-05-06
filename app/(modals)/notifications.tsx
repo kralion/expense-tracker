@@ -1,5 +1,4 @@
 import SingleNotification from "@/components/popups/notification";
-import { useNotificationContext } from "@/context";
 import useAuth from "@/context/AuthContext";
 import { INotification } from "@/interfaces/notification";
 import { supabase } from "@/utils/supabase";

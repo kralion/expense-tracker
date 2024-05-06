@@ -1,5 +1,5 @@
 import AddExpenseSuccesModal from "@/components/popups/add-expense-sucess";
-import { useExpenseContext, useNotificationContext } from "@/context";
+import { useExpenseContext } from "@/context/ExpenseContext";
 import useAuth from "@/context/AuthContext";
 import { IGasto } from "@/interfaces";
 import { FontAwesome5 } from "@expo/vector-icons";
