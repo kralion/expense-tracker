@@ -26,15 +26,10 @@ export function Presupuesto({ presupuesto }: { presupuesto: IPresupuesto }) {
         return (
           <>
             <Box
-              bg={
-                isPressed
-                  ? "white"
-                  : isHovered
-                  ? "coolGray.200"
-                  : "coolGray.200"
-              }
+              bg={isPressed ? "white" : "coolGray.100"}
               rounded={10}
               p={4}
+              my={2}
             >
               <HStack justifyContent="space-between" alignItems="center">
                 <HStack space={3} alignItems="center">

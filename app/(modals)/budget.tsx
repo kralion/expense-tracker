@@ -34,10 +34,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Budget() {
   const [showSavingGoalModal, setShowSavingGoalModal] = React.useState(false);
-  const [presupuesto, setPresupuesto] = React.useState<any>([]);
+  const [presupuestos, setPresupuestos] = React.useState<any>([]);
   async function getPresupuesto() {
     const { data } = await supabase.from("presupuestos").select("*");
-    setPresupuesto(data);
+    setPresupuestos(data);
   }
 
   const {
@@ -53,7 +53,6 @@ export default function Budget() {
       nativeEvent: { timestamp },
     } = event;
   };
-  const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
 
   const [isLoading, setIsLoading] = React.useState(false);
   const { userData } = useAuth();
@@ -79,7 +78,7 @@ export default function Budget() {
   async function onSubmit(data: IPresupuesto) {
     setIsLoading(true);
     const { error } = await supabase
-      .from("presupuesto")
+      .from("presupuestos")
       .insert({
         ...data,
         usuario_id: userData?.id,
@@ -103,6 +102,7 @@ export default function Budget() {
         placement: "top",
         variant: "solid",
       });
+      return;
     }
     setIsLoading(false);
     setShowSavingGoalModal(true);
@@ -111,7 +111,7 @@ export default function Budget() {
 
   React.useEffect(() => {
     getPresupuesto();
-  }, []);
+  }, [userData]);
   return (
     <ScrollView background="white">
       <SafeAreaView className="p-5 ">
@@ -264,7 +264,7 @@ export default function Budget() {
         <VStack space={5} mt={10}>
           <Text className="font-bold text-xl">Historial de Presupuestos</Text>
           <FlatList
-            data={presupuesto}
+            data={presupuestos}
             keyExtractor={(presupuesto) => String(presupuesto.id)}
             renderItem={({ item: presupuesto }) => (
               <Presupuesto presupuesto={presupuesto} />
