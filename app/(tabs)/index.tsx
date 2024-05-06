@@ -45,6 +45,7 @@ export default function Index() {
         "Registrado exitosamente en la app, ahora puedes comenzar a usarla con el plan gratuito.",
       fecha: new Date().toISOString(),
       usuario_id: userData.id,
+      tipo: "INFO",
     };
 
     const { data } = await supabase

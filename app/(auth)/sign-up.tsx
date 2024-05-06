@@ -1,11 +1,11 @@
 import { TermsPolicyModal } from "@/components/popups/terms&policy";
-import useAuth from "@/context/AuthContext";
 import { supabase } from "@/utils/supabase";
 import { FontAwesome5 } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
 import { Image } from "expo-image";
 import { Link, router } from "expo-router";
 import {
+  Alert,
   Button,
   Center,
   Checkbox,
@@ -17,11 +17,11 @@ import {
   ScrollView,
   VStack,
   WarningOutlineIcon,
+  useToast,
 } from "native-base";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-  Alert,
   Keyboard,
   Pressable,
   Text,
@@ -47,41 +47,67 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [showTCModal, setShowTCModal] = React.useState(false);
-  const { session } = useAuth();
+  const toast = useToast();
+
+  async function sendWelcomeNotification(userId: string) {
+    const notification = {
+      titulo: "Bienvenido !!!",
+      descripcion:
+        "Registrado exitosamente en la app, ahora puedes comenzar a usarla con el plan gratuito.",
+      fecha: new Date().toISOString(),
+      usuario_id: userId,
+      tipo: "INFO",
+    };
+
+    await supabase.from("notificaciones").insert(notification);
+  }
 
   async function signUpWithEmail(data: FormData) {
     setLoading(true);
-    try {
-      const { error, data: authData } = await supabase.auth.signUp({
-        email: data.email,
-        password: data.password,
-        options: {
-          emailRedirectTo: "https://expense-tracker-web-nine.vercel.app",
-        },
-      });
+    const { data: authData, error } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+      options: {
+        emailRedirectTo: "https://expensetrackerweb.vercel.app",
+      },
+    });
 
-      if (error) {
-        Alert.alert(`Error de Registro: ${error.message}`);
-      } else if (authData) {
-        const { error: insertError } = await supabase.from("usuarios").insert({
-          nombres: data.nombres,
-          apellidos: data.apellidos,
-          session_id: authData.user?.id,
-          rol: "free",
-          terms: data.termsAndConditions,
-        });
-        if (insertError) {
-          console.error("Error de registro:", insertError.message);
-        }
-      } else {
-        Alert.alert(
-          "Registro Exitoso",
-          "Se ha enviado un correo de confirmación a tu email"
-        );
+    if (error) {
+      toast.show({
+        render: () => (
+          <Alert variant="solid" rounded={10} px={5} status="error">
+            <HStack space={2} alignItems="center">
+              <Alert.Icon mt="1" />
+              <Text className="text-white">Error de Registro</Text>
+            </HStack>
+          </Alert>
+        ),
+        description: "",
+        duration: 2000,
+        placement: "top",
+        variant: "solid",
+      });
+    } else {
+      toast.show({
+        render: () => (
+          <Alert variant="solid" rounded={10} px={5} status="success">
+            <HStack space={2} alignItems="center">
+              <Alert.Icon mt="1" />
+              <Text className="text-white">
+                Registro exitoso, ahora puedes comenzar a usarla con el plan
+                gratuito.
+              </Text>
+            </HStack>
+          </Alert>
+        ),
+        description: "",
+        duration: 2000,
+        placement: "top",
+        variant: "solid",
+      });
+      if (authData.user) {
+        await sendWelcomeNotification(authData.user.id);
       }
-    } catch (e: any) {
-      Alert.alert(`Error inesperado: ${e.message}`);
-    } finally {
       setLoading(false);
       reset();
       router.push("/(auth)/sign-in");

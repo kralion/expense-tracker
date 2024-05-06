@@ -3,13 +3,14 @@ import { useNotificationContext } from "@/context";
 import useAuth from "@/context/AuthContext";
 import { INotification } from "@/interfaces/notification";
 import { supabase } from "@/utils/supabase";
-import { FlatList, VStack } from "native-base";
+import { Alert, FlatList, HStack, VStack, useToast } from "native-base";
 import * as React from "react";
+import { Text } from "react-native";
 
 export default function Notifications() {
-  const { showNotification } = useNotificationContext();
   const [notifications, setNotifications] = React.useState<INotification[]>([]);
   const { session } = useAuth();
+  const toast = useToast();
 
   const getNotifications = async () => {
     const { data, error } = await supabase
@@ -18,9 +19,19 @@ export default function Notifications() {
       .eq("session_id", session?.user.id);
 
     if (error) {
-      showNotification({
-        title: "Error al obtener las notificaciones",
-        alertStatus: "error",
+      toast.show({
+        render: () => (
+          <Alert variant="solid" rounded={10} px={5} status="error">
+            <HStack space={2} alignItems="center">
+              <Alert.Icon mt="1" />
+              <Text className="text-white">Credenciales inválidas</Text>
+            </HStack>
+          </Alert>
+        ),
+        description: "",
+        duration: 2000,
+        placement: "top",
+        variant: "solid",
       });
       return;
     }

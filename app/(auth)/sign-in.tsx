@@ -1,7 +1,6 @@
 import { AppleAuthButton } from "@/components/auth/Apple.auth";
 import FacebookSignInButton from "@/components/auth/Facebook.auth";
 import GoogleSignInButton from "@/components/auth/Google.native.auth";
-import { useNotificationContext } from "@/context";
 import { supabase } from "@/utils/supabase";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
@@ -50,7 +49,6 @@ export default function SignIn() {
   } = useForm<FormData>();
   const [show, setShow] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const { showNotification } = useNotificationContext();
   const toast = useToast();
   async function signInWithEmail(data: FormData) {
     setLoading(true);

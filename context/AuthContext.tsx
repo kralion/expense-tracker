@@ -2,7 +2,8 @@ import React from "react";
 import { supabase } from "@/utils/supabase";
 import { Session } from "@supabase/supabase-js";
 import { router } from "expo-router";
-import { useNotificationContext } from "./NotificationContext";
+import { Alert, HStack, useToast } from "native-base";
+import { Text } from "react-native";
 
 interface AuthContextType {
   session: Session | null;
@@ -22,10 +23,17 @@ type TUserData = {
 };
 export const AuthContext = React.createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const toast = useToast();
   const [session, setSession] = React.useState<Session | null>(null);
   const [userData, setUserData] = React.useState<TUserData>();
-  const { showNotification } = useNotificationContext();
-
+  async function fetchUserData(id: string) {
+    const { data } = await supabase
+      .from("usuarios")
+      .select("*")
+      .eq("session_id", id)
+      .single();
+    setUserData(data);
+  }
   React.useEffect(() => {
     supabase.auth
       .getSession()
@@ -33,7 +41,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setSession(session);
       })
       .catch((error) => {
-        console.error("Error al obtener sesión:", error);
+        toast.show({
+          render: () => (
+            <Alert variant="solid" rounded={10} px={5} status="error">
+              <HStack space={2} alignItems="center">
+                <Alert.Icon mt="1" />
+                <Text className="text-white">
+                  Error al obtener sesión de usuario
+                </Text>
+              </HStack>
+            </Alert>
+          ),
+          description: "",
+          duration: 2000,
+          placement: "top",
+          variant: "solid",
+        });
       });
 
     supabase.auth.onAuthStateChange(async (_event, session) => {
@@ -41,37 +64,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (session) {
         await fetchUserData(session.user.id);
       } else {
-        try {
-          await router.push("/(auth)/sign-in");
-        } catch (error) {
-          console.error("Error redireccionando:", error);
-        }
+        router.push("/(auth)/sign-in");
       }
     });
   }, []);
-  async function fetchUserData(id: string) {
-    try {
-      const { data, error } = await supabase
-        .from("usuarios")
-        .select("*")
-        .eq("session_id", id)
-        .single();
-      if (error) {
-        showNotification({
-          title: "Error al obtener datos del usuario",
-          alertStatus: "error",
-        });
-        console.error("Error al obtener datos del usuario:", error);
-        return;
-      }
-      setUserData(data);
-    } catch (error) {
-      showNotification({
-        title: "Error al obtener datos del usuario",
-        alertStatus: "error",
-      });
-    }
-  }
 
   const value = { session, userData, setUserData };
 

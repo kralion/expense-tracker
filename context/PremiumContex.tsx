@@ -1,7 +1,8 @@
 import { supabase } from "@/utils/supabase";
 import { router } from "expo-router";
 import React, { createContext, useState } from "react";
-import { useNotificationContext } from "./NotificationContext";
+import { Alert, HStack, useToast } from "native-base";
+import { Text } from "react-native";
 
 interface PremiumContextProps {
   isPremium: boolean;
@@ -17,7 +18,7 @@ export const PremiumContext = createContext<PremiumContextProps>({
 
 export function PremiumProvider({ children }: { children: React.ReactNode }) {
   const [isPremium, setIsPremium] = useState(false);
-  const { showNotification } = useNotificationContext();
+  const toast = useToast();
 
   async function getPremiumUserStatusById(id: string) {
     try {
@@ -27,14 +28,38 @@ export function PremiumProvider({ children }: { children: React.ReactNode }) {
         .update({ rol: newRol })
         .eq("id", id);
       if (error) {
-        showNotification({
-          title: "Error al actualizar el rol",
-          alertStatus: "error",
+        toast.show({
+          render: () => (
+            <Alert variant="solid" rounded={10} px={5} status="error">
+              <HStack space={2} alignItems="center">
+                <Alert.Icon mt="1" />
+                <Text className="text-white">
+                  Error al actualizar el rol del usuario
+                </Text>
+              </HStack>
+            </Alert>
+          ),
+          description: "",
+          duration: 2000,
+          placement: "top",
+          variant: "solid",
         });
       } else {
-        showNotification({
-          title: "Plan premium activado",
-          alertStatus: "success",
+        toast.show({
+          render: () => (
+            <Alert variant="solid" rounded={10} px={5} status="success">
+              <HStack space={2} alignItems="center">
+                <Alert.Icon mt="1" />
+                <Text className="text-white">
+                  Ahora eres un usuario premium
+                </Text>
+              </HStack>
+            </Alert>
+          ),
+          description: "",
+          duration: 2000,
+          placement: "top",
+          variant: "solid",
         });
       }
     } catch (error) {

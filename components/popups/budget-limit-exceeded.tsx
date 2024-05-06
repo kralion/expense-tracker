@@ -60,7 +60,7 @@ export function BudgetLimitExceededModal({
               height={12}
               variant="solid"
               onPress={() => {
-                setShowNotification(false), router.push("/(tabs)/statistics");
+                setShowModal(false), router.push("/(tabs)/statistics");
               }}
             >
               <Text className="font-semibold text-white ">
