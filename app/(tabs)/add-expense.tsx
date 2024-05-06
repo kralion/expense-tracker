@@ -220,7 +220,7 @@ export default function AddExpense() {
                     justifyContent="space-between"
                     space={4}
                   >
-                    <Text> Será un Gasto Recurrente / Periódico ?</Text>
+                    <Text> Es un gasto recurrente ?</Text>
                     <HStack space={1} alignItems="center">
                       <Text>{value ? "Sí" : "No"}</Text>
                       <Switch size="sm" value={value} onToggle={onChange} />

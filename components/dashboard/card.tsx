@@ -15,12 +15,12 @@ import Animated, {
 import { BudgetLimitExceededModal } from "../popups";
 import BuyPremiumModal from "../popups/buy-premium";
 
-export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
+export default function Card() {
   const flip = useSharedValue(0);
   const [totalMonthExpenses, setTotalMonthExpenses] = React.useState(0);
   const { userData } = useAuth();
   const { sumOfAllOfExpensesMonthly } = useExpenseContext();
-  const [openBudgetLimitModal, setOpenBudgetLimitModal] = React.useState(false);
+  const [showModal, setShowModal] = React.useState(false);
 
   const animatedStyles = useAnimatedStyle(() => {
     const rotateY = interpolate(
@@ -52,17 +52,13 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
     const oneMonthFromNow = new Date();
     oneMonthFromNow.setMonth(now.getMonth() + 1);
 
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from("presupuestos")
       .select("*")
       .eq("usuario_id", userData.id)
       .lte("fecha_registro", now.toISOString().split("T")[0])
       .gte("fecha_final", now.toISOString().split("T")[0])
       .single();
-
-    if (error) {
-      console.log("Error al obtener el presupuesto", error);
-    }
     if (data) {
       setPresupuesto(data.monto);
     }
@@ -92,7 +88,7 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
       totalMonthExpenses &&
       presupuesto - totalMonthExpenses <= 0
     ) {
-      setOpenBudgetLimitModal(true);
+      setShowModal(true);
     }
   }, [balance]);
   return (
@@ -100,7 +96,7 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
       <BuyPremiumModal setOpenModal={setOpenModal} openModal={openModal} />
       <Pressable
         onPress={() => {
-          if (isPremiumUser) {
+          if (userData.rol === "premium") {
             Alert.alert(
               "Premium",
               "Ya eres usuario premium, tienes acceso a todas las funcionalidades."
@@ -114,7 +110,7 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
         <LinearGradient
           className="flex flex-col justify-between rounded-2xl p-5 shadow-2xl space-y-10 "
           colors={
-            isPremiumUser
+            userData.rol === "premium"
               ? ["#D4AF37", "#FFD700", "#A79647"]
               : ["#6366F1", "#6D28D9"]
           }
@@ -132,16 +128,16 @@ export default function Card({ isPremiumUser }: { isPremiumUser: boolean }) {
               </Text>
             </View>
             <BudgetLimitExceededModal
-              setShowNotification={setOpenBudgetLimitModal}
-              showNotification={openBudgetLimitModal}
+              setShowModal={setShowModal}
+              showModal={showModal}
             />
             <Badge
               variant="solid"
               rounded={10}
-              colorScheme={isPremiumUser ? "yellow" : "orange"}
+              colorScheme={userData.rol === "premium" ? "yellow" : "orange"}
             >
               <Text className="text-white text-xs font-bold">
-                {isPremiumUser ? "Premium" : "Plan Free"}
+                {userData.rol === "premium" ? "Premium" : "Plan Free"}
               </Text>
             </Badge>
           </View>

@@ -1,5 +1,6 @@
 import { useExpenseContext } from "@/context";
 import { IGasto } from "@/interfaces";
+import { supabase } from "@/utils/supabase";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
 import {
@@ -11,6 +12,7 @@ import {
   Input,
   Radio,
   Select,
+  Switch,
   TextArea,
   VStack,
   WarningOutlineIcon,
@@ -23,6 +25,7 @@ interface FormData {
   divisa: string;
   categoria: string;
   descripcion: string;
+  periodicidad: boolean;
 }
 export default function EditExpense() {
   const params = useLocalSearchParams<{ id: string }>();
@@ -32,35 +35,34 @@ export default function EditExpense() {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
-    defaultValues: {
-      monto: expenseDataDetails?.monto,
-      divisa: expenseDataDetails?.divisa,
-      categoria: expenseDataDetails?.categoria,
-      descripcion: expenseDataDetails?.descripcion,
-    },
-  });
-  const { getSingleExpense } = useExpenseContext();
+  } = useForm<FormData>();
 
   async function onSubmit(data: FormData) {
     data.monto = parseFloat(data.monto).toString();
     alert(JSON.stringify(data));
   }
-  React.useEffect(() => {
-    const fetchExpense = async () => {
-      const fetchedExpense = await getSingleExpense(params.id);
-      setExpenseDataDetails(fetchedExpense);
-    };
+  async function getExpense() {
+    const { data, error } = await supabase
+      .from("expenses")
+      .select("*")
+      .eq("id", params.id)
+      .single();
+    setExpenseDataDetails(data);
 
-    fetchExpense();
-    console.log(JSON.stringify(expenseDataDetails, null, 2));
+    if (error) {
+      console.log(error);
+    }
+  }
+  React.useEffect(() => {
+    getExpense();
   }, [params.id]);
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View className="bg-background h-screen px-7 mt-6 rounded-b-xl">
+      <VStack bgColor="white" className=" h-screen p-7  rounded-b-xl ">
         <HStack space={3}>
           <Text className=" text-textmuted text-center text-xl ">
-            Editar Gasto
+            Numero de Gasto
           </Text>
           <Text className="font-bold text-center text-xl ">
             #{expenseDataDetails?.numeroGasto}
@@ -76,14 +78,12 @@ export default function EditExpense() {
             <Controller
               name="categoria"
               control={control}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange } }) => (
                 <Select
                   id="categorias"
-                  selectedValue={value}
                   size="lg"
                   color="gray.800"
-                  marginY={3}
-                  accessibilityLabel="Seleccineuna categoria"
+                  selectedValue={expenseDataDetails?.categoria}
                   placeholder="Seleccione"
                   borderRadius={7}
                   dropdownIcon={
@@ -130,7 +130,7 @@ export default function EditExpense() {
                   size="lg"
                   keyboardType="numeric"
                   marginY={3}
-                  value={value}
+                  value={expenseDataDetails?.monto}
                   onChangeText={(value) => onChange(value)}
                   rightElement={
                     <FontAwesome5
@@ -140,7 +140,6 @@ export default function EditExpense() {
                       size={10}
                     />
                   }
-                  placeholder="65.99"
                   borderRadius={7}
                 />
               )}
@@ -166,7 +165,7 @@ export default function EditExpense() {
               control={control}
               render={({ field: { onChange, value } }) => (
                 <Radio.Group
-                  value={value}
+                  value={expenseDataDetails?.divisa}
                   name="currency"
                   onChange={(value) => onChange(value)}
                   accessibilityLabel="Divisa de Gasto"
@@ -195,7 +194,7 @@ export default function EditExpense() {
               <TextArea
                 autoCompleteType
                 placeholder="Breve descripcion ..."
-                value={value}
+                value={expenseDataDetails?.descripcion}
                 onChangeText={(value) => onChange(value)}
                 borderRadius={5}
                 size="lg"
@@ -204,32 +203,42 @@ export default function EditExpense() {
             defaultValue=""
           />
 
-          {/* //! Quiza despues se implemente esta feature */}
-          {/* <Select
-            id="tipo"
-            borderRadius={7}
-            selectedValue={type}
-            size="md"
-            color="gray.800"
-            placeholder="Tipo"
-            minWidth="105"
-            dropdownIcon={
-              <FontAwesome5
-                name="chevron-down"
-                color="#6D6868"
-                marginRight={10}
-                size={10}
-              />
-            }
-            _selectedItem={{
-              bg: "teal.500",
-            }}
-            mt={1}
-            onValueChange={(itemValue) => setType(itemValue)}
-          >
-            <Select.Item label="Fijo" value="transporte" />
-            <Select.Item label="Variable" value="variable" />
-          </Select> */}
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <VStack space={3}>
+                <HStack
+                  alignItems="center"
+                  justifyContent="space-between"
+                  space={4}
+                >
+                  <Text> Es un gasto recurrente ?</Text>
+                  <HStack space={1} alignItems="center">
+                    <Text>{value ? "Sí" : "No"}</Text>
+                    <Switch
+                      size="sm"
+                      value={expenseDataDetails?.periodicidad}
+                      onToggle={onChange}
+                    />
+                  </HStack>
+                </HStack>
+                {value && (
+                  <Text className="text-textmuted text-xs">
+                    La recurrencia del gasto se hará efectivo cada mes en la
+                    fecha en la que fue creado inicialmente, en este caso cada{" "}
+                    <Text className="font-bold text-black">
+                      {new Date().toLocaleDateString("es-PE", {
+                        day: "numeric",
+                      })}
+                    </Text>{" "}
+                    de cada mes
+                  </Text>
+                )}
+              </VStack>
+            )}
+            name="periodicidad"
+            defaultValue={false}
+          />
         </VStack>
         {/* //! Probar esto solo el los dispositivos, en los emuladores no funciona
       <PushNotification /> */}
@@ -241,7 +250,7 @@ export default function EditExpense() {
         >
           Guardar
         </Button>
-      </View>
+      </VStack>
     </TouchableWithoutFeedback>
   );
 }

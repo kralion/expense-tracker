@@ -5,24 +5,24 @@ import { Button, HStack, Modal, Text, VStack } from "native-base";
 import * as React from "react";
 
 type TNotification = {
-  setShowNotification: React.Dispatch<React.SetStateAction<boolean>>;
-  showNotification: boolean;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  showModal: boolean;
 };
 
 export function BudgetLimitExceededModal({
-  setShowNotification,
-  showNotification,
+  setShowModal,
+  showModal,
 }: TNotification) {
   return (
     <Modal
-      isOpen={showNotification}
+      isOpen={showModal}
       _backdropFade={{
         backgroundColor: "rgba(0, 0, 0, 0.5)",
       }}
       animationPreset="slide"
       backdropVisible={true}
       size="xl"
-      onClose={() => setShowNotification(false)}
+      onClose={() => setShowModal(false)}
     >
       <Modal.Content rounded={30} className="p-5 bg-white">
         <Modal.CloseButton rounded={15} />

@@ -1,11 +1,11 @@
 import DefaultAvatar from "@/assets/svgs/avatar.svg";
-import { useNotificationContext } from "@/context";
 import useAuth from "@/context/AuthContext";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { supabase } from "@/utils/supabase";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import {
+  Alert,
   Button,
   FormControl,
   HStack,
@@ -13,6 +13,7 @@ import {
   ScrollView,
   VStack,
   WarningOutlineIcon,
+  useToast,
 } from "native-base";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -26,7 +27,7 @@ interface FormData {
 
 export default function PersonalInfo() {
   const { userData, session } = useAuth();
-  const { showNotification } = useNotificationContext();
+  const toast = useToast();
 
   const {
     control,
@@ -43,35 +44,46 @@ export default function PersonalInfo() {
   });
 
   async function onSubmit(data: FormData) {
-    try {
-      const { error } = await supabase
-        .from("usuarios")
-        .update({
-          nombres: data.nombres,
-          apellidos: data.apellidos,
-        })
-        .eq("id", userData.id);
+    const { error } = await supabase
+      .from("usuarios")
+      .update({
+        nombres: data.nombres,
+        apellidos: data.apellidos,
+      })
+      .eq("id", userData.id);
 
-      if (error) {
-        showNotification({
-          title: "Error al actualizar los datos",
-          alertStatus: "error",
-        });
-        return;
-      }
-
-      showNotification({
-        title: "Datos actualizados",
-        alertStatus: "success",
+    if (error) {
+      toast.show({
+        render: () => (
+          <Alert variant="solid" rounded={10} px={5} status="error">
+            <HStack space={2} alignItems="center">
+              <Alert.Icon mt="1" />
+              <Text className="text-white">Error al actualizar los datos</Text>
+            </HStack>
+          </Alert>
+        ),
+        description: "",
+        duration: 2000,
+        placement: "top",
+        variant: "solid",
       });
-    } catch (e) {
-      // Este bloque captura errores que no sean específicamente de Supabase
-      console.error("Error inesperado:", e);
-      showNotification({
-        title: "Error inesperado",
-        alertStatus: "error",
-      });
+      return;
     }
+
+    toast.show({
+      render: () => (
+        <Alert variant="solid" rounded={10} px={5} status="success">
+          <HStack space={2} alignItems="center">
+            <Alert.Icon mt="1" />
+            <Text className="text-white">Datos actualizados</Text>
+          </HStack>
+        </Alert>
+      ),
+      description: "",
+      duration: 2000,
+      placement: "top",
+      variant: "solid",
+    });
   }
 
   const pickImageAsync = async () => {

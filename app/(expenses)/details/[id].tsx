@@ -2,24 +2,46 @@ import { useExpenseContext } from "@/context";
 import { IGasto } from "@/interfaces";
 import { supabase } from "@/utils/supabase";
 import { Ionicons } from "@expo/vector-icons";
-import { Link, Stack, router, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Badge, Button, Divider, HStack, Slider, VStack } from "native-base";
+import {
+  Badge,
+  Button,
+  Divider,
+  HStack,
+  Slider,
+  VStack,
+  useToast,
+  AlertDialog,
+  Center,
+  Alert,
+} from "native-base";
 import * as React from "react";
-import { Platform, Pressable, Text, View } from "react-native";
+import { Platform, Text, View } from "react-native";
 
 export default function ExpenseDetailsModal() {
   const [expenseDataDetails, setExpenseDataDetails] = React.useState<IGasto>(
     {} as IGasto
   );
   const [isLoading, setIsLoading] = React.useState(false);
-  const { deleteExpenseById, getSingleExpense } = useExpenseContext();
   const params = useLocalSearchParams<{ id: string }>();
-
+  const toast = useToast();
   const handleDeleteExpense = async (id: string) => {
-    setIsLoading(true);
-    deleteExpenseById(id);
-    setIsLoading(false);
+    await supabase.from("expenses").delete().eq("id", id);
+    toast.show({
+      render: () => (
+        <Alert variant="solid" rounded={10} px={5} status="error">
+          <HStack space={2} alignItems="center">
+            <Alert.Icon mt="1" />
+            <Text className="text-white">Gasto eliminado</Text>
+          </HStack>
+        </Alert>
+      ),
+      description: "",
+      duration: 2000,
+      placement: "top",
+      variant: "solid",
+    });
     router.push("/(tabs)/");
   };
 
@@ -44,24 +66,13 @@ export default function ExpenseDetailsModal() {
   //TODO: Cambiar este valor por el monto presupuestado del mes actual
   const monto_presupuestado = 1000;
   const totalPercentageExpensed = (monto_gastado / monto_presupuestado) * 100;
+  const [isOpen, setIsOpen] = React.useState(false);
 
+  const onClose = () => setIsOpen(false);
+
+  const cancelRef = React.useRef(null);
   return (
     <VStack bgColor="white" className="rounded-b-lg" p={3}>
-      <Stack.Screen
-        options={{
-          presentation: "card",
-          headerBackTitle: "Gastos",
-          headerRight: () => (
-            <Link href={`/(expenses)/edit/${params.id}`} asChild>
-              <Pressable className="active:opacity-50">
-                <Text className="text-blue-500 text-[17px]">Editar</Text>
-              </Pressable>
-            </Link>
-          ),
-
-          title: "Detalles",
-        }}
-      />
       {totalPercentageExpensed >= 80 && (
         <View className="rounded-t-md border-[0.5px] border-red-400 bg-red-100">
           <Text className="p-5 text-red-500  ">
@@ -73,7 +84,41 @@ export default function ExpenseDetailsModal() {
           </Text>
         </View>
       )}
-
+      <AlertDialog
+        leastDestructiveRef={cancelRef}
+        isOpen={isOpen}
+        onClose={onClose}
+        _backdropFade={{
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+        }}
+      >
+        <AlertDialog.Content borderRadius="xl">
+          <AlertDialog.Header>Eliminar Gasto</AlertDialog.Header>
+          <AlertDialog.Body>
+            Este gasto será eliminado de la base de datos y no podrá ser
+            recuperado.
+          </AlertDialog.Body>
+          <AlertDialog.Footer>
+            <Button.Group space={2}>
+              <Button
+                variant="unstyled"
+                colorScheme="coolGray"
+                onPress={onClose}
+                ref={cancelRef}
+              >
+                Cancelar
+              </Button>
+              <Button
+                colorScheme="danger"
+                borderRadius={10}
+                onPress={() => handleDeleteExpense(params.id)}
+              >
+                Eliminar
+              </Button>
+            </Button.Group>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
       <HStack p={5} justifyContent="space-between">
         <HStack space={2}>
           <Text className="text-black font-bold mb-1  text-[18px]">
@@ -151,7 +196,6 @@ export default function ExpenseDetailsModal() {
           <Text>{totalPercentageExpensed}%</Text>
         </Badge>
       </HStack>
-
       <HStack justifyContent="center" p={5} space={3}>
         <Slider
           maxW="330"
@@ -168,7 +212,6 @@ export default function ExpenseDetailsModal() {
           <Slider.Thumb />
         </Slider>
       </HStack>
-
       <Divider
         _light={{
           bg: "muted.200",
@@ -179,7 +222,7 @@ export default function ExpenseDetailsModal() {
       />
       <HStack justifyContent="center" p={5} space={3}>
         <Button
-          onPress={() => handleDeleteExpense(params.id)}
+          onPress={() => setIsOpen(!isOpen)}
           className="w-full rounded-lg bg-red-500"
           height={12}
           variant="solid"

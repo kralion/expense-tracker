@@ -1,5 +1,4 @@
 import DefaultAvatar from "@/assets/svgs/avatar.svg";
-import { useNotificationContext } from "@/context";
 import useAuth from "@/context/AuthContext";
 import { supabase } from "@/utils/supabase";
 import {
@@ -16,17 +15,9 @@ import { Pressable, Text, View } from "react-native";
 
 export default function App() {
   const { userData } = useAuth();
-  const { showNotification } = useNotificationContext();
   async function signOut() {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      showNotification({
-        title: "Error al cerrar sesión",
-        alertStatus: "error",
-      });
-    } else {
-      router.push("/(auth)/sign-in");
-    }
+    await supabase.auth.signOut();
+    router.push("/(auth)/sign-in");
   }
 
   return (

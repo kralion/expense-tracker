@@ -1,33 +1,65 @@
-import { Stack } from "expo-router";
+import { Feather } from "@expo/vector-icons";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { HStack } from "native-base";
 import React from "react";
-import { Pressable, Text } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 
 export default function ModalsLayout() {
+  const params = useLocalSearchParams<{ id: string }>();
+  const router = useRouter();
   return (
     <Stack>
       <Stack.Screen
         name="details/[id]"
         options={{
-          headerBackTitle: "Gastos",
-          presentation: "card",
-          title: "Detalles",
-          contentStyle: {
-            backgroundColor: "#368983",
+          title: "",
+          headerLeft: () => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  router.back();
+                }}
+              >
+                <HStack alignItems="center">
+                  <Feather name="chevron-left" size={24} color="#3b82f6" />
+                  <Text className="text-action text-[17px]">Gastos</Text>
+                </HStack>
+              </TouchableOpacity>
+            );
           },
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => {
+                router.push(`/edit/${params.id}`);
+              }}
+            >
+              <Text className="text-blue-500 text-[17px] pr-2">Editar</Text>
+            </TouchableOpacity>
+          ),
         }}
       />
       <Stack.Screen
         name="edit/[id]"
         options={{
-          presentation: "card",
-          headerBackTitle: "Editar Gasto",
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => {
+                router.back();
+              }}
+            >
+              <HStack alignItems="center">
+                <Feather name="chevron-left" size={24} color="#3b82f6" />
+                <Text className="text-action text-[17px]">Detalles</Text>
+              </HStack>
+            </TouchableOpacity>
+          ),
           headerRight: () => (
-            <Pressable className="active:opacity-50">
-              <Text className="text-red-500 text-[17px]">Cancelar</Text>
-            </Pressable>
+            <TouchableOpacity onPress={() => router.back()}>
+              <Text className="text-red-500 text-[17px] pr-2">Cancelar</Text>
+            </TouchableOpacity>
           ),
 
-          headerTitle: "Editar Gasto",
+          headerTitle: "",
         }}
       />
     </Stack>

@@ -9,7 +9,7 @@ import {
   VStack,
 } from "native-base";
 import React from "react";
-import { Image, ImageBackground } from "react-native";
+import { Image } from "react-native";
 
 export default function AddExpenseSuccesModal({
   openModal,

@@ -7,11 +7,7 @@ import useAuth from "./AuthContext";
 
 export const ExpenseContext = createContext<IExpenseContextProvider>({
   addExpense: () => {},
-  deleteExpenseById: () => {},
   updateExpense: () => {},
-  getSingleExpense: async (id: string): Promise<IGasto> => {
-    return {} as IGasto;
-  },
   sumOfAllOfExpensesMonthly: async () => 0,
   getExpensesByUser: async (id: string) => [],
   expenses: [],
@@ -38,24 +34,6 @@ export const ExpenseContextProvider = ({
     if (error) throw error;
     setExpenses(JSON.parse(JSON.stringify(data)));
     return data;
-  }
-  async function getSingleExpense(id: string): Promise<IGasto> {
-    const { data: expense, error } = await supabase
-      .from("expenses")
-      .select("*")
-      .eq("id", id)
-      .single();
-
-    if (error) {
-      console.error("Error fetching expense:", error);
-      return {} as IGasto;
-    }
-
-    if (!expense) {
-      console.log("No expense found for id:", id);
-    }
-
-    return expense;
   }
 
   async function sumOfAllOfExpensesMonthly() {
@@ -87,9 +65,6 @@ export const ExpenseContextProvider = ({
   const updateExpense = async (expense: IGasto) => {
     await supabase.from("expenses").update(expense).eq("id", expense.id);
   };
-  async function deleteExpenseById(id: string) {
-    await supabase.from("expenses").delete().eq("id", id);
-  }
 
   async function getTopExpenses() {
     const { data: expenses, error } = await supabase
@@ -109,11 +84,9 @@ export const ExpenseContextProvider = ({
         getExpensesByUser,
         expenses,
         addExpense,
-        deleteExpenseById,
         sumOfAllOfExpensesMonthly,
         updateExpense,
         getTopExpenses,
-        getSingleExpense,
       }}
     >
       {children}

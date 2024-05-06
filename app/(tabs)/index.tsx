@@ -1,12 +1,11 @@
+import LockIcon from "@/assets/svgs/lock.svg";
 import NoDataAsset from "@/assets/svgs/no-data.svg";
 import Card from "@/components/dashboard/card";
 import BuyPremiumModal from "@/components/popups/buy-premium";
 import { Expense } from "@/components/shared";
-import { useExpenseContext, useNotificationContext } from "@/context";
+import { useExpenseContext } from "@/context";
 import useAuth from "@/context/AuthContext";
 import { supabase } from "@/utils/supabase";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Image } from "expo-image";
 import {
   Box,
   Button,
@@ -19,8 +18,6 @@ import {
 import * as React from "react";
 import { Animated, FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import LockIcon from "@/assets/svgs/lock.svg";
-import { IGasto } from "@/interfaces";
 
 export default function Index() {
   const fadeAnim = React.useRef(new Animated.Value(1)).current;
@@ -30,8 +27,6 @@ export default function Index() {
   const [showAll, setShowAll] = React.useState(false);
   const [showBuyPremiumModal, setShowBuyPremiumModal] = React.useState(false);
 
-  const { showNotification } = useNotificationContext();
-  const [isPremiumUser, setIsPremiumUser] = React.useState(userData.rol);
   if (!userData) {
     return null;
   }
@@ -41,7 +36,7 @@ export default function Index() {
       duration: 500,
       useNativeDriver: true,
     }).start();
-  }, [showAll, isPremiumUser]);
+  }, [showAll]);
 
   async function welcomeNotification() {
     const notification = {
@@ -49,38 +44,16 @@ export default function Index() {
       descripcion:
         "Registrado exitosamente en la app, ahora puedes comenzar a usarla con el plan gratuito.",
       fecha: new Date().toISOString(),
-      icono: {
-        uri: "https://img.icons8.com/color/96/000000/checked--v1.png",
-      },
       usuario_id: userData.id,
     };
 
-    try {
-      // Check if a notification already exists for the user
-      const { data: existingNotifications, error: fetchError } = await supabase
-        .from("notificaciones")
-        .select("*")
-        .eq("usuario_id", userData.id);
+    const { data } = await supabase
+      .from("notificaciones")
+      .select("*")
+      .eq("usuario_id", userData.id);
 
-      if (fetchError) {
-        console.error("Error fetching notifications:", fetchError);
-        return;
-      }
-
-      // If no notification exists for the user, create a new one
-      if (existingNotifications.length === 0) {
-        const { data, error } = await supabase
-          .from("notificaciones")
-          .insert([notification]);
-
-        if (error) {
-          console.error("Error inserting notification:", error);
-        } else {
-          console.log("Notification inserted:", data);
-        }
-      }
-    } catch (error) {
-      console.error("Unexpected error:", error);
+    if (data?.length === 0) {
+      await supabase.from("notificaciones").insert(notification);
     }
   }
   React.useEffect(() => {
@@ -93,7 +66,7 @@ export default function Index() {
     if (userData) {
       getExpensesByUser(userData.id);
     }
-  }, [userData, isPremiumUser]);
+  }, [userData, getExpensesByUser]);
 
   function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
@@ -172,7 +145,7 @@ export default function Index() {
             </HStack>
 
             <View className="z-10 h-20">
-              <Card isPremiumUser={isPremiumUser} />
+              <Card />
             </View>
             <ScrollView className=" rounded-t-3xl  ">
               <VStack

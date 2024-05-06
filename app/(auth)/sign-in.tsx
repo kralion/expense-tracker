@@ -13,13 +13,14 @@ import {
   Icon,
   Input,
   ScrollView,
+  Alert,
   VStack,
   WarningOutlineIcon,
+  useToast,
 } from "native-base";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-  Alert,
   AppState,
   Keyboard,
   Pressable,
@@ -49,8 +50,8 @@ export default function SignIn() {
   } = useForm<FormData>();
   const [show, setShow] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const [invalidCredentials, setInvalidCredentials] = React.useState(false);
   const { showNotification } = useNotificationContext();
+  const toast = useToast();
   async function signInWithEmail(data: FormData) {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
@@ -58,11 +59,20 @@ export default function SignIn() {
       password: data.password,
     });
     if (error) {
-      showNotification({
-        title: "Error de Inicio de Sesión",
-        alertStatus: "error",
+      toast.show({
+        render: () => (
+          <Alert variant="solid" rounded={10} px={5} status="error">
+            <HStack space={2} alignItems="center">
+              <Alert.Icon mt="1" />
+              <Text className="text-white">Credenciales inválidas</Text>
+            </HStack>
+          </Alert>
+        ),
+        description: "",
+        duration: 2000,
+        placement: "top",
+        variant: "solid",
       });
-      setInvalidCredentials(true);
     } else {
       router.push("/(tabs)/");
     }
@@ -157,12 +167,6 @@ export default function SignIn() {
                 {errors.password && "Este campo es requerido"}
               </FormControl.ErrorMessage>
             </FormControl>
-            {invalidCredentials && (
-              <HStack space={1} justifyContent="center" alignContent="center">
-                <MaterialIcons color="#ef4444" name="dangerous" size={16} />
-                <Text className="text-red-500">Credenciales inválidas</Text>
-              </HStack>
-            )}
 
             <Button
               rounded={10}

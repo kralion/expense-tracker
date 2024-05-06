@@ -12,6 +12,7 @@ module.exports = {
         mute: "#AEACAC",
         textmuted: "#BDBBBC",
         bold: "#2F7D79",
+        action: "#3b82f6",
         background: "#F5F3F3",
         mutedwhite: "#F2F3EE",
       },
