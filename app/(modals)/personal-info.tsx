@@ -1,11 +1,11 @@
-import DefaultAvatar from "@/assets/svgs/avatar.svg";
 import useAuth from "@/context/AuthContext";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { supabase } from "@/utils/supabase";
-import { Image } from "expo-image";
+import { FontAwesome5 } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import CameraIcon from "@/assets/svgs/camera.svg";
 import {
   Alert,
+  Avatar,
   Button,
   FormControl,
   HStack,
@@ -107,33 +107,28 @@ export default function PersonalInfo() {
   }, []);
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <ScrollView>
+      <ScrollView background="white">
         <VStack margin={5} space={3}>
-          <VStack alignItems="center" space={3} className="bg-background">
+          <VStack alignItems="center" space={3}>
             <HStack space={2} alignItems="center">
-              {userData ? (
-                <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=40&id=23454&format=png",
-                  }}
-                  alt="profile-pic"
-                  style={{ width: 120, height: 120 }}
-                  className="rounded-full "
-                />
-              ) : (
-                <DefaultAvatar width={80} height={80} />
-              )}
+              <Avatar
+                bg="teal.600"
+                alignSelf="center"
+                size="2xl"
+                source={{
+                  uri: userData.foto,
+                }}
+              />
             </HStack>
 
             <Button
               onPress={pickImageAsync}
               rounded={7}
-              variant="outline"
-              colorScheme="teal"
-              px={6}
+              variant="subtle"
+              colorScheme="gray"
               height={10}
             >
-              <FontAwesome5 name="camera" size={20} color="black" />
+              <CameraIcon width={30} height={30} />
             </Button>
           </VStack>
           <HStack>

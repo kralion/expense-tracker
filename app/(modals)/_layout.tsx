@@ -1,5 +1,6 @@
-import { FontAwesome5 } from "@expo/vector-icons";
+import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { Stack, router } from "expo-router";
+import { HStack } from "native-base";
 import React from "react";
 import { Text, TouchableOpacity } from "react-native";
 
@@ -80,7 +81,10 @@ export default function ModalsLayout() {
                   router.back();
                 }}
               >
-                <FontAwesome5 name="chevron-left" size={20} color="teal" />
+                <HStack alignItems="center">
+                  <Feather name="chevron-left" size={24} color="#3b82f6" />
+                  <Text className="text-action text-[17px]">Perfil</Text>
+                </HStack>
               </TouchableOpacity>
             );
           },

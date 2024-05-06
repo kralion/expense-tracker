@@ -1,12 +1,15 @@
+import { SavingGoalModal } from "@/components/popups/save-goals";
 import { Presupuesto } from "@/components/shared/presupuesto";
 import useAuth from "@/context/AuthContext";
-import { useExpenseContext } from "@/context/ExpenseContext";
 import { IPresupuesto } from "@/interfaces/presupuesto";
 import { supabase } from "@/utils/supabase";
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
 import { router } from "expo-router";
 import {
+  Alert,
   Button,
   FormControl,
   HStack,
@@ -15,6 +18,7 @@ import {
   TextArea,
   VStack,
   WarningOutlineIcon,
+  useToast,
 } from "native-base";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -31,30 +35,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function Budget() {
   const [showSavingGoalModal, setShowSavingGoalModal] = React.useState(false);
   const [presupuesto, setPresupuesto] = React.useState<any>([]);
-  const [fechaRegistro, setFechaRegistro] = React.useState(new Date());
-  const [fechaFinal, setFechaFinal] = React.useState(new Date());
-  const [showPicker, setShowPicker] = React.useState(false);
-
-  const toggleDatepicker = () => {
-    setShowPicker(!showPicker);
-  };
-
-  const onChangeRegistro = (event: Event, selectedDate?: Date) => {
-    const currentDate = selectedDate || fechaRegistro;
-    setFechaRegistro(currentDate);
-  };
-  const onChangeFinal = (event: Event, selectedDate?: Date) => {
-    const currentDate = selectedDate || fechaFinal;
-    setFechaFinal(currentDate);
-  };
-
   async function getPresupuesto() {
     const { data } = await supabase.from("presupuestos").select("*");
     setPresupuesto(data);
   }
-  React.useEffect(() => {
-    getPresupuesto();
-  }, []);
 
   const {
     control,
@@ -63,46 +47,83 @@ export default function Budget() {
     reset,
     setValue,
   } = useForm<IPresupuesto>();
+  const setDate = (event: DateTimePickerEvent, date: Date) => {
+    const {
+      type,
+      nativeEvent: { timestamp },
+    } = event;
+  };
+  const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
 
-  const { addExpense } = useExpenseContext();
   const [isLoading, setIsLoading] = React.useState(false);
   const { userData } = useAuth();
+
+  const onChangeFechaRegistro = (event: DateTimePickerEvent) => {
+    const {
+      type,
+      nativeEvent: { timestamp },
+    } = event;
+    const selectedDate = new Date(timestamp ?? 0);
+    setValue("fecha_registro", selectedDate.toISOString());
+  };
+  const onChangeFechaFinal = (event: DateTimePickerEvent) => {
+    const {
+      type,
+      nativeEvent: { timestamp },
+    } = event;
+    const selectedDate = new Date(timestamp ?? 0);
+    setValue("fecha_final", selectedDate.toISOString());
+  };
+
+  const toast = useToast();
   async function onSubmit(data: IPresupuesto) {
-    data.id = userData?.id;
-    console.log("Datos a registrar", data);
     setIsLoading(true);
-    try {
-      const { error } = await supabase
-        .from("presupuestos")
-        .insert({
-          monto: data.monto,
-          descripcion: data.descripcion,
-          fecha_registro: data.fecha_registro,
-          fecha_final: data.fecha_final,
-          usuario_id: data.usuario_id,
-        })
-        .single();
-      setShowSavingGoalModal(true);
-      if (error) {
-        console.log("Error al guardar el presupuesto", error);
-      }
-    } catch (error) {
-      console.log("Error al guardar el presupuesto", error);
-    } finally {
-      getPresupuesto();
-      reset();
-      setIsLoading(false);
+    const { error } = await supabase
+      .from("presupuesto")
+      .insert({
+        ...data,
+        usuario_id: userData?.id,
+      })
+      .single();
+    console.log(error);
+    if (error) {
+      toast.show({
+        render: () => (
+          <Alert variant="solid" rounded={10} px={5} status="error">
+            <HStack space={2} alignItems="center">
+              <Alert.Icon mt="1" />
+              <Text className="text-white">
+                Error al guardar el presupuesto
+              </Text>
+            </HStack>
+          </Alert>
+        ),
+        description: "",
+        duration: 2000,
+        placement: "top",
+        variant: "solid",
+      });
     }
+    setIsLoading(false);
+    setShowSavingGoalModal(true);
+    reset();
   }
 
+  React.useEffect(() => {
+    getPresupuesto();
+  }, []);
   return (
-    <ScrollView>
-      <SafeAreaView className="px-4 mt-6">
+    <ScrollView background="white">
+      <SafeAreaView className="p-5 ">
+        <SavingGoalModal
+          openModal={showSavingGoalModal}
+          setOpenModal={setShowSavingGoalModal}
+        />
         <HStack justifyContent="space-between" alignItems="start">
           <VStack space={2}>
             <Text className="font-bold text-left text-2xl">Presupuestos</Text>
-            <Text className="text-xs text-textmuted">
-              Registra presupuestos mensuales para limitar tus gastos
+            <Text className=" text-textmuted">
+              Presupuestos mensuales para limitar tus gastos
             </Text>
           </VStack>
 
@@ -114,17 +135,17 @@ export default function Budget() {
             <AntDesign name="close" size={20} />
           </TouchableOpacity>
         </HStack>
-        <VStack space={5} mt={5} px={7}>
+        <VStack mt={5} space={5}>
           <FormControl isInvalid={!!errors.monto} isRequired>
             <FormControl.Label>Monto</FormControl.Label>
             <Controller
               control={control}
+              name="monto"
               render={({ field: { onChange, value } }) => (
                 <Input
                   size="lg"
                   keyboardType="numeric"
                   isFocused
-                  w={350}
                   value={value}
                   onChangeText={(value) => onChange(value)}
                   rightElement={
@@ -139,7 +160,6 @@ export default function Budget() {
                   borderRadius={7}
                 />
               )}
-              name="monto"
               rules={{
                 required: { value: true, message: "Ingrese el monto" },
                 pattern: {
@@ -156,7 +176,7 @@ export default function Budget() {
             </FormControl.ErrorMessage>
           </FormControl>
 
-          <HStack space={3}>
+          <HStack justifyContent="space-between">
             <FormControl
               flex={1}
               isInvalid={!!errors.fecha_registro}
@@ -166,29 +186,10 @@ export default function Budget() {
               <Controller
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <Pressable onPress={toggleDatepicker}>
-                    <Input
-                      size="lg"
-                      editable={false}
-                      value={
-                        value
-                          ? new Date(value).toLocaleDateString()
-                          : "12/12/2021"
-                      }
-                    />
-                    {showPicker && (
-                      <DateTimePicker
-                        value={fechaRegistro}
-                        mode="date"
-                        display="default"
-                        onChange={(_, selectedDate) => {
-                          onChangeRegistro(selectedDate as any);
-                          onChange(selectedDate);
-                          toggleDatepicker(); // Esto ocultará el DateTimePicker
-                        }}
-                      />
-                    )}
-                  </Pressable>
+                  <DateTimePicker
+                    value={value ? new Date(value) : new Date()}
+                    onChange={onChangeFechaRegistro}
+                  />
                 )}
                 name="fecha_registro"
                 rules={{
@@ -205,33 +206,14 @@ export default function Budget() {
             <FormControl flex={1} isInvalid={!!errors.fecha_final} isRequired>
               <FormControl.Label>Fecha Expiración</FormControl.Label>
               <Controller
+                name="fecha_final"
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <Pressable onPress={toggleDatepicker}>
-                    <Input
-                      size="lg"
-                      editable={false}
-                      value={
-                        value
-                          ? new Date(value).toLocaleDateString()
-                          : "12/12/2023"
-                      }
-                    />
-                    {showPicker && (
-                      <DateTimePicker
-                        value={fechaFinal}
-                        mode="date"
-                        display="default"
-                        onChange={(_, selectedDate) => {
-                          onChangeFinal(selectedDate as any);
-                          onChange(selectedDate);
-                          toggleDatepicker();
-                        }}
-                      />
-                    )}
-                  </Pressable>
+                  <DateTimePicker
+                    value={value ? new Date(value) : new Date()}
+                    onChange={onChangeFechaFinal}
+                  />
                 )}
-                name="fecha_final"
                 rules={{
                   required: { value: true, message: "Requerido" },
                 }}
@@ -247,6 +229,7 @@ export default function Budget() {
           <FormControl isInvalid={!!errors.descripcion} isRequired>
             <FormControl.Label>Descripción</FormControl.Label>
             <Controller
+              name="descripcion"
               control={control}
               render={({ field: { onChange, value } }) => (
                 <TextArea
@@ -260,7 +243,6 @@ export default function Budget() {
                   size="lg"
                 />
               )}
-              name="descripcion"
             />
             <FormControl.ErrorMessage
               marginTop={-1}
