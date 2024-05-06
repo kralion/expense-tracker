@@ -1,5 +1,6 @@
-import { useExpenseContext, useNotificationContext } from "@/context";
+import { useExpenseContext } from "@/context";
 import { IGasto } from "@/interfaces";
+import { supabase } from "@/utils/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack, router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -8,11 +9,13 @@ import * as React from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 
 export default function ExpenseDetailsModal() {
-  const [expenseDataDetails, setExpenseDataDetails] =
-    React.useState<IGasto | null>(null);
+  const [expenseDataDetails, setExpenseDataDetails] = React.useState<IGasto>(
+    {} as IGasto
+  );
   const [isLoading, setIsLoading] = React.useState(false);
   const { deleteExpenseById, getSingleExpense } = useExpenseContext();
   const params = useLocalSearchParams<{ id: string }>();
+
   const handleDeleteExpense = async (id: string) => {
     setIsLoading(true);
     deleteExpenseById(id);
@@ -20,26 +23,30 @@ export default function ExpenseDetailsModal() {
     router.push("/(tabs)/");
   };
 
-  React.useEffect(() => {
-    const fetchExpense = async () => {
-      const fetchedExpense = await getSingleExpense(params.id);
-      console.log(params.id);
-      setExpenseDataDetails(fetchedExpense);
-    };
+  async function getExpense() {
+    const { data, error } = await supabase
+      .from("expenses")
+      .select("*")
+      .eq("id", params.id)
+      .single();
+    setExpenseDataDetails(data);
 
-    fetchExpense();
-    console.log(JSON.stringify(expenseDataDetails, null, 2));
+    if (error) {
+      console.log(error);
+    }
+  }
+  React.useEffect(() => {
+    getExpense();
   }, [params.id]);
-  const monto_gastado = parseInt(
-    expenseDataDetails?.monto ? expenseDataDetails?.monto : "0"
-  );
+
+  const monto_gastado = parseInt(expenseDataDetails?.monto);
   // const monto_presupuestado = expense.cantidad;
-  //TODO : Cambiar este valor por el monto presupuestado del mes actual
+  //TODO: Cambiar este valor por el monto presupuestado del mes actual
   const monto_presupuestado = 1000;
   const totalPercentageExpensed = (monto_gastado / monto_presupuestado) * 100;
 
   return (
-    <VStack bgColor="white" rounded={7} p={3}>
+    <VStack bgColor="white" className="rounded-b-lg" p={3}>
       <Stack.Screen
         options={{
           presentation: "card",
@@ -70,7 +77,7 @@ export default function ExpenseDetailsModal() {
       <HStack p={5} justifyContent="space-between">
         <HStack space={2}>
           <Text className="text-black font-bold mb-1  text-[18px]">
-            #{expenseDataDetails?.numeroGasto}
+            #{expenseDataDetails.numeroGasto}
           </Text>
           <Badge
             size="lg"
@@ -79,7 +86,7 @@ export default function ExpenseDetailsModal() {
             className="rounded-full"
             colorScheme="green"
           >
-            {expenseDataDetails?.categoria}
+            {expenseDataDetails.categoria}
           </Badge>
         </HStack>
         {/* //! FEATURE : Cambiar este icono dependiendo al tipo de gasto */}
@@ -88,33 +95,33 @@ export default function ExpenseDetailsModal() {
       <VStack p={5} space={4}>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Monto</Text>
-          <Text className="font-bold">S/. {expenseDataDetails?.monto}</Text>
+          <Text className="font-bold">S/. {expenseDataDetails.monto}</Text>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Divisa</Text>
-          <Text className="font-bold">{expenseDataDetails?.divisa}</Text>
+          <Text className="font-bold">{expenseDataDetails.divisa}</Text>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Categoría</Text>
-          <Text className="font-bold">{expenseDataDetails?.categoria}</Text>
+          <Text className="font-bold">{expenseDataDetails.categoria}</Text>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>Descripción</Text>
-          <Text className="font-bold">{expenseDataDetails?.descripcion}</Text>
+          <Text className="font-bold">{expenseDataDetails.descripcion}</Text>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center">
           <Text>% Presupuesto</Text>
 
-          <Text className="font-bold">{expenseDataDetails?.monto}</Text>
+          <Text className="font-bold">{expenseDataDetails.monto}</Text>
         </HStack>
 
         <HStack justifyContent="flex-end" space={3}>
           <Badge size="lg" variant="outline" className="rounded-full">
-            {expenseDataDetails?.fecha?.toLocaleString()}
+            {expenseDataDetails.fecha?.toLocaleString()}
           </Badge>
           <Badge size="lg" variant="solid" className="rounded-full">
-            {expenseDataDetails?.fecha
-              ? new Date(expenseDataDetails?.fecha).toLocaleTimeString([], {
+            {expenseDataDetails.fecha
+              ? new Date(expenseDataDetails.fecha).toLocaleTimeString([], {
                   hour: "2-digit",
                   minute: "2-digit",
                 })
@@ -173,7 +180,7 @@ export default function ExpenseDetailsModal() {
       <HStack justifyContent="center" p={5} space={3}>
         <Button
           onPress={() => handleDeleteExpense(params.id)}
-          className="w-full rounded-full"
+          className="w-full rounded-lg bg-red-500"
           height={12}
           variant="solid"
           isLoading={isLoading}

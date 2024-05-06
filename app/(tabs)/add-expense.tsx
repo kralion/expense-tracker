@@ -1,3 +1,4 @@
+import AddExpenseSuccesModal from "@/components/popups/add-expense-sucess";
 import { useExpenseContext, useNotificationContext } from "@/context";
 import useAuth from "@/context/AuthContext";
 import { IGasto } from "@/interfaces";
@@ -24,8 +25,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AddExpense() {
   const { userData } = useAuth();
-  const { showNotification } = useNotificationContext();
   const { addExpense } = useExpenseContext();
+  const [openModal, setOpenModal] = React.useState(false);
+  const [expensePrice, setExpensePrice] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const {
     control,
@@ -41,18 +43,22 @@ export default function AddExpense() {
       ...data,
       usuario_id: userData.id,
     });
-    showNotification({
-      title: "Gasto registrado",
-      alertStatus: "success",
-    });
+    setExpensePrice(data.monto);
     reset();
+
     setValue("categoria", "");
     setIsLoading(false);
+    setOpenModal(true);
   }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView>
+        <AddExpenseSuccesModal
+          expensePrice={expensePrice}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+        />
         <SafeAreaView className=" h-screen p-5">
           <Text className="font-bold mb-5 text-xl ">Registrar Gasto</Text>
           <VStack space={4}>
@@ -95,10 +101,13 @@ export default function AddExpense() {
                     onValueChange={(value) => onChange(value)}
                   >
                     <Select.Item label="Transporte" value="transporte" />
-                    <Select.Item label="Alimentación" value="alimentacion" />
-                    <Select.Item label="Ropa" value="ropa" />
-                    <Select.Item label="Casuales" value="casuales" />
+                    <Select.Item label="Hogar " value="hogar" />
                     <Select.Item label="Salud" value="salud" />
+                    <Select.Item label="Alimentacion" value="alimentacion" />
+                    <Select.Item label="Finanzas" value="finanzas" />
+                    <Select.Item label="Educación" value="educacion" />
+                    <Select.Item label="Personal" value="personal" />
+                    <Select.Item label="Casuales" value="casuales" />
                   </Select>
                 )}
                 rules={{ required: true }}

@@ -16,11 +16,7 @@ export const expensesIdentifiers: expenseIcon[] = [
     iconHref: "https://img.icons8.com/?size=160&id=9shlfoGKqCS7&format=png",
   },
   {
-    label: "Entretenimiento",
-    iconHref: "https://img.icons8.com/?size=160&id=nMSSSpYre8pz&format=png",
-  },
-  {
-    label: "Comida",
+    label: "Alimentacion",
     iconHref: "https://img.icons8.com/?size=160&id=dkL9eYC61t89&format=png",
   },
   {
@@ -33,10 +29,10 @@ export const expensesIdentifiers: expenseIcon[] = [
   },
   {
     label: "Personal",
-    iconHref: "https://img.icons8.com/?size=160&id=7Ego1HgHexLw&format=png",
+    iconHref: "https://img.icons8.com/?size=80&id=S8xAiqv9WRp0&format=png",
   },
   {
-    label: "Otros",
+    label: "Casuales",
     iconHref: "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png",
   },
 ];

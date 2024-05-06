@@ -45,7 +45,16 @@ export const ExpenseContextProvider = ({
       .select("*")
       .eq("id", id)
       .single();
-    if (!expense) throw new Error("Expense not found");
+
+    if (error) {
+      console.error("Error fetching expense:", error);
+      return {} as IGasto;
+    }
+
+    if (!expense) {
+      console.log("No expense found for id:", id);
+    }
+
     return expense;
   }
 

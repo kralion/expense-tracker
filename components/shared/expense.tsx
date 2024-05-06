@@ -12,14 +12,14 @@ export function Expense({ expense }: { expense: IGasto }) {
     : "No date provided";
   const assetIndentificador =
     expensesIdentifiers.find(
-      (icon) => icon.label.toLowerCase() === expense.categoria.toLowerCase()
+      (icon) => icon.label.toLowerCase() === expense.categoria
     )?.iconHref ||
     "https://img.icons8.com/?size=160&id=MjAYkOMsbYOO&format=png";
-
+  const id = expense.id;
   return (
     <Pressable
       onPress={() => {
-        router.push(`/(expenses)/details/${expense.id}`);
+        router.push(`/(expenses)/details/${id}`);
       }}
     >
       {({ isHovered, isPressed }) => {
