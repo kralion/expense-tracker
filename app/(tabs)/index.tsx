@@ -20,11 +20,12 @@ import * as React from "react";
 import { Animated, FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LockIcon from "@/assets/svgs/lock.svg";
+import { IGasto } from "@/interfaces";
 
 export default function Index() {
   const fadeAnim = React.useRef(new Animated.Value(1)).current;
-  const { expenses, fetchData } = useExpenseContext();
-  const { userData, session } = useAuth();
+  const { getExpensesByUser, expenses } = useExpenseContext();
+  const { userData } = useAuth();
 
   const [showAll, setShowAll] = React.useState(false);
   const [showBuyPremiumModal, setShowBuyPremiumModal] = React.useState(false);
@@ -51,7 +52,7 @@ export default function Index() {
       icono: {
         uri: "https://img.icons8.com/color/96/000000/checked--v1.png",
       },
-      session_id: session?.user.id,
+      usuario_id: userData.id,
     };
 
     try {
@@ -59,7 +60,7 @@ export default function Index() {
       const { data: existingNotifications, error: fetchError } = await supabase
         .from("notificaciones")
         .select("*")
-        .eq("session_id", session?.user.id);
+        .eq("usuario_id", userData.id);
 
       if (fetchError) {
         console.error("Error fetching notifications:", fetchError);
@@ -82,13 +83,17 @@ export default function Index() {
       console.error("Unexpected error:", error);
     }
   }
+  React.useEffect(() => {
+    if (userData) {
+      welcomeNotification();
+    }
+  }, [userData]);
 
   React.useEffect(() => {
-    if (session) {
-      welcomeNotification();
-      fetchData(session.user.id);
+    if (userData) {
+      getExpensesByUser(userData.id);
     }
-  }, [session, isPremiumUser]);
+  }, [userData, isPremiumUser]);
 
   function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();

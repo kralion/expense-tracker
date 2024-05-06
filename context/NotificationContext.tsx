@@ -29,23 +29,17 @@ export const NotificationContextProvider = ({
     alertStatus: "",
   });
 
-  const showNotification = (notification: TNotification) => {
-    setNotification(notification);
-    setTimeout(() => {
-      setNotification({
-        title: "",
-        alertStatus: "",
-      });
-    }, 3000);
+  const showNotification = (newNotification: TNotification) => {
+    setNotification(newNotification);
   };
 
   return (
     <NotificationContext.Provider value={{ showNotification, notification }}>
       {notification.title && (
         <Alert
-          variant="solid"
+          variant="subtle"
           shadow="3"
-          rounded={7}
+          rounded={10}
           position="absolute"
           top={10}
           left={2}
@@ -55,16 +49,10 @@ export const NotificationContextProvider = ({
           status={notification.alertStatus}
           w="95%"
         >
-          <VStack space={2} flexShrink={1} w="100%">
-            <HStack flexShrink={1} space={2} justifyContent="space-between">
-              <HStack space={2} flexShrink={1}>
-                <Alert.Icon mt="1" />
-                <Text fontSize="md" color="white">
-                  {notification.title}
-                </Text>
-              </HStack>
-            </HStack>
-          </VStack>
+          <HStack space={2}>
+            <Alert.Icon mt="1" />
+            <Text fontSize="md">{notification.title}</Text>
+          </HStack>
         </Alert>
       )}
       {children}

@@ -1,9 +1,7 @@
-import { useNotificationContext } from "@/context";
+import { useExpenseContext, useNotificationContext } from "@/context";
 import useAuth from "@/context/AuthContext";
 import { IGasto } from "@/interfaces";
-import { supabase } from "@/utils/supabase";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { router } from "expo-router";
 import {
   Button,
   CheckIcon,
@@ -27,69 +25,29 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function AddExpense() {
   const { userData } = useAuth();
   const { showNotification } = useNotificationContext();
+  const { addExpense } = useExpenseContext();
+  const [isLoading, setIsLoading] = React.useState(false);
   const {
     control,
     handleSubmit,
     formState: { errors },
     reset,
     setValue,
-  } = useForm<IGasto>({
-    defaultValues: {
-      divisa: "pen",
-    },
-  });
+  } = useForm<IGasto>();
 
-  // const { addExpense } = useExpenseContext();
-  const [isLoading, setIsLoading] = React.useState(false);
   async function onSubmit(data: IGasto) {
-    data.id = userData?.id;
     setIsLoading(true);
-    try {
-      // Obtén el último gasto
-      const { data: lastExpense, error: lastExpenseError } = await supabase
-        .from("expenses")
-        .select("numeroGasto")
-        .order("numeroGasto", { ascending: false })
-        .limit(1)
-        .single();
-
-      if (lastExpenseError) {
-        console.log("Error al obtener el último gasto", lastExpenseError);
-        return;
-      }
-
-      // Calcula el nuevo numeroGasto
-      const numeroGasto = lastExpense ? lastExpense.numeroGasto + 1 : 1;
-
-      // Inserta el nuevo gasto
-      // const { error } = await supabase
-      //   .from("expenses")
-      //   .insert({
-      //     categoria:
-      //       data.categoria.charAt(0).toUpperCase() + data.categoria.slice(1),
-      //     monto: data.monto,
-      //     divisa: data.divisa,
-      //     descripcion: data.descripcion,
-      //     numeroGasto,
-      //   })
-      //   .single();
-
-      // if (error) {
-      //   console.log("Error al guardar las gastos", error);
-      // } else {
-      //   showNotification({
-      //     title: "Gasto registrado",
-      //     alertStatus: "success",
-      //   });
-      // }
-      alert(JSON.stringify(data));
-    } catch (error) {
-      console.log("Error al guardar las gastos", error);
-    } finally {
-      setValue("categoria", "");
-      reset(), setIsLoading(false);
-      router.push("/(tabs)/");
-    }
+    addExpense({
+      ...data,
+      usuario_id: userData.id,
+    });
+    showNotification({
+      title: "Gasto registrado",
+      alertStatus: "success",
+    });
+    reset();
+    setValue("categoria", "");
+    setIsLoading(false);
   }
 
   return (
@@ -287,7 +245,7 @@ export default function AddExpense() {
           >
             <Text className="font-semibold text-white ">Registrar</Text>
           </Button>
-          {/* //! Probar esto solo el los dispositivos, en los emuladores no funciona
+          {/* TODO: Probar esto solo el los dispositivos, en los emuladores no funciona
       <PushNotification /> */}
         </SafeAreaView>
       </ScrollView>
