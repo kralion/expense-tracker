@@ -130,7 +130,7 @@ export default function EditExpense() {
                   size="lg"
                   keyboardType="numeric"
                   marginY={3}
-                  value={expenseDataDetails?.monto}
+                  value={expenseDataDetails?.monto.toString()}
                   onChangeText={(value) => onChange(value)}
                   rightElement={
                     <FontAwesome5

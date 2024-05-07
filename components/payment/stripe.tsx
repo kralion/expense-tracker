@@ -84,10 +84,10 @@ export default function Stripe() {
         {showConfetti && (
           <ConfettiCannon autoStart count={200} origin={{ x: -10, y: 0 }} />
         )}
-        <VStack space={2} p={5} className="bg-white rounded-lg">
+        <VStack space={2} p={5} className="bg-mutedwhite rounded-lg">
           <FormControl isInvalid={!!errors.monto} isRequired>
             <VStack space={1}>
-              <Text className="text-textmuted">Número de Tarjeta</Text>
+              <Text>Número de Tarjeta</Text>
             </VStack>
             <Controller
               control={control}
@@ -131,7 +131,7 @@ export default function Stripe() {
           </FormControl>
           <FormControl isInvalid={!!errors.cvc} isRequired>
             <VStack space={1}>
-              <Text className="text-textmuted">CVC / CVV</Text>
+              <Text>CVC / CVV</Text>
             </VStack>
             <Controller
               control={control}
@@ -175,7 +175,7 @@ export default function Stripe() {
           </FormControl>
           <FormControl isInvalid={!!errors.expiracion} isRequired>
             <VStack space={1}>
-              <Text className="text-textmuted">Fecha Expiración</Text>
+              <Text>Fecha Expiración</Text>
             </VStack>
             <Controller
               control={control}
@@ -225,7 +225,7 @@ export default function Stripe() {
           </FormControl>
           <FormControl isInvalid={!!errors.monto} isRequired>
             <VStack space={1}>
-              <Text className="text-textmuted">Monto</Text>
+              <Text>Monto</Text>
             </VStack>
             <Controller
               control={control}

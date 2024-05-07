@@ -12,6 +12,8 @@ export const ExpenseContext = createContext<IExpenseContextProvider>({
   getExpensesByUser: async (id: string) => [],
   expenses: [],
   getTopExpenses: async (): Promise<IGasto[]> => [],
+  getRecentExpenses: async (): Promise<IGasto[]> => [],
+  getExpensesByPeriodicity: async (): Promise<IGasto[]> => [],
 });
 
 export const ExpenseContextProvider = ({
@@ -71,22 +73,43 @@ export const ExpenseContextProvider = ({
       .from("expenses")
       .select("*")
       .eq("usuario_id", userData.id)
-      .limit(10);
+      .order("monto", { ascending: false })
+      .limit(15);
     if (!expenses) return [];
-    const sortedExpenses = expenses.sort(
-      (a, b) => Number(b.monto) - Number(a.monto)
-    );
-    return sortedExpenses;
+    return expenses;
+  }
+  async function getRecentExpenses() {
+    const { data: expenses, error } = await supabase
+      .from("expenses")
+      .select("*")
+      .eq("usuario_id", userData.id)
+      .order("fecha", { ascending: false })
+      .limit(15);
+    if (!expenses) return [];
+    return expenses;
+  }
+  async function getExpensesByPeriodicity() {
+    const { data: expenses, error } = await supabase
+      .from("expenses")
+      .select("*")
+      .eq("usuario_id", userData.id)
+      .eq("periodicidad", true)
+      .limit(15);
+    if (!expenses) return [];
+    return expenses;
   }
   return (
     <ExpenseContext.Provider
       value={{
         getExpensesByUser,
         expenses,
+
         addExpense,
         sumOfAllOfExpensesMonthly,
         updateExpense,
         getTopExpenses,
+        getRecentExpenses,
+        getExpensesByPeriodicity,
       }}
     >
       {children}

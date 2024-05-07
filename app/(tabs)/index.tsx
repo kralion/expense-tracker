@@ -149,13 +149,10 @@ export default function Index() {
               <Card />
             </View>
             <ScrollView className=" rounded-t-3xl  ">
-              <VStack
-                space={5}
-                className="bg-background h-screen rounded-t-3xl "
-              >
+              <VStack space={2} className="bg-white h-screen rounded-t-3xl ">
                 <HStack
                   px={4}
-                  marginTop={120}
+                  marginTop={110}
                   className="items-center"
                   justifyContent="space-between"
                 >

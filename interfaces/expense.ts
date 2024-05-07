@@ -18,4 +18,6 @@ export interface IExpenseContextProvider {
   getExpensesByUser: (id: string) => Promise<IGasto[]>;
   sumOfAllOfExpensesMonthly: () => Promise<number>;
   getTopExpenses: () => Promise<IGasto[]>;
+  getRecentExpenses: () => Promise<IGasto[]>;
+  getExpensesByPeriodicity: () => Promise<IGasto[]>;
 }

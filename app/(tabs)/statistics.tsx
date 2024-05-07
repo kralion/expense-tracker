@@ -9,22 +9,37 @@ import * as React from "react";
 import { useState } from "react";
 import { Animated, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Chart from "../../components/estadisticas/chart";
+import Chart from "@/components/estadisticas/chart";
 
 export default function Statistics() {
   const [queryType, setQueryType] = useState("recientes");
-  const [timelineQuery, setTimelineQuery] = useState("mensual");
-  const [topExpenses, setTopExpenses] = useState<IGasto[]>([]);
-  const { getTopExpenses } = useExpenseContext();
+  const [timelineQuery, setTimelineQuery] = useState("semanal");
+  const [expenses, setExpenses] = useState<IGasto[]>([]);
+  const { getTopExpenses, getRecentExpenses, getExpensesByPeriodicity } =
+    useExpenseContext();
   const [showAll, setShowAll] = React.useState(false);
   const fadeAnim = React.useRef(new Animated.Value(1)).current;
+  const fetchRecentExpenses = async () => {
+    const expenses = await getRecentExpenses();
+    setExpenses(expenses);
+  };
+  const fetchTopExpenses = async () => {
+    const expenses = await getTopExpenses();
+    setExpenses(expenses);
+  };
+  const fetchExpensesByPeriodicity = async () => {
+    const expenses = await getExpensesByPeriodicity();
+    setExpenses(expenses);
+  };
   React.useEffect(() => {
-    const fetchTopExpenses = async () => {
-      const expenses = await getTopExpenses();
-      setTopExpenses(expenses);
-    };
-    fetchTopExpenses();
-  }, []);
+    if (queryType === "recientes") {
+      fetchRecentExpenses();
+    } else if (queryType === "top-gastos") {
+      fetchTopExpenses();
+    } else if (queryType === "periódicos") {
+      fetchExpensesByPeriodicity();
+    }
+  }, [queryType]);
   React.useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: showAll ? 1 : 0,
@@ -36,11 +51,15 @@ export default function Statistics() {
   return (
     <>
       {showAll ? (
-        <Animated.View style={{ opacity: fadeAnim }}>
+        <Animated.View style={{ opacity: fadeAnim, backgroundColor: "white" }}>
           <SafeAreaView>
             <HStack space={4} justifyContent="space-between" px={4} my={7}>
               <Text className="text-xl text-muted font-semibold">
-                Top Gastos
+                {queryType === "recientes"
+                  ? "Recientes"
+                  : queryType === "top-gastos"
+                  ? "Top Gastos"
+                  : "Periódicos"}
               </Text>
               <TouchableOpacity
                 onPress={() => {
@@ -55,51 +74,51 @@ export default function Statistics() {
               </TouchableOpacity>
             </HStack>
             <FlatList
-              data={topExpenses}
+              data={expenses}
               renderItem={({ item }) => <Expense expense={item} />}
               keyExtractor={(item) => String(item.id)}
             />
           </SafeAreaView>
         </Animated.View>
       ) : (
-        <SafeAreaView>
+        <SafeAreaView style={{ backgroundColor: "white" }}>
           <VStack space={4}>
             <Text className="font-bold text-center text-2xl">Estadísticas</Text>
             <HStack space={1.5} mx={1.5}>
               <Button
                 variant="ghost"
                 className="py-2.5 w-[90px]"
-                borderRadius={5}
+                borderRadius={10}
+                isPressed={timelineQuery === "hoy"}
+                onPress={() => setTimelineQuery("hoy")}
+              >
+                Hoy
+              </Button>
+              <Button
+                variant="ghost"
                 isPressed={timelineQuery === "diario"}
+                className="py-2.5 w-[90px]  rounded-lg"
                 onPress={() => setTimelineQuery("diario")}
               >
                 Diario
               </Button>
               <Button
                 variant="ghost"
+                className="py-2.5 w-[90px] "
                 isPressed={timelineQuery === "semanal"}
-                className="py-2.5 w-[90px]  rounded-lg"
                 onPress={() => setTimelineQuery("semanal")}
+                borderRadius={10}
               >
                 Semanal
               </Button>
               <Button
                 variant="ghost"
-                className="py-2.5 w-[90px] "
                 isPressed={timelineQuery === "mensual"}
+                className="py-2.5 w-[90px] "
                 onPress={() => setTimelineQuery("mensual")}
-                borderRadius={5}
+                borderRadius={10}
               >
                 Mensual
-              </Button>
-              <Button
-                variant="ghost"
-                isPressed={timelineQuery === "anual"}
-                className="py-2.5 w-[90px] "
-                onPress={() => setTimelineQuery("anual")}
-                borderRadius={5}
-              >
-                Anual
               </Button>
             </HStack>
             <Chart timelineQuery={timelineQuery} />
@@ -138,7 +157,11 @@ export default function Statistics() {
             </HStack>
             <HStack space={4} justifyContent="space-between" px={4}>
               <Text className="text-xl text-muted font-semibold">
-                Top Gastos
+                {queryType === "recientes"
+                  ? "Recientes"
+                  : queryType === "top-gastos"
+                  ? "Top Gastos"
+                  : "Periódicos"}
               </Text>
               <TouchableOpacity
                 onPress={() => {
@@ -154,7 +177,7 @@ export default function Statistics() {
             </HStack>
             <FlatList
               mx={2}
-              data={topExpenses}
+              data={expenses}
               keyExtractor={(expense) => String(expense.id)}
               renderItem={({ item: expense }) => <Expense expense={expense} />}
             />

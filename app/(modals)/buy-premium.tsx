@@ -5,7 +5,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Divider, HStack, ScrollView, VStack } from "native-base";
+import { Badge, Divider, HStack, ScrollView, VStack } from "native-base";
 import * as React from "react";
 import {
   Animated as AnimatedRN,
@@ -14,7 +14,6 @@ import {
   Pressable,
   Text,
   TouchableOpacity,
-  View,
 } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -66,50 +65,43 @@ export default function BuyPremiumModal() {
 
   return (
     <ScrollView>
-      <SafeAreaView className=" h-screen pt-5 bg-primary">
-        <VStack space={6} className="px-5">
+      <SafeAreaView className=" h-screen pt-5 bg-white">
+        <VStack space={5} className="px-5">
           <HStack justifyContent="space-between" alignItems="center">
-            <Text className=" text-xl font-bold text-white ">
-              Información de Compra
-            </Text>
+            <Text className=" text-xl font-bold ">Información de Compra</Text>
             <TouchableOpacity onPress={() => router.back()}>
-              <AntDesign name="close" size={20} color="white" />
+              <AntDesign name="close" size={20} />
             </TouchableOpacity>
           </HStack>
 
-          <HStack justifyContent="space-between" alignItems="center">
-            <HStack space={3} alignItems="center">
-              <Image
-                source={{
-                  //TODO change to user avatar
-                  // uri: userData?.perfil.uri,
-                  uri: "https://img.icons8.com/?size=40&id=23454&format=png",
-                }}
-                alt="profile-pic"
-                style={{ width: 40, height: 40 }}
-                className="rounded-full "
-              />
-              <VStack>
-                <Text className="font-bold text-white text-lg ">
-                  {userData?.nombres} {userData?.apellidos}
-                </Text>
-                <View className="bg-orange-400 px-3  py-1 rounded-full">
-                  <Text className="text-white  text-xs ">
-                    {userData.rol === "premium"
-                      ? "Plan Actual Premium"
-                      : "Plan Actual Básico"}
-                  </Text>
-                </View>
-              </VStack>
-            </HStack>
+          <HStack space={3}>
+            <Image
+              source={{
+                uri: userData?.foto,
+              }}
+              alt="profile-pic"
+              style={{ width: 50, height: 50 }}
+              className="rounded-full mt-1"
+            />
+            <VStack>
+              <Text className="font-bold  text-lg ">
+                {userData?.nombres} {userData?.apellidos}
+              </Text>
+              <Badge
+                className="border border-orange-500"
+                variant="solid"
+                borderRadius={10}
+                colorScheme={userData.rol === "premium" ? "success" : "warning"}
+              >
+                {`Usuario ${userData.rol}`}
+              </Badge>
+            </VStack>
           </HStack>
           <Divider h={0.3} />
 
-          <Text className=" font-semibold text-xl text-white ">
-            Método de Pago
-          </Text>
+          <Text className=" font-semibold text-xl  ">Método de Pago</Text>
           <VStack space={4}>
-            <HStack bg="white" justifyContent="center" p={1} rounded={7}>
+            <HStack bg="#F2F3EE" justifyContent="center" p={1} rounded={7}>
               <Animated.View
                 style={[
                   {
@@ -119,7 +111,7 @@ export default function BuyPremiumModal() {
                     width: "50%",
                     borderRadius: 7,
                     height: "100%",
-                    backgroundColor: "#d1d5db",
+                    backgroundColor: "white", //TODO change to user avatar
                   },
                   useAnimatedStyle(() => {
                     return {

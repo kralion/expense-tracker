@@ -136,7 +136,7 @@ export default function AddExpense() {
                     keyboardType="numeric"
                     isFocused
                     marginY={3}
-                    value={value}
+                    value={value.toString()}
                     onChangeText={(value) => onChange(value)}
                     rightElement={
                       <FontAwesome5

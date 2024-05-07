@@ -28,6 +28,7 @@ export function Expense({ expense }: { expense: IGasto }) {
             margin={2}
             borderColor="coolGray.300"
             rounded={14}
+            className="shadow-sm border border-gray-200 active:border-gray-100 "
             p={2}
             bg={isPressed ? "white" : "coolGray.100"}
           >
@@ -53,7 +54,7 @@ export function Expense({ expense }: { expense: IGasto }) {
               </View>
               <Spacer />
               <Text className=" text-xl text-red-500   font-bold">
-                S/. {monto}
+                - S/. {monto}
               </Text>
             </HStack>
           </Box>
