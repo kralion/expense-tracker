@@ -1,16 +1,11 @@
-import { ExpenseContextProvider } from "@/context/ExpenseContext";
-import { Entypo } from "@expo/vector-icons";
-import { Tabs, router } from "expo-router";
-import * as React from "react";
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  useColorScheme,
-} from "react-native";
+import AddExpenseIcon from "@/components/shared/add-expense-icon";
 import Colors from "@/constants/Colors";
-import NotAllowed from "@/components/popups/not-allowed";
+import useAuth from "@/context/AuthContext";
+import { ExpenseContextProvider } from "@/context/ExpenseContext";
 import { Image } from "expo-image";
+import { Tabs } from "expo-router";
+import * as React from "react";
+import { View, useColorScheme } from "react-native";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -69,17 +64,7 @@ export default function TabLayout() {
           options={{
             title: "",
             headerShown: false,
-            tabBarIcon: () => (
-              <View>
-                <TouchableOpacity
-                  style={styles.customTabStyle}
-                  onPress={() => router.push("/(tabs)/add-expense")}
-                  activeOpacity={0.8}
-                >
-                  <Entypo name="plus" size={40} color="white" />
-                </TouchableOpacity>
-              </View>
-            ),
+            tabBarIcon: () => <AddExpenseIcon />,
           }}
         />
 
@@ -126,24 +111,3 @@ export default function TabLayout() {
     </ExpenseContextProvider>
   );
 }
-const styles = StyleSheet.create({
-  customTabStyle: {
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    position: "absolute",
-    marginBottom: -25,
-    left: -35,
-    bottom: 10,
-    borderRadius: 50,
-    padding: 10,
-    backgroundColor: "#6366F1",
-    shadowOpacity: 0.3,
-    borderWidth: 1.5,
-    borderColor: "#979AEE",
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-});

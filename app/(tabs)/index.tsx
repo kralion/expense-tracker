@@ -23,7 +23,6 @@ export default function Index() {
   const fadeAnim = React.useRef(new Animated.Value(1)).current;
   const { getExpensesByUser, expenses } = useExpenseContext();
   const { userData } = useAuth();
-
   const [showAll, setShowAll] = React.useState(false);
   const [showBuyPremiumModal, setShowBuyPremiumModal] = React.useState(false);
 
@@ -196,7 +195,4 @@ export default function Index() {
       )}
     </>
   );
-}
-function uuid() {
-  throw new Error("Function not implemented.");
 }

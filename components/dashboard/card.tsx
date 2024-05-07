@@ -19,6 +19,7 @@ export default function Card() {
   const flip = useSharedValue(0);
   const [totalMonthExpenses, setTotalMonthExpenses] = React.useState(0);
   const { userData } = useAuth();
+  // TODO: get this from the actual month
   const { sumOfAllOfExpensesMonthly } = useExpenseContext();
   const [showModal, setShowModal] = React.useState(false);
   const [presupuesto, setPresupuesto] = React.useState(0);
@@ -74,14 +75,10 @@ export default function Card() {
     flip.value = withTiming(1, { duration: 2000 });
   }, []);
 
-  const balance = presupuesto ? presupuesto - totalMonthExpenses : 0;
+  const balance = presupuesto - totalMonthExpenses;
 
   React.useEffect(() => {
-    if (
-      presupuesto &&
-      totalMonthExpenses &&
-      presupuesto - totalMonthExpenses <= 0
-    ) {
+    if (balance <= 0) {
       setShowModal(true);
     }
   }, [balance]);
