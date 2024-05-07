@@ -21,6 +21,19 @@ export default function Card() {
   const { userData } = useAuth();
   const { sumOfAllOfExpensesMonthly } = useExpenseContext();
   const [showModal, setShowModal] = React.useState(false);
+  const [presupuesto, setPresupuesto] = React.useState(0);
+  const getLastBudget = async () => {
+    const { data } = await supabase
+      .from("presupuestos")
+      .select("*")
+      .order("fecha_final", {
+        ascending: false,
+      })
+      .limit(1);
+    if (data) {
+      setPresupuesto(data[0].monto);
+    }
+  };
 
   const animatedStyles = useAnimatedStyle(() => {
     const rotateY = interpolate(
@@ -45,32 +58,13 @@ export default function Card() {
       backfaceVisibility: "hidden",
     };
   });
-  const [presupuesto, setPresupuesto] = React.useState<number>();
-
-  async function getPremiumStatus() {
-    const now = new Date();
-    const oneMonthFromNow = new Date();
-    oneMonthFromNow.setMonth(now.getMonth() + 1);
-
-    const { data } = await supabase
-      .from("presupuestos")
-      .select("*")
-      .eq("usuario_id", userData.id)
-      .lte("fecha_registro", now.toISOString().split("T")[0])
-      .gte("fecha_final", now.toISOString().split("T")[0])
-      .single();
-    if (data) {
-      setPresupuesto(data.monto);
-    }
-  }
 
   React.useEffect(() => {
     async function fetchExpenses() {
       const totalExpenses = await sumOfAllOfExpensesMonthly();
       setTotalMonthExpenses(totalExpenses);
     }
-
-    getPremiumStatus();
+    getLastBudget();
     fetchExpenses();
   }, [userData]);
 
@@ -159,7 +153,7 @@ export default function Card() {
                 </Text>
               </View>
               <Text className="text-xl font-semibold text-center text-mutedwhite">
-                S/. {presupuesto ? presupuesto : "0.00"}
+                S/. {presupuesto}
               </Text>
             </View>
           </Pressable>

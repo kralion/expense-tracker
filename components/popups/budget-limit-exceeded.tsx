@@ -24,23 +24,23 @@ export function BudgetLimitExceededModal({
       size="xl"
       onClose={() => setShowModal(false)}
     >
-      <Modal.Content rounded={30} className="p-5 bg-white">
+      <Modal.Content rounded={25} className="p-5 bg-white">
         <Modal.CloseButton rounded={15} />
-        <Modal.Body className="space-y-10">
-          <VStack space={7} alignItems="center">
+        <Modal.Body className="space-y-5">
+          <VStack space={7} alignItems={"center"}>
             <Image
               style={{
-                width: 200,
-                height: 300,
+                width: 225,
+                height: 225,
               }}
               source={require("../../assets/images/budget-limit.png")}
               alt="BudgetLimit"
             />
-            <Text className=" font-bold text-2xl ">Presupuesto Excedido</Text>
-            <Text className="text-[16px] text-center">
-              Parece que ya has gastado todo el monto presupuesto para este mes.
-            </Text>
           </VStack>
+          <Text className=" font-bold text-2xl ">Presupuesto Excedido</Text>
+          <Text>
+            Parece que ya has gastado todo el monto presupuesto para este mes.
+          </Text>
           <VStack space={3}>
             <Text className="font-semibold">
               Te recomendamos lo siguiente :
@@ -67,8 +67,8 @@ export function BudgetLimitExceededModal({
                 Ver Estadísticas
               </Text>
             </Button>
-            <Text className="text-red-500 text-xs">
-              Por ahora no podrás agregar mas gastos a tu{" "}
+            <Text className="text-red-500 text-xs text-center">
+              Cuando excedes el presupuesto, no podrás agregar más gastos a tu{" "}
               <Text className="underline text-xs text-red-500">
                 historial de gastos
               </Text>

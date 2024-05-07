@@ -49,7 +49,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="statistics"
           options={{
-            title: "Reportes",
+            title: "Analíticas",
             tabBarIcon: ({ color, focused }) => (
               <Image
                 style={{ width: 28, height: 28, tintColor: color }}

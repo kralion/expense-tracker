@@ -1,11 +1,11 @@
 export interface IGasto {
   id?: string;
-  fecha?: Date;
+  fecha: string;
   descripcion?: string;
   usuario_id?: string;
   periodicidad?: boolean;
   categoria: string;
-  monto: string;
+  monto: number;
   assetIdentificador?: string;
   divisa?: string;
   numeroGasto?: number;

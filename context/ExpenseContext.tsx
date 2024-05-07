@@ -20,7 +20,7 @@ export const ExpenseContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [expenses, setExpenses] = React.useState<IGasto[]>([]);
-  const { session } = useAuth();
+  const { userData } = useAuth();
 
   const addExpense = async (expense: IGasto) => {
     await supabase.from("expenses").insert(expense);
@@ -48,7 +48,7 @@ export const ExpenseContextProvider = ({
     const { data } = await supabase
       .from("expenses")
       .select("monto")
-      .eq("session_id", session?.user.id)
+      .eq("usuario_id", userData.id)
       .gte("fecha", startOfThisMonth)
       .lte("fecha", endOfThisMonth);
 
@@ -70,7 +70,7 @@ export const ExpenseContextProvider = ({
     const { data: expenses, error } = await supabase
       .from("expenses")
       .select("*")
-      .eq("session_id", session?.user.id)
+      .eq("usuario_id", userData.id)
       .limit(10);
     if (!expenses) return [];
     const sortedExpenses = expenses.sort(
