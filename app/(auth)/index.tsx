@@ -29,15 +29,15 @@ export default function Welcome() {
               a día, sin pederte de nada.
             </Text>
           </VStack>
-          <Link asChild href="/(auth)/sign-up">
+          <Link asChild href="/(auth)/sign-in">
             <Button
-              px={10}
+              px={6}
               className="shadow-md border border-b-teal-600 border-t-transparent border-l-transparent border-r-transparent"
-              py={5}
+              py={3}
               mt={10}
               rounded={10}
             >
-              <Text className="font-semibold text-white ">Empezar</Text>
+              <Text className="font-semibold text-white  text-lg">Empezar</Text>
             </Button>
           </Link>
         </Center>

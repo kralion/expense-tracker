@@ -4,17 +4,29 @@ import {
   HStack,
   Modal,
   Pressable,
-  Spacer,
   Text,
   VStack,
 } from "native-base";
 import * as React from "react";
-import { Alert, Image, View } from "react-native";
+import { Image } from "react-native";
 import { IPresupuesto } from "../../interfaces/presupuesto";
-import { FontAwesome5 } from "@expo/vector-icons";
 export function Presupuesto({ presupuesto }: { presupuesto: IPresupuesto }) {
   const { monto, descripcion, fecha_registro, fecha_final } = presupuesto;
   const [openBudgetDetails, setOpenBudgetDetails] = React.useState(false);
+  const formattedFechaRegistro = fecha_registro
+    ? new Date(fecha_registro).toLocaleDateString("es-ES", {
+        year: "2-digit",
+        month: "numeric",
+        day: "numeric",
+      })
+    : "";
+  const formattedFechaFinal = fecha_final
+    ? new Date(fecha_final).toLocaleDateString("es-ES", {
+        year: "2-digit",
+        month: "numeric",
+        day: "numeric",
+      })
+    : "";
 
   function openModal() {
     setOpenBudgetDetails(true);
@@ -22,7 +34,7 @@ export function Presupuesto({ presupuesto }: { presupuesto: IPresupuesto }) {
 
   return (
     <Pressable onPress={() => openModal()}>
-      {({ isHovered, isPressed }) => {
+      {({ isPressed }) => {
         return (
           <>
             <Box
@@ -33,19 +45,26 @@ export function Presupuesto({ presupuesto }: { presupuesto: IPresupuesto }) {
             >
               <HStack justifyContent="space-between" alignItems="center">
                 <HStack space={3} alignItems="center">
-                  <Box className="rounded-full">
+                  <Box className="rounded-full ">
                     <Image
                       width={40}
                       height={40}
                       source={{
-                        uri: "https://img.icons8.com/?size=80&id=IxgyPdVjEhFa&format=png",
+                        uri: "https://img.icons8.com/?size=48&id=WXSGKqvop1Fo&format=gif",
                       }}
                     />
                   </Box>
-                  <Text className="text-textmuted text-xs w-1/2">
-                    Monto Mensual Presupuestado
-                  </Text>
+                  <VStack space={1}>
+                    <Text className="text-textmuted">Periodo</Text>
+                    <HStack space={1}>
+                      <Text className="text-xs">
+                        {formattedFechaRegistro} -
+                      </Text>
+                      <Text className="text-xs">{formattedFechaFinal}</Text>
+                    </HStack>
+                  </VStack>
                 </HStack>
+
                 <Text className=" text-black font-bold">S/. {monto}</Text>
               </HStack>
             </Box>
@@ -53,11 +72,10 @@ export function Presupuesto({ presupuesto }: { presupuesto: IPresupuesto }) {
               isOpen={openBudgetDetails}
               onClose={() => setOpenBudgetDetails(false)}
               safeAreaTop={true}
+              size="xl"
             >
-              <Modal.Content rounded={10} padding={3}>
-                <Modal.Header className=" flex justify-center items-center">
-                  Detalles del Presupuesto
-                </Modal.Header>
+              <Modal.Content rounded={10}>
+                <Modal.Header>Detalles del Presupuesto</Modal.Header>
                 <Modal.Body>
                   <VStack space={3}>
                     <VStack>
@@ -90,10 +108,9 @@ export function Presupuesto({ presupuesto }: { presupuesto: IPresupuesto }) {
                       Cerrar
                     </Button>
                     <Button
-                      rounded={5}
+                      rounded={10}
                       onPress={() => {
                         alert("La funcionalidad aun no esta disponible");
-                        setOpenBudgetDetails(false);
                       }}
                     >
                       Editar

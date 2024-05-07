@@ -1,14 +1,20 @@
 import { INotification } from "@/interfaces/notification";
 import { Box, HStack, VStack } from "native-base";
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Text } from "react-native";
+
+const iconos = {
+  INFO: "https://img.icons8.com/?size=48&id=63308&format=png",
+  WARNING: "https://img.icons8.com/?size=48&id=12116&format=png",
+  ERROR: "https://img.icons8.com/?size=48&id=12226&format=png",
+};
 
 export default function SingleNotification({
   notification,
 }: {
   notification: INotification;
 }) {
-  const { descripcion, icono, fecha } = notification;
+  const { descripcion, fecha } = notification;
   const formatDate = (fecha: string) => {
     const date = new Date(fecha);
     const today = new Date();
@@ -35,26 +41,36 @@ export default function SingleNotification({
       });
     }
   };
+
   return (
-    <View className="mx-3 my-2">
-      <Box borderColor="coolGray.300" rounded={10} p={1} bg={"white"}>
-        <HStack alignItems="center" space={2} className="p-2 rounded-xl">
-          <Image
-            width={40}
-            height={40}
-            source={{
-              uri: icono.uri,
-            }}
-          />
-          <VStack space={2} flex={1}>
-            <HStack justifyContent="space-between">
-              <Text className="font-semibold ">{notification.titulo}</Text>
-              <Text className="text-mute   text-xs">{formatDate(fecha)}</Text>
-            </HStack>
-            <Text className="text-textmuted text-xs ">{descripcion}</Text>
-          </VStack>
-        </HStack>
-      </Box>
-    </View>
+    <Box
+      className="m-3"
+      borderColor="coolGray.300"
+      rounded={7}
+      p={1}
+      bg={"white"}
+    >
+      <HStack alignItems="center" space={2} className="p-2 rounded-xl">
+        <Image
+          width={40}
+          height={40}
+          source={{
+            uri:
+              notification.tipo === "INFO"
+                ? iconos.INFO
+                : notification.tipo === "WARNING"
+                ? iconos.WARNING
+                : iconos.ERROR,
+          }}
+        />
+        <VStack space={2} flex={1}>
+          <HStack justifyContent="space-between">
+            <Text className="font-semibold ">{notification.titulo}</Text>
+            <Text className="text-mute   text-xs">{formatDate(fecha)}</Text>
+          </HStack>
+          <Text className="text-textmuted text-xs ">{descripcion}</Text>
+        </VStack>
+      </HStack>
+    </Box>
   );
 }

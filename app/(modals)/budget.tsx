@@ -135,9 +135,9 @@ export default function Budget() {
             <AntDesign name="close" size={20} />
           </TouchableOpacity>
         </HStack>
-        <VStack mt={5} space={5}>
+        <VStack mt={5} space={7}>
           <FormControl isInvalid={!!errors.monto} isRequired>
-            <FormControl.Label>Monto</FormControl.Label>
+            <FormControl.Label>Monto del Presupuesto</FormControl.Label>
             <Controller
               control={control}
               name="monto"
@@ -149,12 +149,7 @@ export default function Budget() {
                   value={value}
                   onChangeText={(value) => onChange(value)}
                   rightElement={
-                    <FontAwesome5
-                      name="dollar-sign"
-                      color="#6D6868"
-                      marginRight={10}
-                      size={10}
-                    />
+                    <Text className="text-textmuted pr-2">S/.</Text>
                   }
                   placeholder="450.50"
                   borderRadius={7}
@@ -176,19 +171,16 @@ export default function Budget() {
             </FormControl.ErrorMessage>
           </FormControl>
 
-          <HStack justifyContent="space-between">
-            <FormControl
-              flex={1}
-              isInvalid={!!errors.fecha_registro}
-              isRequired
-            >
+          <FormControl flex={1} isInvalid={!!errors.fecha_registro} isRequired>
+            <HStack alignItems="center" space={5}>
               <FormControl.Label>Fecha Registro</FormControl.Label>
               <Controller
                 control={control}
-                render={({ field: { onChange, value } }) => (
+                render={({ field: { value } }) => (
                   <DateTimePicker
                     value={value ? new Date(value) : new Date()}
                     onChange={onChangeFechaRegistro}
+                    locale="es"
                   />
                 )}
                 name="fecha_registro"
@@ -196,35 +188,37 @@ export default function Budget() {
                   required: { value: true, message: "Requerido" },
                 }}
               />
-              <FormControl.ErrorMessage
-                leftIcon={<WarningOutlineIcon size="xs" />}
-              >
-                {errors.fecha_registro && errors.fecha_registro.message}
-              </FormControl.ErrorMessage>
-            </FormControl>
-
-            <FormControl flex={1} isInvalid={!!errors.fecha_final} isRequired>
+            </HStack>
+            <FormControl.ErrorMessage
+              leftIcon={<WarningOutlineIcon size="xs" />}
+            >
+              {errors.fecha_registro && errors.fecha_registro.message}
+            </FormControl.ErrorMessage>
+          </FormControl>
+          <FormControl flex={1} isInvalid={!!errors.fecha_final} isRequired>
+            <HStack alignItems="center" space={2}>
               <FormControl.Label>Fecha Expiración</FormControl.Label>
               <Controller
                 name="fecha_final"
                 control={control}
-                render={({ field: { onChange, value } }) => (
+                render={({ field: { value } }) => (
                   <DateTimePicker
                     value={value ? new Date(value) : new Date()}
                     onChange={onChangeFechaFinal}
+                    locale="es"
                   />
                 )}
                 rules={{
                   required: { value: true, message: "Requerido" },
                 }}
               />
-              <FormControl.ErrorMessage
-                leftIcon={<WarningOutlineIcon size="xs" />}
-              >
-                {errors.fecha_final && errors.fecha_final.message}
-              </FormControl.ErrorMessage>
-            </FormControl>
-          </HStack>
+            </HStack>
+            <FormControl.ErrorMessage
+              leftIcon={<WarningOutlineIcon size="xs" />}
+            >
+              {errors.fecha_final && errors.fecha_final.message}
+            </FormControl.ErrorMessage>
+          </FormControl>
 
           <FormControl isInvalid={!!errors.descripcion} isRequired>
             <FormControl.Label>Descripción</FormControl.Label>
@@ -234,7 +228,7 @@ export default function Budget() {
               render={({ field: { onChange, value } }) => (
                 <TextArea
                   autoCompleteType
-                  placeholder="Escribe aquí ..."
+                  placeholder="Una descripción para este presupuesto"
                   minH={35}
                   isFocused
                   value={value}

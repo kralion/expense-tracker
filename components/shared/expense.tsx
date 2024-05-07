@@ -22,16 +22,14 @@ export function Expense({ expense }: { expense: IGasto }) {
         router.push(`/(expenses)/details/${id}`);
       }}
     >
-      {({ isHovered, isPressed }) => {
+      {({ isPressed }) => {
         return (
           <Box
             margin={2}
             borderColor="coolGray.300"
             rounded={14}
             p={2}
-            bg={
-              isPressed ? "white" : isHovered ? "coolGray.200" : "coolGray.100"
-            }
+            bg={isPressed ? "white" : "coolGray.100"}
           >
             <HStack alignItems="center">
               <View className="flex-row gap-2  items-center">
