@@ -2,6 +2,10 @@
 
 Expense-tracker is a mobile app development project, for daily financial expenses tracking, built with React Native, Typescript, NativeWind and Expo. It is based on essential dependencies such as react-native, native-base, and more.
 
+
+https://github.com/kralion/monedo/assets/66649036/086d0707-254e-45be-ba42-c4f5661349fd
+ 
+
 ## 🔍 Table of Contents
 
 * [Stack](#stack)
